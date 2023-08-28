@@ -11,8 +11,8 @@
     "clean-win": "rd /s /q dist && del /f tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@ignisign/public": "0.0.*",
-    "@ignisign/sdk": "0.0.*",
+    "@ignisign/public": "^1.0.0",
+    "@ignisign/sdk": "^1.0.0",
     "axios": "^0.21.1",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.13.1",

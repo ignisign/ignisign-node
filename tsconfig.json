@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "module": "commonjs",
+    "target": "ES2019",
+    "lib": [ "ES2019", "dom" ],
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "references" : [
+    { "path": "../ignisign-lib-public"},
+  ],
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "src/**/*.spec.ts",
+    "**/*.d.ts",
+    "dist/**/*"
+  ]
+}

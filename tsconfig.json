@@ -6,7 +6,6 @@
     "sourceMap": true,
     "strict": false,
     "skipLibCheck": true,
-    "jsx": "react",
     "moduleResolution": "node",
     "composite": true,
     "allowJs": false,

@@ -1,1 +1,1 @@
-# node-js-sdk
+# Ignisign Node JS SDK

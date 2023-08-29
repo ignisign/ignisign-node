@@ -3,10 +3,8 @@ example/node_modules
 
 dist
 example/dist
-
 example/.env
 
 tsconfig.tsbuildinfo
 .npmrc
-
 example/data/**

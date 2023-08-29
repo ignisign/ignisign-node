@@ -1,4 +1,5 @@
-const fs     = require('fs');
+import * as fs from 'fs';
+
 const Engine = require('tingodb')();
 
 const envDir = `./data/${process.env.IGNISIGN_APP_ENV}`

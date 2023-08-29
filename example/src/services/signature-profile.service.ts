@@ -1,10 +1,8 @@
+import { IGNISIGN_INTEGRATION_MODE, Ignisign_SignatureProfile } from "@ignisign/public";
+import { IgnisignSdkManagerService } from "./ignisign-sdk-manager.service";
 
-
-import { IGNISIGN_INTEGRATION_MODE } from "@ignisign/public";
-import { IgnisignManagerService } from "./ignisign-webhook.manager";
-
-const getSignatureProfiles = async () => {
-  const signatureProfiles = await IgnisignManagerService.getSignatureProfiles()
+const getSignatureProfiles = async () : Promise<Ignisign_SignatureProfile[]> => {
+  const signatureProfiles = await IgnisignSdkManagerService.getSignatureProfiles()
   return signatureProfiles?.filter(e=>e.integrationMode === IGNISIGN_INTEGRATION_MODE.EMBEDDED)
 }
 

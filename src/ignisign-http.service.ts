@@ -5,11 +5,8 @@ import { IgnisignSdkInitializer, IgnisignSdkExecutionContext} from "./ignisign-s
 import {createIgnisignSdkError, createIgnisignSdkErrorFromHttp} from "./ignisign-sdk-error.service";
 import {IgnisignApiAuth_RequestDto, IGNISIGN_ERROR_CODES, IgnisignJwtContainer} from "@ignisign/public";
 
-import { formatUrlRequestInterceptor, responseStdInterceptor} from './utils/http-utils';
-
 const IGNISIGN_SERVER_URL = process.env.IGNISIGN_SERVER_URL || DEFAULT_IGNISIGN_API_URL;
 const MAX_BODY_LENGTH     = 50000000;
-//const URL_API_AUTH        = "/v1/api-auth";
 const URL_API_AUTH        = "/v3/auth/app-api";
 
 // /!\ https://github.com/axios/axios/issues/1510#issuecomment-525382535
@@ -31,6 +28,10 @@ declare module 'axios' {
   }
 }
 
+
+
+
+
 export class IgnisignHttpApi {
 
   private ignisignConnectedApi  : AxiosInstance   = axios.create({ baseURL : IGNISIGN_SERVER_URL, headers: { Accept: 'application/json' }, maxBodyLength: MAX_BODY_LENGTH });
@@ -50,6 +51,26 @@ export class IgnisignHttpApi {
 
   private async _executeInit(init: IgnisignSdkInitializer){
     try {
+
+      const responseStdInterceptor = (resp) => resp.data;
+      const formatUrlRequestInterceptor = (config) => {
+        if (!config.url)
+          return config;
+      
+        const currentUrl = new URL(config.url, config.baseURL);
+      
+        // @ts-ignore
+        Object.entries(config.urlParams || {}).forEach(([k, v]) => currentUrl.pathname = currentUrl.pathname.replace(`:${k}`, encodeURIComponent(v)));
+      
+        return {
+          ...config,
+          baseURL: `${currentUrl.protocol}//${currentUrl.host}`,
+          url: currentUrl.pathname,
+        };
+      };
+      
+      
+
       this.initAlreadyStarted = true;
       this.execContext = {
         appId           : init.appId,
@@ -107,7 +128,6 @@ export class IgnisignHttpApi {
 
       return this.jwtToken;
   }
-
 
 
   private async _authRequestInterceptor(config) {

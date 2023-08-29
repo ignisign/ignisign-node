@@ -5,7 +5,7 @@ import { SignatureRequestService } from './signature-request.service';
 
 let ignisignSdkInstance: IgnisignSdk = null;
 
-export const IgnisignManagerService = {
+export const IgnisignSdkManagerService = {
   init,
   createNewSigner,
   revokeSigner,
@@ -28,7 +28,7 @@ const exampleConsumeWebhook = async ( webhookContext: any, topic : IGNISIGN_WEBH
 
 async function init() {
   if(!IGNISIGN_APP_ID || !IGNISIGN_APP_ENV || !IGNISIGN_APP_SECRET)
-    throw new Error(`IGNISIGN_APP_ID, IGNISIGN_APP_ENV and IGNISIGN_APP_SECRET are mandatory to init IgnisignManagerService`);
+    throw new Error(`IGNISIGN_APP_ID, IGNISIGN_APP_ENV and IGNISIGN_APP_SECRET are mandatory to init IgnisignSdkManagerService`);
     
   try {
     ignisignSdkInstance = new IgnisignSdk({

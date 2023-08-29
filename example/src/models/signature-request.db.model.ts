@@ -1,4 +1,5 @@
-const fs     = require('fs');
+import * as fs from 'fs';
+
 const Engine = require('tingodb')();
 
 const envDir = `./data/${process.env.IGNISIGN_APP_ENV}`
@@ -23,7 +24,7 @@ export type MySignatureRequestSigners = {
   signatureRequestId  ?: string;
   signers ?: {
     signerId   ?: string;
-    myUserId ?: string;
+    myUserId   ?: string;
     token      ?: string;
   }[]
 }

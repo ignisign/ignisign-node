@@ -1,7 +1,17 @@
-import _ = require("lodash");
+import * as _ from 'lodash';
+import * as fs from 'fs';
+import * as crypto from "crypto";
 
-const fs = require('fs');
-const crypto: any = require('crypto');
+const ALGORITHM   = 'sha256'
+const ENCODING      = 'base64'
+type HashDataInput  = string | NodeJS.ReadableStream;
+
+async function getFileHash(input: HashDataInput) : Promise<string>{
+  if(_.isString(input))
+    return crypto.createHash(ALGORITHM).update(<string>input).digest(ENCODING);
+
+  return getHashFromStream(<NodeJS.ReadableStream>input);
+}
 
 const saveFileToFolder = (filePath, folderPath, fileName = null) => {
   return new Promise((resolve, reject) => {
@@ -22,29 +32,14 @@ const saveFileToFolder = (filePath, folderPath, fileName = null) => {
   });
 }
 
-const algorithm = 'sha256'
-const encoding = 'base64'
- 
-type HashDataInput = string | NodeJS.ReadableStream;
-
-async function getFileHash(input: HashDataInput) : Promise<string>{
-  if(_.isString(input))
-    return getHashFromString(<string>input)
-
-  return getHashFromStream(<NodeJS.ReadableStream>input);
-}
-
-async function getHashFromString(input : string): Promise<string>{
-  return crypto.createHash('sha256').update(input).digest('base64');
-}
 
 async function getHashFromStream(input: any): Promise<string>{
   return new Promise((resolve, reject) => {
     try {
-      const hash = crypto.createHash("sha256");
-      input.on('error', err => reject(err));
-      input.on('data', chunk => hash.update(chunk));
-      input.on('end', () => resolve(hash.digest('base64')));
+      const hash = crypto.createHash(ALGORITHM);
+      input.on('error', (err)   => reject(err));
+      input.on('data',  (chunk) => hash.update(chunk));
+      input.on('end',   ()      => resolve(hash.digest(ENCODING)));
     } catch (e) {
       reject(e);
     }

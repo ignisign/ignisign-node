@@ -10,8 +10,6 @@ import {
   IgnisignWebhookActionDto,
   IgnisignWebhookCallback,
   IgnisignDocumentContentCreation_DataJsonDto, IgnisignDocument, IgnisignSigner_Creation_ResponseDto,
-  // IgnisignSigner_MobileAuthentication_RequestDto,
-  // IgnisignSigner_MobileAuthentication_ResponseDto,
   IgnisignTechnicalTokenCheckAndConsumeDto,
   DocumentSignatureImagesDto, IgnisignSigner_Creation_RequestDto,
   Ignisign_SignatureRequest_UpdateDto, IgnisignWebhookEndpointDto,

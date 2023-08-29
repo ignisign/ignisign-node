@@ -1,6 +1,6 @@
 import { IgnisignSigner_Creation_RequestDto } from "@ignisign/public";
 import { MyUser, MyUserModel } from "../models/user.db.model";
-import { IgnisignManagerService } from "./ignisign-webhook.manager";
+import { IgnisignSdkManagerService } from "./ignisign-sdk-manager.service";
 
 const addSigner = (signatureProfileId, signer: IgnisignSigner_Creation_RequestDto) => {
   try {
@@ -11,7 +11,7 @@ const addSigner = (signatureProfileId, signer: IgnisignSigner_Creation_RequestDt
         } else {
           try {
             const userId = found?.length ? found[0]._id.toString() : null;
-            const user = await IgnisignManagerService.createNewSigner(
+            const user = await IgnisignSdkManagerService.createNewSigner(
               signatureProfileId, {
               ...signer,
               birthDate : signer.birthDate.toString(), 

@@ -1,13 +1,8 @@
-
-
-
 export const DEFAULT_IGNISIGN_API_URL = "https://api.ignisign.io";
-
 
 export const ignisignRemoteServiceUrls = {
 
   // Webhooks
-
   addWebhookEndpoint                      : "/v3/applications/:appId/envs/:appEnv/webhooks", 
   updateWebhookEndpoint                   : "/v3/webhooks/:webhookId",
   removeWebhookEndpoint                   : "/v3/webhooks/:webhookId",
@@ -59,18 +54,10 @@ export const ignisignRemoteServiceUrls = {
 
   getSignatureImg                         : "/v3/documents/:documentId/img-signatures", // ??
   
-  
-
-  // getDocumentSignatures                : "/v3/documents/:documentId/signatures", //  get
-  // getDocumentSignature                 : "/v3/documents/:documentId/signatures/:signatureId", //   get
 
   // Signature profile   
 
-  getSignatureProfiles                        : "/v3/applications/:appId/envs/:appEnv/signature-profiles", //  
-
-  // getSignatureProfileContext               : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/context", //  
-  // getSignatureProfile_GlobalSignerContraints  : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signer-constraints", //  
-  // getSignatureProfiel_SignerContraints         : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signer-constraints/:signerId", //  
+  getSignatureProfiles                    : "/v3/applications/:appId/envs/:appEnv/signature-profiles", //  
 
   updateSignatureProfileStatus            : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/status", // put
 

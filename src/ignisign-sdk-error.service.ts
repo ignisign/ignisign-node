@@ -6,21 +6,21 @@ const ERRORS_WARN : IGNISIGN_ERROR_CODES[] = [];
 const IGNISIGN_ERROR_TEXT = "IGNISIGN SDK EXCEPTION"
 
 const getTimestampString = () => {
-  const pad = (num) => num < 10 ? '0' + num : num;
+  const pad     = (num) => num < 10 ? '0' + num : num;
 
-  const date = new Date();
+  const date    = new Date();
   const dateUtc = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
   
-  const year = dateUtc.getUTCFullYear();
-  const month = pad(dateUtc.getUTCMonth() + 1); // Months are 0 based, so we need to add 1
-  const day = pad(dateUtc.getUTCDate());
-  const hour = pad(dateUtc.getUTCHours());
+  const year    = dateUtc.getUTCFullYear();
+  const month   = pad(dateUtc.getUTCMonth() + 1); // Months are 0 based, so we need to add 1
+  const day     = pad(dateUtc.getUTCDate());
+  const hour    = pad(dateUtc.getUTCHours());
   const minutes = pad(dateUtc.getUTCMinutes());
   const seconds = pad(dateUtc.getUTCSeconds());
   
-  const offset = -date.getTimezoneOffset();
-  const sign = offset < 0 ? '-' : '+';
-  const offsetHours = pad(Math.abs(Math.floor(offset / 60)));
+  const offset  = -date.getTimezoneOffset();
+  const sign    = offset < 0 ? '-' : '+';
+  const offsetHours   = pad(Math.abs(Math.floor(offset / 60)));
   const offsetMinutes = pad(Math.abs(offset % 60));
   
   const formattedDate = `${year}-${month}-${day} ${hour}:${minutes}:${seconds} ${sign}${offsetHours}${offsetMinutes}`;
@@ -28,10 +28,9 @@ const getTimestampString = () => {
   return formattedDate;
 }
 
-
 const logError = ( code : IGNISIGN_ERROR_CODES, context : object = {}, stack: string = "", execContext: IgnisignSdkExecutionContext) => {
 
-  const timestamp = getTimestampString(); //`${moment().utc().format('YYYY-MM-DD HH:mm:ss ZZ')}`;
+  const timestamp = getTimestampString();
   const isWarn    = ERRORS_WARN.includes(code);
 
   if(isWarn && !execContext?.displayWarning)
@@ -50,13 +49,11 @@ const logError = ( code : IGNISIGN_ERROR_CODES, context : object = {}, stack: st
     context['execContext'] = execContext;
   }
 
-  if(context && Object.keys(context).length !== 0){
+  if(context && Object.keys(context).length !== 0)
     console.error("* Context: ", context);
-  }
-
-  if(stack && stack.length !== 0){
+  
+  if(stack && stack.length !== 0)
     console.error("* Stack: ", stack);
-  }
 }
 
 

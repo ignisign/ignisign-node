@@ -3,14 +3,16 @@ import * as path from 'path';
 // @ts-ignore
 global['appRoot'] = path.join(__dirname, '..');
 
+import * as moment from "moment";
+import * as express from 'express';
+import cookieParser = require('cookie-parser');
+import cors = require('cors');
+
 import { NextFunction, Request, Response } from 'express';
 
 import 'dotenv/config';
 
-import { App } from './commons/app';
-import { errorMiddleware } from './commons/error.middleware';
-import { jsonSuccess } from './commons/utils';
-import { IgnisignManagerService } from './services/ignisign-webhook.manager';
+import { IgnisignSdkManagerService } from './services/ignisign-sdk-manager.service';
 
 import { SignerService } from './services/signer.service';
 import { SignatureRequestService } from './services/signature-request.service';
@@ -18,16 +20,37 @@ import { SignatureProfileService } from './services/signature-profile.service';
 import { deleteFile } from './utils/files.util';
 import { FileService } from './services/files.service';
 
+
+import { checkBearerToken } from './utils/authorization.middleware';
+
+
+
 const UPLOAD_TMP = 'uploads_tmp/'
-const multer = require('multer');
-const upload = multer({ dest: UPLOAD_TMP });
+const multer    = require('multer');
+const upload    = multer({ dest: UPLOAD_TMP });
+const port      = process.env.PORT || 4242;
+
+const jsonSuccess = <T = any>(res : Response, obj : T) => {
+  res.status(200).json(obj);
+}
+
+
 
 
 const initExampleApp = async () =>{
   try {
-    const app     = new App();
-    const router  = app.router;
-    await IgnisignManagerService.init();
+
+    const app     : express.Application = express();
+    const router  : express.Router      = express.Router();
+
+    app.use(express.json({limit: "15mb"}));
+    app.use(express.urlencoded({ extended: true , limit: "15mb"}));
+    app.use(cookieParser());
+    app.use(cors({ origin: true, credentials: true }));
+    app.use('/uploads', checkBearerToken, express.static('uploads'));
+    
+
+    await IgnisignSdkManagerService.init();
 
     router.get('/v1/healthcheck', (req, res) => jsonSuccess(res, {status: 'ok'} ));
 
@@ -106,7 +129,7 @@ const initExampleApp = async () =>{
     router.delete('/v1/users/:userId', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const found = await SignerService.deleteUser(req.params.userId);
-        await IgnisignManagerService.revokeSigner(found.signerId);
+        await IgnisignSdkManagerService.revokeSigner(found.signerId);
         return jsonSuccess(res, found);
       } catch(e) { next(e) }
     })
@@ -114,20 +137,46 @@ const initExampleApp = async () =>{
     router.post('/v1/ignisign-webhook', async (req: Request, res: Response, next: NextFunction) => {
       try {
         console.log('CONSUME_WEBHOOK');
-        const result = await IgnisignManagerService.consumeWebhook(req.body);
+        const result = await IgnisignSdkManagerService.consumeWebhook(req.body);
         jsonSuccess(res, result);
       } catch(e) { next(e) }
     })
 
-    app.app.use(router);
-    app.app.use(errorMiddleware);
-    app.listen();
+    app.use(router);
+
+    const errorMiddleware = (error: Error, req: Request, res: Response, next: NextFunction) => {
+
+      let status = 500;
+      let message = error.message || 'Something went wrong';
+    
+      const timestamp = `${moment().utc().format('YYYY-MM-DD HH:mm:ss ZZ')}`;
+    
+      let result :any = { message, timestamp };
+    
+      const errorHeaderMessage = `[ERROR] [ ${timestamp} | ${status} ]`;
+    
+      console.error(errorHeaderMessage)
+    
+      if(error?.name)
+        console.error("* Name: ", error?.name);
+    
+      if(error?.message)
+        console.error("* Message: ", error?.message);
+    
+      if(error?.stack)
+        console.error("* Stack: ", error?.stack);
+    
+      console.error(`------------------------- END ERROR -------------------------`);
+      res.status(status).json(result);
+    }
+
+    app.use(errorMiddleware);
+    app.listen(port, () => console.info(`🚀 App listening on the port ${port}`));
 
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
-  
 }
 
 

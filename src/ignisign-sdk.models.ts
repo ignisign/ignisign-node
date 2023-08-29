@@ -29,7 +29,6 @@ export class IgnisignWebhookCallbackMapper<T> {
   callback  : IgnisignWebhookCallback<T>
 }
 
-
 export class IgnisignSdkFileContentUploadDto {
   fileStream  : NodeJS.ReadableStream;
   filename    : string;

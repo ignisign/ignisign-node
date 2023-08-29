@@ -17,10 +17,7 @@ import {
   Ignisign_SignatureRequest_UpdateDto, IgnisignWebhookEndpointDto,
   IgnisignWebhookSettingsDescription, IGNISIGN_WEBHOOK_EVENT_FILTER,
   IgnisignWebhookEventResponseDto,
-  IgnisignWebhookEvent,
-  IgnisignApplicationEnvSettings_UpdateRequestDto,
-  IgnisignApplicationEnvSettings,
-  IgnisignApplicationInvitedUser,
+  IgnisignWebhookEvent, IgnisignApplicationInvitedUser,
   IgnisignApplicationInvitedUserCreationRequestDto,
   IgnisignApplicationUserEditRequestDto,
   IgnisignSignerContext,
@@ -61,12 +58,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** APPLICATION *************/
 
-  public async updateApplicationEnvSettings(updateDto: IgnisignApplicationEnvSettings_UpdateRequestDto): Promise<IgnisignApplicationEnvSettings> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-
-    return await ignisignConnectedApi.put<IgnisignApplicationEnvSettings>(ignisignRemoteServiceUrls.updateApplicationEnvSettings, updateDto, { urlParams: { appId, appEnv } });
-  }
   /************** APPLICATION USER INVITATION *************/
   
   public async getAppInvitedUsers(): Promise<IgnisignApplicationInvitedUser[]> {

@@ -96,8 +96,6 @@ const initExampleApp = async () =>{
           return {file: e, fullPrivacy: JSON.parse(fullPrivacy[i])}
         })        
 
-        console.log('TEST_1 : ', signatureProfileId);
-
         await SignatureRequestService.createNewSignatureRequest(signatureProfileId, title, files, usersIds.split(','))
         jsonSuccess(res, {status: 'ok'} )
       } catch (error) {
@@ -136,7 +134,6 @@ const initExampleApp = async () =>{
 
     router.post('/v1/ignisign-webhook', async (req: Request, res: Response, next: NextFunction) => {
       try {
-        console.log('CONSUME_WEBHOOK');
         const result = await IgnisignSdkManagerService.consumeWebhook(req.body);
         jsonSuccess(res, result);
       } catch(e) { next(e) }

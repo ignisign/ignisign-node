@@ -68,7 +68,7 @@ async function createNewSigner(signatureProfileId, inputs: IgnisignSigner_Creati
     return await ignisignSdkInstance.createSigner(dto);
     
   } catch (error) {
-    console.log(error.toString());
+    console.error(error.toString());
     
   }
 }

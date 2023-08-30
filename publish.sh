@@ -1,5 +1,3 @@
-#!/bin/bash
+#!/bin/bash 
 
-yarn install
-yarn build
-npm publish
+yarn install && yarn build && npm publish

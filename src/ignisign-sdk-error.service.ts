@@ -46,7 +46,10 @@ const logError = ( code : IGNISIGN_ERROR_CODES, context : object = {}, stack: st
     if(!context)
       context = {};
 
-    context['execContext'] = execContext;
+    context['execContext'] = {
+      appId: execContext.appId,
+      appEnv: execContext.appEnv,
+    };
   }
 
   if(context && Object.keys(context).length !== 0)
@@ -66,11 +69,13 @@ export const createIgnisignSdkError = (code : IGNISIGN_ERROR_CODES, context : ob
 
   logError(code, context, stack, execContext);
 
-  const e =  new Error(`${IGNISIGN_ERROR_TEXT}: ${ignisignError}`)
+  const e: any = new Error(`${IGNISIGN_ERROR_TEXT}: ${ignisignError}`)
 
   if(stack && stack.length)
     e.stack = stack;
 
+  e.context = context
+  e.code = code
   return e;
 }
 

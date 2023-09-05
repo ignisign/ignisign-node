@@ -220,8 +220,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createDocumentRequest, dto, { urlParams: {documentId} });
   }
 
-  // TODO see the return type, update the documentation when checked
-  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<any> {
+
+  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadDocumentSignatureXades,  { urlParams: { documentId, signatureId } });
   }
@@ -237,7 +237,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   // TODO see the return type
-  public async downloadSignatureProofDocument(documentId: string): Promise<any> {
+  public async downloadSignatureProofDocument(documentId: string): Promise<ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId } });
   }

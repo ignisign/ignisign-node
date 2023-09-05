@@ -2,7 +2,7 @@ import {
   IGNISIGN_APPLICATION_ENV,
   IGNISIGN_WEBHOOK_MESSAGE_NATURE,
   IGNISIGN_WEBHOOK_TOPICS,
-  IgnisignWebhookCallback
+  IgnisignWebhook_Callback
 } from "@ignisign/public";
 
 
@@ -21,12 +21,12 @@ export class IgnisignSdkExecutionContext {
   appSecret       : string;
 }
 
-export class IgnisignWebhookCallbackMapper<T> {
+export class IgnisignWebhook_CallbackMapper<T> {
   uuid      : string;
   topic     : IGNISIGN_WEBHOOK_TOPICS         |  'ALL';
   action    : string;
   msgNature : IGNISIGN_WEBHOOK_MESSAGE_NATURE |  'ALL';
-  callback  : IgnisignWebhookCallback<T>
+  callback  : IgnisignWebhook_Callback<T>
 }
 
 export class IgnisignSdkFileContentUploadDto {

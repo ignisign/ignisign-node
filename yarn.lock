@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.11.tgz#75667d379846b48619d763afaa6681057723c5b8"
-  integrity sha512-nHFhOrlu8s+JQ6+j28iIvKKp2DRLeHNkwnAwf90ZD88Pqyb4/zQpnSpozgf9rPNSLp1ifqL4it621s060jnaDw==
+"@ignisign/public@1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.14.tgz#62c9a8188c4ba622672f982bd8e1149a8a8f7153"
+  integrity sha512-Fmmx482ppDiZnkwKyRVK8TTk92aH7PMJq/NtMMFcwfoGCtvwzeR86A7MDbIQE6swaLmGaB6lZQz+zI4Y7XF8Cg==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"
@@ -792,13 +792,13 @@ spdx-license-ids@^3.0.0:
   integrity sha512-XkD+zwiqXHikFZm4AX/7JSCXA98U5Db4AFd5XUg/+9UNtnH75+Z9KxtpYiJZx36mUDVOwH83pl7yvCer6ewM3w==
 
 string.prototype.padend@^3.0.0:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/string.prototype.padend/-/string.prototype.padend-3.1.4.tgz#2c43bb3a89eb54b6750de5942c123d6c98dd65b6"
-  integrity sha512-67otBXoksdjsnXXRUq+KMVTdlVRZ2af422Y0aTyTjVaoQkGr3mxl2Bc5emi7dOQ3OGVVQQskmLEWwFXwommpNw==
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/string.prototype.padend/-/string.prototype.padend-3.1.5.tgz#311ef3a4e3c557dd999cdf88fbdde223f2ac0f95"
+  integrity sha512-DOB27b/2UTTD+4myKUFh+/fXWcu/UDyASIXfg+7VzoCNNGOfWvoyU/x5pvVHr++ztyt/oSYI1BcWBBG/hmlNjA==
   dependencies:
     call-bind "^1.0.2"
-    define-properties "^1.1.4"
-    es-abstract "^1.20.4"
+    define-properties "^1.2.0"
+    es-abstract "^1.22.1"
 
 string.prototype.trim@^1.2.7:
   version "1.2.7"
@@ -819,13 +819,13 @@ string.prototype.trimend@^1.0.6:
     es-abstract "^1.20.4"
 
 string.prototype.trimstart@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/string.prototype.trimstart/-/string.prototype.trimstart-1.0.6.tgz#e90ab66aa8e4007d92ef591bbf3cd422c56bdcf4"
-  integrity sha512-omqjMDaY92pbn5HOX7f9IccLA+U1tA9GvtU4JrodiXFfYB7jPzzHpRzpglLAjtUV6bB557zwClJezTqnAiYnQA==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/string.prototype.trimstart/-/string.prototype.trimstart-1.0.7.tgz#d4cdb44b83a4737ffbac2d406e405d43d0184298"
+  integrity sha512-NGhtDFu3jCEm7B4Fy0DpLewdJQOZcQ0rGbwQ/+stjnrp2i+rlKeCvos9hOIeCmqwratM47OBxY7uFZzjxHXmrg==
   dependencies:
     call-bind "^1.0.2"
-    define-properties "^1.1.4"
-    es-abstract "^1.20.4"
+    define-properties "^1.2.0"
+    es-abstract "^1.22.1"
 
 strip-bom@^3.0.0:
   version "3.0.0"

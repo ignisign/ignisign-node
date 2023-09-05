@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.14.tgz#62c9a8188c4ba622672f982bd8e1149a8a8f7153"
-  integrity sha512-Fmmx482ppDiZnkwKyRVK8TTk92aH7PMJq/NtMMFcwfoGCtvwzeR86A7MDbIQE6swaLmGaB6lZQz+zI4Y7XF8Cg==
+"@ignisign/public@1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.15.tgz#db51dfb7e8425eec40defa964467b9b19bf9badb"
+  integrity sha512-xV/1HJyaI9s0aDrDPSwkypRYPPwX5lj6ctZXK0z/O540ueShaaRFj4SFmKb22CR+zoM05AR0n0jVIOuvO2xY6g==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"

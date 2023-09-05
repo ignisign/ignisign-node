@@ -6,13 +6,17 @@ export const ignisignRemoteServiceUrls = {
   addWebhookEndpoint                      : "/v3/applications/:appId/envs/:appEnv/webhooks", 
   updateWebhookEndpoint                   : "/v3/webhooks/:webhookId",
   removeWebhookEndpoint                   : "/v3/webhooks/:webhookId",
+  getWebhookEndpoints                     : "/v3/applications/:appId/envs/:appEnv/webhooks", 
 
   getWebhookEvents                        : "/v3/webhooks/:webhookId/events",
   getWebhookEvent                         : "/v3/webhooks/:webhookId/events/:eventId",
   resendWebhookEvent                      : "/v3/webhooks/:webhookId/events/:eventId/resend",
 
   // Applications
-  updateApplicationEnvSettings            : "/v3/applications/:appId/envs/:appEnv/settings", // put
+  getApplicationContext                   : "/v3/applications/:appId/context", // get // /v3/applications/:appId/envs/:appEnv/context
+
+
+  // updateApplicationEnvSettings            : "/v3/applications/:appId/envs/:appEnv/settings", // put
 
   // User invitations
   getAppInvitedUsers                      : "/v3/applications/:appId/users-invitations", // get
@@ -23,6 +27,7 @@ export const ignisignRemoteServiceUrls = {
 
   // Signers
   getSignerWithDetails                    : "/v3/applications/:appId/envs/:appEnv/signers/:signerId/details", // get
+  getSignerSummary                        : "/v3/applications/:appId/envs/:appEnv/signers/:signerId", // get
   searchApplicationSigners                : "/v3/applications/:appId/envs/:appEnv/signers-search", // post
   getPaginateApplicationSigners           : "/v3/applications/:appId/envs/:appEnv/signers-paginate",//get
   createSigner                            : "/v3/applications/:appId/envs/:appEnv/signers",//post
@@ -52,14 +57,16 @@ export const ignisignRemoteServiceUrls = {
   downloadDocumentSignatureXades          : "/v3/documents/:documentId/signatures/:signatureId/xades", //
   downloadAsicFile                        : "/v3/documents/:documentId/asics", // 
 
-  getSignatureImg                         : "/v3/documents/:documentId/img-signatures", // ??
+  getSignatureImg                         : "/v3/documents/:documentId/img-signatures", // get
+  getDocumentSignatures                   : "/v3/documents/:documentId/signatures", // get
+  getDocumentSignature                   : "/v3/documents/:documentId/signatures/:signatureId", // get
   
 
   // Signature profile   
 
-  getSignatureProfiles                    : "/v3/applications/:appId/envs/:appEnv/signature-profiles", //  
-
-  updateSignatureProfileStatus            : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/status", // put
+  getSignatureProfiles                        : "/v3/applications/:appId/envs/:appEnv/signature-profiles", //  get
+  updateSignatureProfileStatus                : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/status", // put
+  getSignatureProfileSignerInputsConstraints  : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signer-inputs-constraints", // get
 
   // Signature requests
 

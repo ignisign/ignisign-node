@@ -38,7 +38,7 @@ const getSignatureRequests = async (signatureProfileId) => {
 
 const getSignatureRequestsSigners = async (signatureRequestId) => {
   return new Promise((resolve, reject) => {
-    MySignatureRequestSignersModel.findOne({signatureRequestId}, (error, found) => {
+    MySignatureRequestSignersModel.findOne({_id: signatureRequestId}, (error, found) => {
       if (error) {
         console.error("getSignatureRequestsSigners ERROR : ", error);
         reject(error);
@@ -62,10 +62,7 @@ const getUsers = (usersIds): Promise<MyUser[]> => {
 }
 
 const createNewSignatureRequest = async (signatureProfileId, title, files: {file, fullPrivacy: boolean}[], usersIds) => {
- 
   const users: MyUser[]     = await getUsers(usersIds)
-  
-  
   const signatureRequestId = await IgnisignSdkManagerService.initSignatureRequest(signatureProfileId)
   const documentIds = []
 

@@ -5,13 +5,13 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc -b",
-    "dev": "cross-env NODE_ENV=development nodemon --watch dist --delay 1 --exec 'ts-node' dist/server.js",
+    "dev": "tsc-watch --onSuccess 'node ./dist/server.js'",
     "watch": "tsc -b -w --preserveWatchOutput",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "clean-win": "rd /s /q dist && del /f tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@ignisign/sdk": "1.0.5",
+    "@ignisign/sdk": "1.0.11",
     "axios": "^0.21.1",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.13.1",
@@ -49,6 +49,7 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-node": "^8.10.1",
+    "tsc-watch": "^6.0.4",
     "tslib": "1.9.3",
     "typescript": "^4.1.3"
   }

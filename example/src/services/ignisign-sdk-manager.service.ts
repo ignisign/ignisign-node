@@ -66,10 +66,9 @@ async function createNewSigner(signatureProfileId, inputs: IgnisignSigner_Creati
 
   try {
     return await ignisignSdkInstance.createSigner(dto);
-    
   } catch (error) {
     console.error(error.toString());
-    
+    throw error
   }
 }
 
@@ -84,7 +83,6 @@ async function uploadHashDocument(signatureRequestId, fileHash, label): Promise<
     label,
   }
 
-
   const { documentId } = await ignisignSdkInstance.initializeDocument(dto)
   await ignisignSdkInstance.provideDocumentContent_PrivateContent(documentId, fileHash)
   return documentId 
@@ -97,8 +95,7 @@ async function uploadDocument(signatureRequestId, uploadDto : IgnisignSdkFileCon
   }
   const { documentId } = await ignisignSdkInstance.initializeDocument(dto)
   await ignisignSdkInstance.provideDocumentContent_File(documentId, uploadDto)
-  return documentId 
-
+  return documentId
 }
 
 async function getSignatureProfiles(): Promise<Ignisign_SignatureProfile[]> {  
@@ -111,11 +108,22 @@ async function initSignatureRequest(signatureProfileId: string): Promise<string>
 }
 
 async function updateSignatureRequest(signatureRequestId : string, dto: Ignisign_SignatureRequest_UpdateDto): Promise<IgnisignSignatureRequestContext> {
-  return await ignisignSdkInstance.updateSignatureRequest(signatureRequestId, dto);
+  try {
+    const data = await ignisignSdkInstance.updateSignatureRequest(signatureRequestId, dto);
+    return data
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function publishSignatureRequest(signatureRequestId : string){
-  return await ignisignSdkInstance.publishSignatureRequest(signatureRequestId);
+  try {
+    const data = await ignisignSdkInstance.publishSignatureRequest(signatureRequestId);
+    return data
+  } catch (error) {
+    throw error;
+    
+  }
 }
 
 async function consumeWebhook(actionDto: IgnisignWebhookActionDto) {

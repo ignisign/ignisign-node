@@ -1,5 +1,7 @@
 
-import { IGNISIGN_APPLICATION_ENV, IGNISIGN_WEBHOOK_MESSAGE_NATURE, IGNISIGN_WEBHOOK_TOPICS, IgnisignWebhookActionDto, IgnisignSigner_Creation_RequestDto, IgnisignSigner_Creation_InputMap, IgnisignSigner_Creation_ResponseDto, IGNISIGN_SIGNATURE_REQUEST_WEBHOOK_ACTION, IGNISIGN_SIGNER_ENTITY_TYPE, IgnisignDocumentInitializationDto, Ignisign_SignatureProfile, Ignisign_SignatureRequest_UpdateDto, IgnisignSignatureRequestContext } from '@ignisign/public';
+import {
+  IGNISIGN_APPLICATION_ENV, IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST, IGNISIGN_WEBHOOK_MESSAGE_NATURE, IGNISIGN_WEBHOOK_TOPICS, IgnisignDocument_InitializationDto, IgnisignSignatureProfile, IgnisignSignatureRequest_Context, IgnisignSignatureRequest_UpdateDto, IgnisignSigner_CreationRequestDto, IgnisignSigner_CreationResponseDto, IgnisignWebhook_ActionDto
+} from '@ignisign/public';
 import { IgnisignSdk, IgnisignSdkFileContentUploadDto } from '@ignisign/sdk';
 import { SignatureRequestService } from './signature-request.service';
 
@@ -47,7 +49,7 @@ async function init() {
     await ignisignSdkInstance.registerWebhookCallback(
       SignatureRequestService.handleSignatureRequestWebhookSigners,  
       IGNISIGN_WEBHOOK_TOPICS.SIGNER, 
-      IGNISIGN_SIGNATURE_REQUEST_WEBHOOK_ACTION.LAUNCHED, 
+      IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST.LAUNCHED, 
       IGNISIGN_WEBHOOK_MESSAGE_NATURE.SUCCESS);
       
 
@@ -56,9 +58,9 @@ async function init() {
   }
 }
 
-async function createNewSigner(signatureProfileId, inputs: IgnisignSigner_Creation_InputMap = {}, externalId: string = null): Promise<IgnisignSigner_Creation_ResponseDto> {  
+async function createNewSigner(signatureProfileId, inputs: IgnisignSigner_Creation_InputMap = {}, externalId: string = null): Promise<IgnisignSigner_CreationResponseDto> {  
 
-  const dto : IgnisignSigner_Creation_RequestDto = {
+  const dto : IgnisignSigner_CreationRequestDto = {
     signatureProfileId,
     ...inputs,
     ...(externalId && {externalId})
@@ -78,7 +80,7 @@ async function revokeSigner(signerId: string) : Promise<{signerId : string}> {
 
 async function uploadHashDocument(signatureRequestId, fileHash, label): Promise<string> {
 
-  const dto : IgnisignDocumentInitializationDto = {
+  const dto : IgnisignDocument_InitializationDto = {
     signatureRequestId,
     label,
   }
@@ -90,7 +92,7 @@ async function uploadHashDocument(signatureRequestId, fileHash, label): Promise<
 
 async function uploadDocument(signatureRequestId, uploadDto : IgnisignSdkFileContentUploadDto): Promise<string>{
 
-  const dto : IgnisignDocumentInitializationDto = {
+  const dto : IgnisignDocument_InitializationDto = {
     signatureRequestId,
   }
   const { documentId } = await ignisignSdkInstance.initializeDocument(dto)
@@ -98,7 +100,7 @@ async function uploadDocument(signatureRequestId, uploadDto : IgnisignSdkFileCon
   return documentId
 }
 
-async function getSignatureProfiles(): Promise<Ignisign_SignatureProfile[]> {  
+async function getSignatureProfiles(): Promise<IgnisignSignatureProfile[]> {  
   return await ignisignSdkInstance.getSignatureProfiles()
 }
 
@@ -107,7 +109,7 @@ async function initSignatureRequest(signatureProfileId: string): Promise<string>
   return signatureRequestId
 }
 
-async function updateSignatureRequest(signatureRequestId : string, dto: Ignisign_SignatureRequest_UpdateDto): Promise<IgnisignSignatureRequestContext> {
+async function updateSignatureRequest(signatureRequestId : string, dto: IgnisignSignatureRequest_UpdateDto): Promise<IgnisignSignatureRequest_Context> {
   try {
     const data = await ignisignSdkInstance.updateSignatureRequest(signatureRequestId, dto);
     return data
@@ -126,7 +128,7 @@ async function publishSignatureRequest(signatureRequestId : string){
   }
 }
 
-async function consumeWebhook(actionDto: IgnisignWebhookActionDto) {
+async function consumeWebhook(actionDto: IgnisignWebhook_ActionDto) {
   return await ignisignSdkInstance.consumeWebhook(actionDto);
 }
 

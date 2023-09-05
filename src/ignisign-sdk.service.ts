@@ -17,7 +17,7 @@ import {
   IgnisignWebhookEvent_ResponseDto,
   IgnisignWebhookEvent, IgnisignApplication_InvitedUser,
   IgnisignApplication_InvitedUser_CreationRequestDto,
-  IgnisignApplicationUser_EditRequestDto,
+  IgnisignApplication_User_EditRequestDto,
   IgnisignSigner_Context,
   IgnisignSigners_SearchResultDto,
   IgnisignDocument_InitializationDto,
@@ -98,7 +98,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.delete<IgnisignApplication_InvitedUser>(ignisignRemoteServiceUrls.cancelAppUserInvitation,  { urlParams: { appId, userInvitationId} });
   }
 
-  public async editAppInvitedUser(userInvitationId: string, dto : IgnisignApplicationUser_EditRequestDto): Promise<IgnisignApplication_InvitedUser> {
+  public async editAppInvitedUser(userInvitationId: string, dto : IgnisignApplication_User_EditRequestDto): Promise<IgnisignApplication_InvitedUser> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId }             = this.execContext;
     return await ignisignConnectedApi.put<IgnisignApplication_InvitedUser>(ignisignRemoteServiceUrls.editAppInvitedUser, dto, { urlParams: { appId, userInvitationId } });

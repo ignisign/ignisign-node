@@ -73,6 +73,7 @@ const initExampleApp = async () =>{
     router.get('/v1/signature-requests/:signatureRequestId', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { signatureRequestId } = req.params
+        console.log('getSignatureRequest : ', signatureRequestId);
         const found = await SignatureRequestService.getSignatureRequestsSigners(signatureRequestId)
         return jsonSuccess(res, found)
       } catch(e) { next(e) }

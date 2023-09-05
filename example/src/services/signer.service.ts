@@ -1,8 +1,8 @@
-import { IgnisignSigner_Creation_RequestDto } from "@ignisign/public";
+import { IgnisignSigner_CreationRequestDto } from "@ignisign/public";
 import { MyUser, MyUserModel } from "../models/user.db.model";
 import { IgnisignSdkManagerService } from "./ignisign-sdk-manager.service";
 
-const addSigner = (signatureProfileId, signer: IgnisignSigner_Creation_RequestDto) => {
+const addSigner = (signatureProfileId, signer: IgnisignSigner_CreationRequestDto) => {
   try {
     return new Promise((resolve, reject) => {
       MyUserModel.insert({...signer, signatureProfileId}, async (error, found)=>{

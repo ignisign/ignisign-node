@@ -7,39 +7,39 @@ import {
   IGNISIGN_ERROR_CODES,
   IGNISIGN_WEBHOOK_MESSAGE_NATURE,
   IGNISIGN_WEBHOOK_TOPICS,
-  IgnisignWebhookActionDto,
-  IgnisignWebhookCallback,
-  IgnisignDocumentContentCreation_DataJsonDto, IgnisignDocument, IgnisignSigner_Creation_ResponseDto,
-  IgnisignTechnicalTokenCheckAndConsumeDto,
-  DocumentSignatureImagesDto, IgnisignSigner_Creation_RequestDto,
-  Ignisign_SignatureRequest_UpdateDto, IgnisignWebhookEndpointDto,
-  IgnisignWebhookSettingsDescription, IGNISIGN_WEBHOOK_EVENT_FILTER,
-  IgnisignWebhookEventResponseDto,
-  IgnisignWebhookEvent, IgnisignApplicationInvitedUser,
-  IgnisignApplicationInvitedUserCreationRequestDto,
-  IgnisignApplicationUserEditRequestDto,
-  IgnisignSignerContext,
-  IgnisignSignersSearchResultDto,
-  IgnisignDocumentInitializationDto,
-  IgnisignDocumentContentCreation_PrivateContentDto,
-  IgnisignDocumentRequestDto, IgnisignDocumentContext,
-  Ignisign_SignatureProfile,
-  Ignisign_SignatureProfile_StatusWrapper,
+  IgnisignWebhook_ActionDto,
+  IgnisignWebhook_Callback,
+  IgnisignDocument_ContentCreation_DataJsonDto, IgnisignDocument, IgnisignSigner_CreationResponseDto,
+  IgnisignTechnicalToken_CheckAndConsumeDto,
+  Ignisign_SignatureImagesDto, IgnisignSigner_CreationRequestDto,
+  IgnisignSignatureRequest_UpdateDto, IgnisignWebhook_EndpointDto,
+  IgnisignWebhook_SettingsDescription, IGNISIGN_WEBHOOK_EVENT_FILTER,
+  IgnisignWebhookEvent_ResponseDto,
+  IgnisignWebhookEvent, IgnisignApplication_InvitedUser,
+  IgnisignApplication_InvitedUser_CreationRequestDto,
+  IgnisignApplication_User_EditRequestDto,
+  IgnisignSigner_Context,
+  IgnisignSigners_SearchResultDto,
+  IgnisignDocument_InitializationDto,
+  IgnisignDocument_ContentCreation_PrivateContentDto,
+  IgnisignDocumentRequest_RequestDto, IgnisignDocument_Context,
+  IgnisignSignatureProfile,
+  IgnisignSignatureProfile_StatusWrapper,
   IGNISIGN_SIGNATURE_PROFILE_STATUS,
-  Ignisign_SignatureProfileIdContainerDto,
-  IgnisignSignatureRequestIdContainer,
-  IgnisignSignatureRequestContext,
-  IgnisignSignatureRequestsPaginate,
-  IgnisignSigner_Update_RequestDto,
+  IgnisignSignatureProfile_IdContainerDto,
+  IgnisignSignatureRequest_IdContainer,
+  IgnisignSignatureRequest_Context,
+  IgnisignSignatureRequests_Paginate,
+  IgnisignSigner_UpdateRequestDto,
   IgnisignWebhook,
-  IgnisignApplicationContext,
-  IgnisignSignerSummary,
-  Ignisign_SignatureProfileSignerInputsConstraints,
+  IgnisignApplication_Context,
+  IgnisignSigner_Summary,
+  IgnisignSignatureProfile_SignerInputsConstraints,
   IgnisignSignature,
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
-import { IgnisignSdkFileContentUploadDto, IgnisignSdkInitializer, IgnisignWebhookCallbackMapper } from "./ignisign-sdk.models";
+import { IgnisignSdkFileContentUploadDto, IgnisignSdkInitializer, IgnisignWebhook_CallbackMapper } from "./ignisign-sdk.models";
 import { ignisignRemoteServiceUrls } from "./ignisign-sdk.constant";
 import { IgnisignHttpApi } from "./ignisign-http.service";
 
@@ -53,7 +53,7 @@ const _logIfActivated = (...args) => {
 
 export class IgnisignSdk extends IgnisignHttpApi {
 
-  private callbacks: IgnisignWebhookCallbackMapper<any>[] = [];
+  private callbacks: IgnisignWebhook_CallbackMapper<any>[] = [];
 
   constructor(init: IgnisignSdkInitializer){
     super(init);
@@ -62,83 +62,83 @@ export class IgnisignSdk extends IgnisignHttpApi {
    /************** APPLICATION *************/
 
    // TODO https://app.clickup.com/t/860rnx794
-   public async getApplicationContext(): Promise<IgnisignApplicationContext> {
+   public async getApplicationContext(): Promise<IgnisignApplication_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get<IgnisignApplicationContext>(ignisignRemoteServiceUrls.getApplicationContext);
+    return await ignisignConnectedApi.get<IgnisignApplication_Context>(ignisignRemoteServiceUrls.getApplicationContext);
    }
 
 
   /************** APPLICATION USER INVITATION *************/
   
-  public async getAppInvitedUsers(): Promise<IgnisignApplicationInvitedUser[]> {
+  public async getAppInvitedUsers(): Promise<IgnisignApplication_InvitedUser[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId }             = this.execContext;
 
-    return await ignisignConnectedApi.get<IgnisignApplicationInvitedUser[]>(ignisignRemoteServiceUrls.getAppInvitedUsers, { urlParams: { appId } });
+    return await ignisignConnectedApi.get<IgnisignApplication_InvitedUser[]>(ignisignRemoteServiceUrls.getAppInvitedUsers, { urlParams: { appId } });
   }
 
-  public async inviteNewAppUser(dto: IgnisignApplicationInvitedUserCreationRequestDto): Promise<IgnisignApplicationInvitedUser> {
+  public async inviteNewAppUser(dto: IgnisignApplication_InvitedUser_CreationRequestDto): Promise<IgnisignApplication_InvitedUser> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId }             = this.execContext;
 
-    return await ignisignConnectedApi.post<IgnisignApplicationInvitedUser>(ignisignRemoteServiceUrls.inviteNewAppUser, dto, { urlParams: { appId } });
+    return await ignisignConnectedApi.post<IgnisignApplication_InvitedUser>(ignisignRemoteServiceUrls.inviteNewAppUser, dto, { urlParams: { appId } });
   }
 
-  public async resendAppUserInvitation(userInvitationId: string): Promise<IgnisignApplicationInvitedUser> {
+  public async resendAppUserInvitation(userInvitationId: string): Promise<IgnisignApplication_InvitedUser> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId }             = this.execContext;
 
-    return await ignisignConnectedApi.post<IgnisignApplicationInvitedUser>(ignisignRemoteServiceUrls.resendAppUserInvitation, {}, { urlParams: { appId, userInvitationId } });
+    return await ignisignConnectedApi.post<IgnisignApplication_InvitedUser>(ignisignRemoteServiceUrls.resendAppUserInvitation, {}, { urlParams: { appId, userInvitationId } });
   }
 
-  public async cancelAppUserInvitation(userInvitationId: string): Promise<IgnisignApplicationInvitedUser> {
+  public async cancelAppUserInvitation(userInvitationId: string): Promise<IgnisignApplication_InvitedUser> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId }             = this.execContext;
 
-    return await ignisignConnectedApi.delete<IgnisignApplicationInvitedUser>(ignisignRemoteServiceUrls.cancelAppUserInvitation,  { urlParams: { appId, userInvitationId} });
+    return await ignisignConnectedApi.delete<IgnisignApplication_InvitedUser>(ignisignRemoteServiceUrls.cancelAppUserInvitation,  { urlParams: { appId, userInvitationId} });
   }
 
-  public async editAppInvitedUser(userInvitationId: string, dto : IgnisignApplicationUserEditRequestDto): Promise<IgnisignApplicationInvitedUser> {
+  public async editAppInvitedUser(userInvitationId: string, dto : IgnisignApplication_User_EditRequestDto): Promise<IgnisignApplication_InvitedUser> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId }             = this.execContext;
-    return await ignisignConnectedApi.put<IgnisignApplicationInvitedUser>(ignisignRemoteServiceUrls.editAppInvitedUser, dto, { urlParams: { appId, userInvitationId } });
+    return await ignisignConnectedApi.put<IgnisignApplication_InvitedUser>(ignisignRemoteServiceUrls.editAppInvitedUser, dto, { urlParams: { appId, userInvitationId } });
   }
 
   /************** SIGNERS *************/
 
-  public async getSignerWithDetails(signerId : string): Promise<IgnisignSignerContext> {
+  public async getSignerWithDetails(signerId : string): Promise<IgnisignSigner_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignSignerContext>(ignisignRemoteServiceUrls.getSignerWithDetails,  { urlParams: { appId, appEnv, signerId } });
+    return await ignisignConnectedApi.get<IgnisignSigner_Context>(ignisignRemoteServiceUrls.getSignerWithDetails,  { urlParams: { appId, appEnv, signerId } });
   }
-  public async getSignerSummary(signerId : string): Promise<IgnisignSignerSummary> {
+  public async getSignerSummary(signerId : string): Promise<IgnisignSigner_Summary> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignSignerSummary>(ignisignRemoteServiceUrls.getSignerSummary,  { urlParams: { appId, appEnv, signerId } });
-  }
-
-  public async searchApplicationSigners(filter: string): Promise<IgnisignSignersSearchResultDto> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignSignersSearchResultDto>(ignisignRemoteServiceUrls.searchApplicationSigners, { urlParams: { appId, appEnv }, params: { filter } });
+    return await ignisignConnectedApi.get<IgnisignSigner_Summary>(ignisignRemoteServiceUrls.getSignerSummary,  { urlParams: { appId, appEnv, signerId } });
   }
 
-  public async getPaginateApplicationSigners(page: number): Promise<IgnisignSignersSearchResultDto> {
+  public async searchApplicationSigners(filter: string): Promise<IgnisignSigners_SearchResultDto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignSignersSearchResultDto>(ignisignRemoteServiceUrls.getPaginateApplicationSigners, { urlParams: {  appId, appEnv}, params: { page : page.toString() } });
+    return await ignisignConnectedApi.get<IgnisignSigners_SearchResultDto>(ignisignRemoteServiceUrls.searchApplicationSigners, { urlParams: { appId, appEnv }, params: { filter } });
   }
 
-  public async createSigner(dto: IgnisignSigner_Creation_RequestDto) {
+  public async getPaginateApplicationSigners(page: number): Promise<IgnisignSigners_SearchResultDto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.post<IgnisignSigner_Creation_ResponseDto>(ignisignRemoteServiceUrls.createSigner, dto, { urlParams: { appId, appEnv } });
+    return await ignisignConnectedApi.get<IgnisignSigners_SearchResultDto>(ignisignRemoteServiceUrls.getPaginateApplicationSigners, { urlParams: {  appId, appEnv}, params: { page : page.toString() } });
+  }
+
+  public async createSigner(dto: IgnisignSigner_CreationRequestDto) {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    return await ignisignConnectedApi.post<IgnisignSigner_CreationResponseDto>(ignisignRemoteServiceUrls.createSigner, dto, { urlParams: { appId, appEnv } });
   }
   
-  public async updateSigner(signerId: string, dto: IgnisignSigner_Update_RequestDto) {
+  public async updateSigner(signerId: string, dto: IgnisignSigner_UpdateRequestDto) {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.put<IgnisignSigner_Creation_ResponseDto>(ignisignRemoteServiceUrls.updateSigner, dto, { urlParams: { appId, appEnv, signerId } });
+    return await ignisignConnectedApi.put<IgnisignSigner_CreationResponseDto>(ignisignRemoteServiceUrls.updateSigner, dto, { urlParams: { appId, appEnv, signerId } });
   }
   
   public async revokeSigner(signerId: string): Promise<{signerId : string}> {
@@ -150,7 +150,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** DOCUMENT FILES *************/
 
-  public async initializeDocument(dto: IgnisignDocumentInitializationDto): Promise<{documentId : string}> {
+  public async initializeDocument(dto: IgnisignDocument_InitializationDto): Promise<{documentId : string}> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.post<{documentId : string}>(ignisignRemoteServiceUrls.initializeDocument, dto, { urlParams: { appId, appEnv } });
@@ -162,12 +162,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get<IgnisignDocument>(ignisignRemoteServiceUrls.getDocumentById, { urlParams: { documentId } });
   }
 
-  public async getDocumentContext(documentId: string): Promise<IgnisignDocumentContext> {
+  public async getDocumentContext(documentId: string): Promise<IgnisignDocument_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get<IgnisignDocumentContext>(ignisignRemoteServiceUrls.getDocumentContext, { urlParams: { documentId } });
+    return await ignisignConnectedApi.get<IgnisignDocument_Context>(ignisignRemoteServiceUrls.getDocumentContext, { urlParams: { documentId } });
   }
 
-  public async updateDocument(documentId: string, dto: IgnisignDocumentInitializationDto): Promise<IgnisignDocument> {
+  public async updateDocument(documentId: string, dto: IgnisignDocument_InitializationDto): Promise<IgnisignDocument> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.put<IgnisignDocument>(ignisignRemoteServiceUrls.updateDocument, ignisignConnectedApi, { urlParams: { documentId } });
   }
@@ -183,7 +183,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async provideDocumentContent_DataJson(documentId: string, content : any): Promise<IgnisignDocument> {
-    const dto: IgnisignDocumentContentCreation_DataJsonDto = { jsonContent : content};
+    const dto: IgnisignDocument_ContentCreation_DataJsonDto = { jsonContent : content};
 
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     
@@ -191,7 +191,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async provideDocumentContent_PrivateContent(documentId: string, documentHash: string): Promise<IgnisignDocument> {
-    const dto: IgnisignDocumentContentCreation_PrivateContentDto = { documentHash };
+    const dto: IgnisignDocument_ContentCreation_PrivateContentDto = { documentHash };
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post<IgnisignDocument>(ignisignRemoteServiceUrls.provideDocumentContent_PrivateContent, dto, { urlParams: { documentId } });
   }
@@ -215,7 +215,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId } });
   }
 
-  public async createDocumentRequest(documentId: string, dto: IgnisignDocumentRequestDto): Promise<IgnisignDocument> {
+  public async createDocumentRequest(documentId: string, dto: IgnisignDocumentRequest_RequestDto): Promise<IgnisignDocument> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createDocumentRequest, dto, { urlParams: {documentId} });
   }
@@ -231,7 +231,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
   }
 
-  public async getSignatureImg(documentId : string, signerId: string): Promise<DocumentSignatureImagesDto> {
+  public async getSignatureImg(documentId : string, signerId: string): Promise<Ignisign_SignatureImagesDto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId,  signerId } });
   }
@@ -258,57 +258,57 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** SIGNATURE PROFILE *************/
 
-  public async getSignatureProfiles(): Promise<Ignisign_SignatureProfile[]> {
+  public async getSignatureProfiles(): Promise<IgnisignSignatureProfile[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<Ignisign_SignatureProfile[]>(ignisignRemoteServiceUrls.getSignatureProfiles,  { urlParams: { appId, appEnv } });
+    return await ignisignConnectedApi.get<IgnisignSignatureProfile[]>(ignisignRemoteServiceUrls.getSignatureProfiles,  { urlParams: { appId, appEnv } });
   }
 
-  public async updateSignatureProfileStatus(signatureProfileId: string, status: IGNISIGN_SIGNATURE_PROFILE_STATUS): Promise<Ignisign_SignatureProfile> {
+  public async updateSignatureProfileStatus(signatureProfileId: string, status: IGNISIGN_SIGNATURE_PROFILE_STATUS): Promise<IgnisignSignatureProfile> {
 
-    const dto : Ignisign_SignatureProfile_StatusWrapper = { status };
+    const dto : IgnisignSignatureProfile_StatusWrapper = { status };
 
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.put<Ignisign_SignatureProfile>(ignisignRemoteServiceUrls.updateSignatureProfileStatus, dto, { urlParams: { appId, appEnv, signatureProfileId } });
+    return await ignisignConnectedApi.put<IgnisignSignatureProfile>(ignisignRemoteServiceUrls.updateSignatureProfileStatus, dto, { urlParams: { appId, appEnv, signatureProfileId } });
   }
 
-  public async getSignatureProfileSignerInputsConstraints(signatureProfileId : string) : Promise<Ignisign_SignatureProfileSignerInputsConstraints> {
+  public async getSignatureProfileSignerInputsConstraints(signatureProfileId : string) : Promise<IgnisignSignatureProfile_SignerInputsConstraints> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<Ignisign_SignatureProfileSignerInputsConstraints>(ignisignRemoteServiceUrls.getSignatureProfileSignerInputsConstraints, { urlParams: { appId, appEnv, signatureProfileId } });
+    return await ignisignConnectedApi.get<IgnisignSignatureProfile_SignerInputsConstraints>(ignisignRemoteServiceUrls.getSignatureProfileSignerInputsConstraints, { urlParams: { appId, appEnv, signatureProfileId } });
   }
 
   /**************  SIGNATURE REQUESTS *************/
 
-  public async initSignatureRequest(dto: Ignisign_SignatureProfileIdContainerDto): Promise<IgnisignSignatureRequestIdContainer> {
+  public async initSignatureRequest(dto: IgnisignSignatureProfile_IdContainerDto): Promise<IgnisignSignatureRequest_IdContainer> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.initSignatureRequest, dto, { urlParams: { appId, appEnv } });
   }
 
-  public async updateSignatureRequest(signatureRequestId : string, dto: Ignisign_SignatureRequest_UpdateDto): Promise<IgnisignSignatureRequestContext> {
+  public async updateSignatureRequest(signatureRequestId : string, dto: IgnisignSignatureRequest_UpdateDto): Promise<IgnisignSignatureRequest_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.put<IgnisignSignatureRequestContext>(ignisignRemoteServiceUrls.updateSignatureRequest, dto, { urlParams: { signatureRequestId } });
+    return await ignisignConnectedApi.put<IgnisignSignatureRequest_Context>(ignisignRemoteServiceUrls.updateSignatureRequest, dto, { urlParams: { signatureRequestId } });
   }
 
-  public async publishSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequestIdContainer> {
+  public async publishSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_IdContainer> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.publishSignatureRequest, {}, { urlParams: { signatureRequestId } });
   }
 
-  public async closeSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequestIdContainer> {
+  public async closeSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_IdContainer> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.closeSignatureRequest, {}, { urlParams: {  signatureRequestId} });
   }
 
-  public async getSignatureRequestsByAppIdAndAppEnv(page: Number = 1): Promise<IgnisignSignatureRequestsPaginate> {
+  public async getSignatureRequestsByAppIdAndAppEnv(page: Number = 1): Promise<IgnisignSignatureRequests_Paginate> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignSignatureRequestsPaginate>(ignisignRemoteServiceUrls.getSignatureRequestsByAppIdAndAppEnv, { urlParams: { appId, appEnv }, params: { page : page.toString() } });
+    return await ignisignConnectedApi.get<IgnisignSignatureRequests_Paginate>(ignisignRemoteServiceUrls.getSignatureRequestsByAppIdAndAppEnv, { urlParams: { appId, appEnv }, params: { page : page.toString() } });
   }
 
-  public async getSignatureRequestContext(signatureRequestId : string): Promise<IgnisignSignatureRequestContext> {
+  public async getSignatureRequestContext(signatureRequestId : string): Promise<IgnisignSignatureRequest_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureRequestContext, { urlParams: {  signatureRequestId } });
   }
@@ -316,24 +316,24 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** WEBHOOK *************/
 
-  public async addWebhookEndpoint(endPointDto: IgnisignWebhookEndpointDto): Promise<IgnisignWebhookSettingsDescription[]> {
+  public async addWebhookEndpoint(endPointDto: IgnisignWebhook_EndpointDto): Promise<IgnisignWebhook_SettingsDescription[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
 
     return ignisignConnectedApi.post(ignisignRemoteServiceUrls.addWebhookEndpoint, endPointDto, { urlParams: { appId, appEnv } });
   }
 
-  public async updateWebhookEndpoint(webhookId: string, endPointDto: IgnisignWebhookEndpointDto): Promise<IgnisignWebhookSettingsDescription[]> {
+  public async updateWebhookEndpoint(webhookId: string, endPointDto: IgnisignWebhook_EndpointDto): Promise<IgnisignWebhook_SettingsDescription[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return ignisignConnectedApi.put(ignisignRemoteServiceUrls.updateWebhookEndpoint, endPointDto, { urlParams: { webhookId } });
   }
 
-  public async removeWebhookEndpoint(webhookId: string): Promise<IgnisignWebhookSettingsDescription[]> {
+  public async removeWebhookEndpoint(webhookId: string): Promise<IgnisignWebhook_SettingsDescription[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return ignisignConnectedApi.delete(ignisignRemoteServiceUrls.removeWebhookEndpoint, { urlParams: { webhookId } });
   }
 
-  public async getWebhookEvents(webhookId: string, filter: IGNISIGN_WEBHOOK_EVENT_FILTER, page: number): Promise<IgnisignWebhookEventResponseDto> {
+  public async getWebhookEvents(webhookId: string, filter: IGNISIGN_WEBHOOK_EVENT_FILTER, page: number): Promise<IgnisignWebhookEvent_ResponseDto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return ignisignConnectedApi.get(ignisignRemoteServiceUrls.getWebhookEvents, { urlParams: { webhookId }, params: { filter, page } });
   }
@@ -351,7 +351,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   public async checkWebhookToken(token : string, appId: string, appEnv: string) : Promise<boolean> {
     try {
       const ignisignConnectedApi = await this.getIgnisignConnectedApi();
-      const checkResult:IgnisignTechnicalTokenCheckAndConsumeDto = await ignisignConnectedApi.post(ignisignRemoteServiceUrls.checkWebhookToken, { token, appId, appEnv }, {})
+      const checkResult:IgnisignTechnicalToken_CheckAndConsumeDto = await ignisignConnectedApi.post(ignisignRemoteServiceUrls.checkWebhookToken, { token, appId, appEnv }, {})
       return (checkResult && checkResult.isValid)
 
     } catch (e) {
@@ -368,13 +368,13 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
 
   public async registerWebhookCallback<T = any>(
-    callback   : IgnisignWebhookCallback<T>,
+    callback   : IgnisignWebhook_Callback<T>,
     topic?     : IGNISIGN_WEBHOOK_TOPICS,
     action?    : string,
     msgNature? : IGNISIGN_WEBHOOK_MESSAGE_NATURE,
   ): Promise<string>{
 
-    const mapper : IgnisignWebhookCallbackMapper<T>  = {
+    const mapper : IgnisignWebhook_CallbackMapper<T>  = {
       uuid      : uuid.v4(),
       topic     : topic     ? topic     : 'ALL',
       action    : action    ? action    : 'ALL',
@@ -391,7 +391,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     this.callbacks = this.callbacks.filter( c => c.uuid !== callbackId);
   }
 
-  public async consumeWebhook(actionDto: IgnisignWebhookActionDto){
+  public async consumeWebhook(actionDto: IgnisignWebhook_ActionDto){
 
     _logIfActivated("consumeWebhook", actionDto)
 

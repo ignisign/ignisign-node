@@ -10,7 +10,7 @@ import { IgnisignSdkFileContentUploadDto } from "@ignisign/sdk";
 import { MySignatureRequest, MySignatureRequestModel, MySignatureRequestSignersModel } from "../models/signature-request.db.model";
 import { MyUser, MyUserModel } from "../models/user.db.model";
 
-const addSignatureRequest = async (signatureProfileId, signatureRequest: MySignatureRequest) => {
+const addSignatureRequest = async (signatureProfileId, signatureRequest: MySignatureRequest) : Promise<MySignatureRequest> => {
   return new Promise((resolve, reject) => {
     MySignatureRequestModel.insert({...signatureRequest, signatureProfileId}, async (error, found)=>{
       if (error) {
@@ -62,9 +62,14 @@ const getUsers = (usersIds): Promise<MyUser[]> => {
 }
 
 const createNewSignatureRequest = async (signatureProfileId, title, files: {file, fullPrivacy: boolean}[], usersIds) => {
-  const users: MyUser[]     = await getUsers(usersIds)
-  const signatureRequestId = await IgnisignSdkManagerService.initSignatureRequest(signatureProfileId)
-  const documentIds = []
+  const users: MyUser[]     = await getUsers(usersIds);
+  const signatureRequestId  = await IgnisignSdkManagerService.initSignatureRequest(signatureProfileId);
+  const documentIds         = [];
+
+  const mySignatureRequest = await addSignatureRequest(
+    signatureProfileId,
+    { title, signatureRequestId: signatureRequestId }
+  );
 
   for (const {file, fullPrivacy} of files) {
     let documentId = null;
@@ -96,17 +101,11 @@ const createNewSignatureRequest = async (signatureProfileId, title, files: {file
     title, 
     documentIds,
     signerIds : users.map(e => e.signerId),
+    externalId : mySignatureRequest._id.toString()
   };
 
   await IgnisignSdkManagerService.updateSignatureRequest(signatureRequestId, dto);
-  
-  const signatureRequestResult: IgnisignSignatureRequest_IdContainer = await IgnisignSdkManagerService.publishSignatureRequest(signatureRequestId);
-
-  addSignatureRequest(
-    signatureProfileId,
-    { title, signatureRequestId: signatureRequestResult.signatureRequestId }
-  );
-
+  await IgnisignSdkManagerService.publishSignatureRequest(signatureRequestId);
 }
 
 const handleSignatureRequestWebhookSigners = async (webhookContext: any): Promise<any> => {

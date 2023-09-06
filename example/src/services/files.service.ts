@@ -1,4 +1,4 @@
-import { IgnisignPrivateFileDto } from "@ignisign/public";
+import { IgnisignDocument_PrivateFileDto } from "@ignisign/public";
 import { generateBearerToken } from "../utils/authorization.middleware";
 import { saveFileToFolder } from "../utils/files.util";
 import { MyFile, MyFileModel } from "../models/file.db.model";
@@ -10,7 +10,7 @@ const buildFileAccessPath = (documentId: string) => {
   return `${process.env.MY_SERVER_URL}/uploads/${documentId}`
 }
 
-const getPrivateFileUrl = (documentId) : Promise<IgnisignPrivateFileDto> => {
+const getPrivateFileUrl = (documentId) : Promise<IgnisignDocument_PrivateFileDto> => {
   return new Promise((resolve, reject) => {
     MyFileModel.findOne({documentId}, (error, found: MyFile) => {
       if (error) {
@@ -18,6 +18,7 @@ const getPrivateFileUrl = (documentId) : Promise<IgnisignPrivateFileDto> => {
       } else {
         const url = buildFileAccessPath(documentId)
         resolve({
+          documentId,
           fileUrl  : url,
           mimeType : found.mimeType,
           fileName : found.fileName,
@@ -27,7 +28,6 @@ const getPrivateFileUrl = (documentId) : Promise<IgnisignPrivateFileDto> => {
     });
   });
 }
-
 const saveFile = (fileHash, file, documentId) => {
   return new Promise(async (resolve, reject) => {
 

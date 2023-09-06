@@ -1,7 +1,7 @@
+import { IgnisignSignatureRequest_IdContainer, IgnisignSignatureRequest_UpdateDto } from '@ignisign/public';
 import * as FormData from "form-data";
 import * as fs from 'fs';
 
-import { IgnisignSignatureRequestIdContainer, Ignisign_SignatureRequest_UpdateDto } from "@ignisign/public";
 import { getFileHash } from "../utils/files.util";
 import { FileService } from "./files.service";
 import { IgnisignSdkManagerService } from "./ignisign-sdk-manager.service";
@@ -92,7 +92,7 @@ const createNewSignatureRequest = async (signatureProfileId, title, files: {file
     documentIds.push(documentId)
   }
 
-  const dto : Ignisign_SignatureRequest_UpdateDto = {
+  const dto : IgnisignSignatureRequest_UpdateDto = {
     title, 
     documentIds,
     signerIds : users.map(e => e.signerId),
@@ -100,7 +100,7 @@ const createNewSignatureRequest = async (signatureProfileId, title, files: {file
 
   await IgnisignSdkManagerService.updateSignatureRequest(signatureRequestId, dto);
   
-  const signatureRequestResult: IgnisignSignatureRequestIdContainer = await IgnisignSdkManagerService.publishSignatureRequest(signatureRequestId);
+  const signatureRequestResult: IgnisignSignatureRequest_IdContainer = await IgnisignSdkManagerService.publishSignatureRequest(signatureRequestId);
 
   addSignatureRequest(
     signatureProfileId,

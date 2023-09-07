@@ -40,11 +40,11 @@ import {
   IgnisignWebhookDto_DocumentRequest,
   IgnisignWebhookDto_SignatureRequest,
   IgnisignWebhookDto_SignatureRequestLaunched,
-  IgnisignWebhookDto_SignatureProfileCreated,
   IgnisignWebhookDto_Signer,
   IgnisignWebhookDto_SignatureProof,
   IgnisignWebhookDto_SignatureImage,
-  IgnisignWebhookDto_Application
+  IgnisignWebhookDto_Application,
+  IgnisignWebhookDto_SignatureProfile
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -432,12 +432,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async registerWebhookCallback_SignatureProfile(
-    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureProfileCreated>,
+    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureProfile>,
     action?    : string,
     msgNature? : IGNISIGN_WEBHOOK_MESSAGE_NATURE,
   ): Promise<string>{
 
-    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProfileCreated> = {
+    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProfile> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_PROFILE,
       action    : action    ? action    : 'ALL',

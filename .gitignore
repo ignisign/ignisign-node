@@ -1,10 +1,5 @@
 node_modules
-example/node_modules
-
+example
 dist
-example/dist
-example/.env
-
 tsconfig.tsbuildinfo
 .npmrc
-example/data/**

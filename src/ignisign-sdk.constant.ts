@@ -59,7 +59,7 @@ export const ignisignRemoteServiceUrls = {
 
   getSignatureImg                         : "/v3/documents/:documentId/img-signatures", // get
   getDocumentSignatures                   : "/v3/documents/:documentId/signatures", // get
-  getDocumentSignature                   : "/v3/documents/:documentId/signatures/:signatureId", // get
+  getDocumentSignature                    : "/v3/documents/:documentId/signatures/:signatureId", // get
   
 
   // Signature profile   

@@ -576,7 +576,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     }
 
     const callbacksToApply = this.callbacks.filter( c => {
-      const topicIsMatching   = c.topic [ actionDto.topic, 'ALL'].includes(c.topic);
+      const topicIsMatching   = [ actionDto.topic, 'ALL'].includes(c.topic);
       const actionIsMatching  = [ actionDto.action, 'ALL'].includes(c.action);
 
       return (topicIsMatching && actionIsMatching)

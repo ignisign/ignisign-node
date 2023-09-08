@@ -25,7 +25,6 @@ export class IgnisignWebhook_CallbackMapper<T> {
   uuid      : string;
   topic     : IGNISIGN_WEBHOOK_TOPICS         |  'ALL';
   action    : string;
-  msgNature : IGNISIGN_WEBHOOK_MESSAGE_NATURE |  'ALL';
   callback  : IgnisignWebhook_Callback<T>
 }
 

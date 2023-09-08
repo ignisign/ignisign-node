@@ -196,7 +196,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post<IgnisignDocument>(ignisignRemoteServiceUrls.provideDocumentContent_PrivateContent, dto, { urlParams: { documentId } });
   }
 
-  // TODO see stream management
   public async provideDocumentContent_File(documentId: string, uploadDto : IgnisignSdkFileContentUploadDto): Promise<IgnisignDocument> {
 
     const formData = new FormData();

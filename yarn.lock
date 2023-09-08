@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.16.tgz#126b4815b1c321ef89b913724f9e2cd0823e32fa"
-  integrity sha512-PvOT3jw/foD/5iZ7BbMs5NNqM3kkNu4VI9F8SDRBB+/NJMamFQ8PlK/b62AHWixOdRQuk0IfIhfiYd96AYxhCg==
+"@ignisign/public@1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.27.tgz#fb5d8e32923821e1f756e88a7058996cb27b8be3"
+  integrity sha512-VPD9GQdAoKrTKe6O5b0OEEt/97rXMx8o8ONG4mPdw3fPJI0HfO21hK9DfYNKw6BMJirXWmY5uN8ihJRz/H3Qkw==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"
@@ -37,13 +37,14 @@ array-buffer-byte-length@^1.0.0:
     is-array-buffer "^3.0.1"
 
 arraybuffer.prototype.slice@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/arraybuffer.prototype.slice/-/arraybuffer.prototype.slice-1.0.1.tgz#9b5ea3868a6eebc30273da577eb888381c0044bb"
-  integrity sha512-09x0ZWFEjj4WD8PDbykUwo3t9arLn8NIzmmYEJFpYekOAQjpkGSyrQhNoRTcwwcFRu+ycWF78QZ63oWTqSjBcw==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/arraybuffer.prototype.slice/-/arraybuffer.prototype.slice-1.0.2.tgz#98bd561953e3e74bb34938e77647179dfe6e9f12"
+  integrity sha512-yMBKppFur/fbHu9/6USUe03bZ4knMYiwFBcyiaXB8Go0qNehwX6inYPzK9U0NeQvGxKthcmHcaR8P5MStSRBAw==
   dependencies:
     array-buffer-byte-length "^1.0.0"
     call-bind "^1.0.2"
     define-properties "^1.2.0"
+    es-abstract "^1.22.1"
     get-intrinsic "^1.2.1"
     is-array-buffer "^3.0.2"
     is-shared-array-buffer "^1.0.2"
@@ -703,12 +704,12 @@ rimraf@^3.0.2:
     glob "^7.1.3"
 
 safe-array-concat@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/safe-array-concat/-/safe-array-concat-1.0.0.tgz#2064223cba3c08d2ee05148eedbc563cd6d84060"
-  integrity sha512-9dVEFruWIsnie89yym+xWTAYASdpw3CJV7Li/6zBewGf9z2i1j31rP6jnY0pHEO4QZh6N0K11bFjWmdR8UGdPQ==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/safe-array-concat/-/safe-array-concat-1.0.1.tgz#91686a63ce3adbea14d61b14c99572a8ff84754c"
+  integrity sha512-6XbUAseYE2KtOuGueyeobCySj9L4+66Tn6KQMOPQJrAJEowYKW/YR/MGJZl7FdydUdaFu4LYyDZjxf4/Nmo23Q==
   dependencies:
     call-bind "^1.0.2"
-    get-intrinsic "^1.2.0"
+    get-intrinsic "^1.2.1"
     has-symbols "^1.0.3"
     isarray "^2.0.5"
 

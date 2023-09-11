@@ -50,7 +50,10 @@ import {
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE_PROOF,
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE_IMAGE,
   IGNISIGN_WEBHOOK_ACTION_APPLICATION,
-  IgnisignWebhook_Action
+  IgnisignWebhook_Action,
+  IGNISIGN_WEBHOOK_ACTION_SIGNATURE_SESSION,
+  IgnisignWebhookDto_Signature,
+  IGNISIGN_WEBHOOK_ACTION_SIGNATURE
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -328,7 +331,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  /************** WEBHOOK *************/
+  /************** WEBHOOK MANAGEMENT *************/
 
   public async addWebhookEndpoint(endPointDto: IgnisignWebhook_EndpointDto): Promise<IgnisignWebhook_SettingsDescription[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
@@ -379,9 +382,92 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return ignisignConnectedApi.get<IgnisignWebhook[]>(ignisignRemoteServiceUrls.getWebhookEndpoints, { urlParams: { appId, appEnv } });
   }
 
+
+
+  public async consumeWebhook(actionDto: IgnisignWebhook_ActionDto){
+
+    _logIfActivated("consumeWebhook", actionDto)
+
+    if(!this.isInitialized)
+      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext)
+
+    if(!actionDto.topic || !actionDto.action || !actionDto.msgNature || !actionDto.verificationToken || !actionDto.appId || !actionDto.appEnv){
+      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_BAD_APP_ID, {
+        customMessage : "[IGNISIGN SDK] Webhook received a message that is badly formatted",
+        webhookMessageReceived : actionDto
+      }, null, this.execContext)
+    }
+
+    if(actionDto.appId !== this.execContext.appId) {
+
+      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_BAD_APP_ID, {
+        customMessage : "[IGNISIGN SDK] You received a webhook for another app than yours",
+        webhookMessageReceived : actionDto
+      }, null, this.execContext)
+    }
+
+    if(actionDto.appEnv !== this.execContext.appEnv) {
+      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_BAD_APP_ENV, {
+        customMessage : "[IGNISIGN SDK] You received a webhook from another environment than yours",
+        webhookMessageReceived : actionDto
+      }, null, this.execContext)
+    }
+
+    const isTokenValid:boolean = await this.checkWebhookToken(actionDto.verificationToken, actionDto.appId, actionDto.appEnv)
+
+    if(!isTokenValid){
+      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_VERIFICATION_FAILED, {
+        customMessage : "[IGNISIGN SDK] Webhook received a message that cannot be verified",
+        webhookMessageReceived : actionDto
+      }, null, this.execContext)
+    }
+
+    const callbacksToApply = this.callbacks.filter( c => {
+      const topicIsMatching   = [ actionDto.topic, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.topic);
+      const actionIsMatching  = [ actionDto.action, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.action);
+
+      return (topicIsMatching && actionIsMatching)
+    });
+
+    return callbacksToApply.reduce( async (accPr, c) => {
+      try {
+        await accPr;
+        return c.callback(actionDto.content, actionDto?.error || undefined, actionDto.msgNature, actionDto.action, actionDto.topic)
+          .catch(e => {
+            console.error("[IGNISIGN SDK] Webhook: error when executing your webhook application callback", e)
+            return Promise.resolve()
+          })
+
+      } catch (e) {
+        console.error("[IGNISIGN SDK] Webhook: error when executing your webhook application callback", e)
+        return Promise.resolve()
+      }
+    }, Promise.resolve())
+  }
+
+  //************************************************** WEBHOOKS REGISTER CALLBACKS ***************************************************/
+
+  public async registerWebhookCallback_Signature(
+    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_Signature>,
+    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
+  ): Promise<string>{
+
+    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signature> = {
+      uuid      : uuid.v4(),
+      topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SESSION,
+      action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      callback
+    }
+
+    this.callbacks.push(mapper)
+
+    return mapper.uuid;
+  }
+
+
   public async registerWebhookCallback_SignatureSession(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureSession>,
-    action?    : string,
+    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE_SESSION,
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureSession> = {
@@ -535,66 +621,5 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async revokeCallback(callbackId : string){
     this.callbacks = this.callbacks.filter( c => c.uuid !== callbackId);
-  }
-
-  public async consumeWebhook(actionDto: IgnisignWebhook_ActionDto){
-
-    _logIfActivated("consumeWebhook", actionDto)
-
-    if(!this.isInitialized)
-      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext)
-
-    if(!actionDto.topic || !actionDto.action || !actionDto.msgNature || !actionDto.verificationToken || !actionDto.appId || !actionDto.appEnv){
-      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_BAD_APP_ID, {
-        customMessage : "[IGNISIGN SDK] Webhook received a message that is badly formatted",
-        webhookMessageReceived : actionDto
-      }, null, this.execContext)
-    }
-
-    if(actionDto.appId !== this.execContext.appId) {
-
-      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_BAD_APP_ID, {
-        customMessage : "[IGNISIGN SDK] You received a webhook for another app than yours",
-        webhookMessageReceived : actionDto
-      }, null, this.execContext)
-    }
-
-    if(actionDto.appEnv !== this.execContext.appEnv) {
-      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_BAD_APP_ENV, {
-        customMessage : "[IGNISIGN SDK] You received a webhook from another environment than yours",
-        webhookMessageReceived : actionDto
-      }, null, this.execContext)
-    }
-
-    const isTokenValid:boolean = await this.checkWebhookToken(actionDto.verificationToken, actionDto.appId, actionDto.appEnv)
-
-    if(!isTokenValid){
-      throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_WEBHOOK_VERIFICATION_FAILED, {
-        customMessage : "[IGNISIGN SDK] Webhook received a message that cannot be verified",
-        webhookMessageReceived : actionDto
-      }, null, this.execContext)
-    }
-
-    const callbacksToApply = this.callbacks.filter( c => {
-      const topicIsMatching   = [ actionDto.topic, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.topic);
-      const actionIsMatching  = [ actionDto.action, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.action);
-
-      return (topicIsMatching && actionIsMatching)
-    });
-
-    return callbacksToApply.reduce( async (accPr, c) => {
-      try {
-        await accPr;
-        return c.callback(actionDto.content, actionDto?.error || undefined, actionDto.msgNature, actionDto.action, actionDto.topic)
-          .catch(e => {
-            console.error("[IGNISIGN SDK] Webhook: error when executing your webhook application callback", e)
-            return Promise.resolve()
-          })
-
-      } catch (e) {
-        console.error("[IGNISIGN SDK] Webhook: error when executing your webhook application callback", e)
-        return Promise.resolve()
-      }
-    }, Promise.resolve())
   }
 }

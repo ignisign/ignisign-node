@@ -80,7 +80,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
    /************** APPLICATION *************/
 
-   // TODO https://app.clickup.com/t/860rnx794
    public async getApplicationContext(): Promise<IgnisignApplication_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get<IgnisignApplication_Context>(ignisignRemoteServiceUrls.getApplicationContext);

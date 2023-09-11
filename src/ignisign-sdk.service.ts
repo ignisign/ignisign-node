@@ -374,7 +374,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async getWebhookEndpoints(): Promise<IgnisignWebhook[]>{
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const ignisignConnectedApi  = await this.getIgnisignPublicApi();
     const { appId, appEnv }     = this.execContext;
     return ignisignConnectedApi.get<IgnisignWebhook[]>(ignisignRemoteServiceUrls.getWebhookEndpoints, { urlParams: { appId, appEnv } });
   }

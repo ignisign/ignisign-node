@@ -5,7 +5,7 @@ import { ResponseType } from "axios";
 
 import {
   IGNISIGN_ERROR_CODES,
-  IGNISIGN_WEBHOOK_MESSAGE_NATURE,
+  IGNISIGN_WEBHOOK_ACTION_ALL,
   IGNISIGN_WEBHOOK_TOPICS,
   IgnisignWebhook_ActionDto,
   IgnisignWebhook_Callback,
@@ -387,7 +387,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureSession> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SESSION,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -404,7 +404,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_DocumentRequest> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.DOCUMENT_REQUEST,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -421,7 +421,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureRequest> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_REQUEST,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -438,7 +438,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProfile> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_PROFILE,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -455,7 +455,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signer> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNER,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -472,7 +472,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProof> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_PROOF,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -489,7 +489,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureImage> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SIGNER_IMAGE,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -506,7 +506,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Application> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.APP,
-      action    : action    ? action    : 'ALL',
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -523,8 +523,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
     const mapper : IgnisignWebhook_CallbackMapper<T>  = {
       uuid      : uuid.v4(),
-      topic     : topic     ? topic     : 'ALL',
-      action    : action    ? action    : 'ALL',
+      topic     : topic     ? topic     : IGNISIGN_WEBHOOK_ACTION_ALL,
+      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -576,8 +576,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
     }
 
     const callbacksToApply = this.callbacks.filter( c => {
-      const topicIsMatching   = c.topic [ actionDto.topic, 'ALL'].includes(c.topic);
-      const actionIsMatching  = [ actionDto.action, 'ALL'].includes(c.action);
+      const topicIsMatching   = [ actionDto.topic, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.topic);
+      const actionIsMatching  = [ actionDto.action, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.action);
 
       return (topicIsMatching && actionIsMatching)
     });

@@ -1,5 +1,3 @@
-#
-
 This is the implemetation of the Ignisign API SDK in Node JS. It ease the integration of the Ignisign API with your backend.
 
 ## Pre-requisites

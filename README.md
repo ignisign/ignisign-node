@@ -57,6 +57,7 @@ enum IGNISIGN_APPLICATION_ENV {
 
 ### Call the API easyly
 <br/>
+
 The **IgnisignSdk** class expose all the API endpoints as methods.<br/>
 So, you can call them easily.<br/><br/>
 

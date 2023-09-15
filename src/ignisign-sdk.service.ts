@@ -14,7 +14,7 @@ import {
   Ignisign_SignatureImagesDto, IgnisignSigner_CreationRequestDto,
   IgnisignSignatureRequest_UpdateDto, IgnisignWebhook_EndpointDto,
   IgnisignWebhook_SettingsDescription, IGNISIGN_WEBHOOK_EVENT_FILTER,
-  IgnisignWebhookEvent_ResponseDto,
+  IgnisignWebhookEvent_ListingDto,
   IgnisignWebhookEvent, IgnisignApplication_InvitedUser,
   IgnisignApplication_InvitedUser_CreationRequestDto,
   IgnisignApplicationUser_EditRequestDto,
@@ -350,7 +350,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return ignisignConnectedApi.delete(ignisignRemoteServiceUrls.removeWebhookEndpoint, { urlParams: { webhookId } });
   }
 
-  public async getWebhookEvents(webhookId: string, filter: IGNISIGN_WEBHOOK_EVENT_FILTER, page: number): Promise<IgnisignWebhookEvent_ResponseDto> {
+  public async getWebhookEvents(webhookId: string, filter: IGNISIGN_WEBHOOK_EVENT_FILTER, page: number): Promise<IgnisignWebhookEvent_ListingDto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return ignisignConnectedApi.get(ignisignRemoteServiceUrls.getWebhookEvents, { urlParams: { webhookId }, params: { filter, page } });
   }

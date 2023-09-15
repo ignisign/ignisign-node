@@ -54,7 +54,7 @@ import {
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE_SESSION,
   IgnisignWebhookDto_Signature,
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
-  IGNISIGN_WEBHOOK_ACTION_DOCUMENT
+  IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -489,7 +489,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_DocumentRequest(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_DocumentRequest>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_DOCUMENT,
+    action?    : IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_DocumentRequest> = {

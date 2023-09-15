@@ -123,7 +123,7 @@ const exampleWebhookCallback = async (
 await ignisignSdkInstance.registerWebhookCallback(
   exampleWebhookCallback, 
   IGNISIGN_WEBHOOK_TOPICS.SIGNATURE,
-  IGNISIGN_WEBHOOK_ACTION_SIGNATURE.CREATED
+  IGNISIGN_WEBHOOK_ACTION_SIGNATURE.FINALIZED
 );
 
 ```
@@ -144,7 +144,7 @@ There are also register functions for **each webhook type**.
 
   registerWebhookCallback_DocumentRequest(
     callback: IgnisignWebhook_Callback<IgnisignWebhookDto_DocumentRequest>, 
-    action?: IGNISIGN_WEBHOOK_ACTION_DOCUMENT
+    action?: IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST
   ): Promise<string>;
 
   registerWebhookCallback_SignatureRequest(

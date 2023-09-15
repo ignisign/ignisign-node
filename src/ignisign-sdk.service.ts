@@ -11,7 +11,7 @@ import {
   IgnisignWebhook_Callback,
   IgnisignDocument_ContentCreation_DataJsonDto, IgnisignDocument, IgnisignSigner_CreationResponseDto,
   IgnisignTechnicalToken_CheckAndConsumeDto,
-  Ignisign_SignatureImagesDto, IgnisignSigner_CreationRequestDto,
+  IgnisignSignatureImages_Dto, IgnisignSigner_CreationRequestDto,
   IgnisignSignatureRequest_UpdateDto, IgnisignWebhook_EndpointDto,
   IgnisignWebhook_SettingsDescription, IGNISIGN_WEBHOOK_EVENT_FILTER,
   IgnisignWebhookEvent_ListingDto,
@@ -123,6 +123,14 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   /************** SIGNERS *************/
+
+
+  public async getSignatureProfileSignerInputsConstraints(signatureProfileId : string) : Promise<IgnisignSignatureProfile_SignerInputsConstraints> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    return await ignisignConnectedApi.get<IgnisignSignatureProfile_SignerInputsConstraints>(ignisignRemoteServiceUrls.getSignatureProfileSignerInputsConstraints, { urlParams: { appId, appEnv, signatureProfileId } });
+  }
+
 
   public async getSignerWithDetails(signerId : string): Promise<IgnisignSigner_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
@@ -248,7 +256,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
   }
 
-  public async getSignatureImg(documentId : string, signerId: string): Promise<Ignisign_SignatureImagesDto> {
+  public async getSignatureImg(documentId : string, signerId: string): Promise<IgnisignSignatureImages_Dto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId,  signerId } });
   }
@@ -290,12 +298,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.put<IgnisignSignatureProfile>(ignisignRemoteServiceUrls.updateSignatureProfileStatus, dto, { urlParams: { appId, appEnv, signatureProfileId } });
   }
 
-  public async getSignatureProfileSignerInputsConstraints(signatureProfileId : string) : Promise<IgnisignSignatureProfile_SignerInputsConstraints> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignSignatureProfile_SignerInputsConstraints>(ignisignRemoteServiceUrls.getSignatureProfileSignerInputsConstraints, { urlParams: { appId, appEnv, signatureProfileId } });
-  }
-
+  
   /**************  SIGNATURE REQUESTS *************/
 
   public async initSignatureRequest(dto: IgnisignSignatureProfile_IdContainerDto): Promise<IgnisignSignatureRequest_IdContainer> {
@@ -340,6 +343,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return ignisignConnectedApi.post(ignisignRemoteServiceUrls.addWebhookEndpoint, endPointDto, { urlParams: { appId, appEnv } });
   }
 
+  public async getWebhookEndpoints(): Promise<IgnisignWebhook[]>{
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    return ignisignConnectedApi.get<IgnisignWebhook[]>(ignisignRemoteServiceUrls.getWebhookEndpoints, { urlParams: { appId, appEnv } });
+  }
+
   public async updateWebhookEndpoint(webhookId: string, endPointDto: IgnisignWebhook_EndpointDto): Promise<IgnisignWebhook_SettingsDescription[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return ignisignConnectedApi.put(ignisignRemoteServiceUrls.updateWebhookEndpoint, endPointDto, { urlParams: { webhookId } });
@@ -376,11 +385,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     }
   }
 
-  public async getWebhookEndpoints(): Promise<IgnisignWebhook[]>{
-    const ignisignConnectedApi  = await this.getIgnisignPublicApi();
-    const { appId, appEnv }     = this.execContext;
-    return ignisignConnectedApi.get<IgnisignWebhook[]>(ignisignRemoteServiceUrls.getWebhookEndpoints, { urlParams: { appId, appEnv } });
-  }
+  
 
 
 

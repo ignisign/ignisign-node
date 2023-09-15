@@ -3,3 +3,4 @@ example
 dist
 tsconfig.tsbuildinfo
 .npmrc
+.DS_Store

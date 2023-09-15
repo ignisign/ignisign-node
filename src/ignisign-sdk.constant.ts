@@ -2,21 +2,9 @@ export const DEFAULT_IGNISIGN_API_URL = "https://api.ignisign.io";
 
 export const ignisignRemoteServiceUrls = {
 
-  // Webhooks
-  addWebhookEndpoint                      : "/v3/applications/:appId/envs/:appEnv/webhooks", 
-  updateWebhookEndpoint                   : "/v3/webhooks/:webhookId",
-  removeWebhookEndpoint                   : "/v3/webhooks/:webhookId",
-  getWebhookEndpoints                     : "/v3/applications/:appId/envs/:appEnv/webhooks", 
-
-  getWebhookEvents                        : "/v3/webhooks/:webhookId/events",
-  getWebhookEvent                         : "/v3/webhooks/:webhookId/events/:eventId",
-  resendWebhookEvent                      : "/v3/webhooks/:webhookId/events/:eventId/resend",
 
   // Applications
-  getApplicationContext                   : "/v3/applications/:appId/context", // get // /v3/applications/:appId/envs/:appEnv/context
-
-
-  // updateApplicationEnvSettings            : "/v3/applications/:appId/envs/:appEnv/settings", // put
+  getApplicationContext                   : "/v3/applications/:appId/context", // get
 
   // User invitations
   getAppInvitedUsers                      : "/v3/applications/:appId/users-invitations", // get
@@ -33,6 +21,7 @@ export const ignisignRemoteServiceUrls = {
   createSigner                            : "/v3/applications/:appId/envs/:appEnv/signers",//post
   updateSigner                            : "/v3/applications/:appId/envs/:appEnv/signers/:signerId", //put
   revokeSigner                            : "/v3/applications/:appId/envs/:appEnv/signers/:signerId/revoke", //delete
+  getSignatureProfileSignerInputsConstraints  : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signer-inputs-constraints", // get
 
   // Documents
   initializeDocument                      : "/v3/applications/:appId/envs/:appEnv/init-documents", // post
@@ -48,11 +37,12 @@ export const ignisignRemoteServiceUrls = {
   removeDocumentContent                   : "/v3/documents/:documentId/content", //
 
   createDocumentRequest                   : "/v3/documents/:documentId/requests", //
-  documentRequestValidation               : "/v3/documents/:documentId/document-request-validation", //  
 
   provideDocumentContent_File             : "/v3/documents/:documentId/file", //
   downloadOriginalDoc                     : "/v3/documents/:documentId/file", // 
   
+  // Signature Proof
+
   downloadSignatureProofDocument          : "/v3/documents/:documentId/signature-proof", //  
   downloadDocumentSignatureXades          : "/v3/documents/:documentId/signatures/:signatureId/xades", //
   downloadAsicFile                        : "/v3/documents/:documentId/asics", // 
@@ -63,10 +53,9 @@ export const ignisignRemoteServiceUrls = {
   
 
   // Signature profile   
-
-  getSignatureProfiles                        : "/v3/applications/:appId/envs/:appEnv/signature-profiles", //  get
-  updateSignatureProfileStatus                : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/status", // put
-  getSignatureProfileSignerInputsConstraints  : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signer-inputs-constraints", // get
+  getSignatureProfiles                    : "/v3/applications/:appId/envs/:appEnv/signature-profiles", //  get
+  updateSignatureProfileStatus            : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/status", // put
+  
 
   // Signature requests
 
@@ -78,5 +67,15 @@ export const ignisignRemoteServiceUrls = {
   closeSignatureRequest                   : "/v3/signature-requests/:signatureRequestId/close", //    
   getSignatureRequestContext              : "/v3/signature-requests/:signatureRequestId/context", //  
 
+  
+  // Webhooks
+  addWebhookEndpoint                      : "/v3/applications/:appId/envs/:appEnv/webhooks", 
+  updateWebhookEndpoint                   : "/v3/webhooks/:webhookId",
+  removeWebhookEndpoint                   : "/v3/webhooks/:webhookId",
+  getWebhookEndpoints                     : "/v3/applications/:appId/envs/:appEnv/webhooks", 
+
+  getWebhookEvents                        : "/v3/webhooks/:webhookId/events",
+  getWebhookEvent                         : "/v3/webhooks/:webhookId/events/:eventId",
+  resendWebhookEvent                      : "/v3/webhooks/:webhookId/events/:eventId/resend",
   checkWebhookToken                       : '/v3/tokens/webhook-verification/checking-consumption',
 }

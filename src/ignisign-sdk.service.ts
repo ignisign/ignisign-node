@@ -11,7 +11,7 @@ import {
   IgnisignWebhook_Callback,
   IgnisignDocument_ContentCreation_DataJsonDto, IgnisignDocument, IgnisignSigner_CreationResponseDto,
   IgnisignTechnicalToken_CheckAndConsumeDto,
-  Ignisign_SignatureImagesDto, IgnisignSigner_CreationRequestDto,
+  IgnisignSignatureImages_Dto, IgnisignSigner_CreationRequestDto,
   IgnisignSignatureRequest_UpdateDto, IgnisignWebhook_EndpointDto,
   IgnisignWebhook_SettingsDescription, IGNISIGN_WEBHOOK_EVENT_FILTER,
   IgnisignWebhookEvent_ResponseDto,
@@ -256,7 +256,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
   }
 
-  public async getSignatureImg(documentId : string, signerId: string): Promise<Ignisign_SignatureImagesDto> {
+  public async getSignatureImg(documentId : string, signerId: string): Promise<IgnisignSignatureImages_Dto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId,  signerId } });
   }
@@ -344,7 +344,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async getWebhookEndpoints(): Promise<IgnisignWebhook[]>{
-    const ignisignConnectedApi  = await this.getIgnisignPublicApi();
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return ignisignConnectedApi.get<IgnisignWebhook[]>(ignisignRemoteServiceUrls.getWebhookEndpoints, { urlParams: { appId, appEnv } });
   }

@@ -41,12 +41,17 @@ export class IgnisignHttpApi {
 
   protected isInitialized         : boolean         = false;
   protected initAlreadyStarted    : boolean         = false;
+  private _init: IgnisignSdkInitializer = null;
 
   protected execContext           : IgnisignSdkExecutionContext;
 
 
   constructor(init: IgnisignSdkInitializer){
-    this._executeInit(init);
+    this._init = init;
+  }
+
+  public async init(){
+    await this._executeInit(this._init);
   }
 
   private async _executeInit(init: IgnisignSdkInitializer){

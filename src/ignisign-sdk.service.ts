@@ -459,7 +459,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signature> = {
       uuid      : uuid.v4(),
-      topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SESSION,
+      topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE,
       action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }

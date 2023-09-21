@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@1.0.56":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.56.tgz#3ee2bca9c1d76595be3aab1b3539aae54245c286"
-  integrity sha512-ZIK/yfTLpoNnb7SZDINP//x6r/JXXefPenktBNshQSGabKUu4OFUkfbVI9UrbAagzLA7VpBj/Eq+SRQoGhhzlg==
+"@ignisign/public@1.0.58":
+  version "1.0.58"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.58.tgz#fdc2aa7e4cf60babaaa7ca3a71a5629e285748b5"
+  integrity sha512-5mRRyPDcEnW05B29QPbZQeDHlm8kLcQ1I8ewMCq92AYO+qaAvMdgM/Cm+teUc1DSJofGAJ+2YjhbawWa6teCNg==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"
@@ -253,9 +253,9 @@ escape-string-regexp@^1.0.5:
   integrity sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==
 
 follow-redirects@^1.14.0:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
-  integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.3.tgz#fe2f3ef2690afce7e82ed0b44db08165b207123a"
+  integrity sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -807,9 +807,9 @@ spdx-expression-parse@^3.0.0:
     spdx-license-ids "^3.0.0"
 
 spdx-license-ids@^3.0.0:
-  version "3.0.13"
-  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.13.tgz#7189a474c46f8d47c7b0da4b987bb45e908bd2d5"
-  integrity sha512-XkD+zwiqXHikFZm4AX/7JSCXA98U5Db4AFd5XUg/+9UNtnH75+Z9KxtpYiJZx36mUDVOwH83pl7yvCer6ewM3w==
+  version "3.0.15"
+  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.15.tgz#142460aabaca062bc7cd4cc87b7d50725ed6a4ba"
+  integrity sha512-lpT8hSQp9jAKp9mhtBU4Xjon8LPGBvLIuBiSVhMEtmLecTh2mO0tlqrAMp47tBXzMr13NJMQ2lf7RpQGLJ3HsQ==
 
 string.prototype.padend@^3.0.0:
   version "3.1.5"

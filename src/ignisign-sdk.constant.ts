@@ -22,6 +22,7 @@ export const ignisignRemoteServiceUrls = {
   updateSigner                            : "/v3/applications/:appId/envs/:appEnv/signers/:signerId", //put
   revokeSigner                            : "/v3/applications/:appId/envs/:appEnv/signers/:signerId/revoke", //delete
   getSignatureProfileSignerInputsConstraints  : "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signer-inputs-constraints", // get
+  getMissingSignerInputs_FromSignatureProfile: "/v3/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signers/:signerId/missing-inputs", // get
 
   // Documents
   initializeDocument                      : "/v3/applications/:appId/envs/:appEnv/init-documents", // post

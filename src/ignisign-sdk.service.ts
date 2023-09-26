@@ -62,6 +62,7 @@ import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
 import { IgnisignSdkFileContentUploadDto, IgnisignSdkInitializer, IgnisignWebhook_CallbackMapper } from "./ignisign-sdk.models";
 import { ignisignRemoteServiceUrls } from "./ignisign-sdk.constant";
 import { IgnisignHttpApi } from "./ignisign-http.service";
+import { Readable } from "stream";
 
 
 const LOG_ACTIVATED = false;
@@ -269,9 +270,9 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  public async downloadSignatureProofDocument(documentId: string): Promise<ReadableStream> {
+  public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId } });
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
   /************** DOCUMENTS *************/

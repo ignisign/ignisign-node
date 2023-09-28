@@ -243,9 +243,9 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post<IgnisignDocument>(ignisignRemoteServiceUrls.provideDocumentContent_File, formData, { urlParams: { documentId } , headers: {...formData.getHeaders()} });
   }
 
-  public async downloadOriginalDoc(documentId : string): Promise<ReadableStream|string|Object> {
+  public async downloadOriginalDoc(documentId : string): Promise<NodeJS.ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId } });
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
   public async createDocumentRequest(documentId: string, dto: IgnisignDocumentRequest_RequestDto): Promise<IgnisignDocument> {
@@ -254,15 +254,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<ReadableStream> {
+  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<NodeJS.ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadDocumentSignatureXades,  { urlParams: { documentId, signatureId } });
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadDocumentSignatureXades,  { urlParams: { documentId, signatureId }, responseType:<ResponseType>('stream') });
   }
 
-  public async downloadAsicFile(documentId : string): Promise<ReadableStream> {
+  public async downloadAsicFile(documentId : string): Promise<NodeJS.ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-     await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
-     return null
+    await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
+    return null
   }
 
   public async getSignatureImg(documentId : string, signerId: string): Promise<IgnisignSignatureImages_Dto> {
@@ -271,7 +271,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
+  public async downloadSignatureProofDocument(documentId: string): Promise<NodeJS.ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }

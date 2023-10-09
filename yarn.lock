@@ -2,19 +2,24 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@1.0.63":
-  version "1.0.63"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.63.tgz#7d24ac25c63ace0a1a3c158f88ef2d447f93b6f0"
-  integrity sha512-RJ6QYEZBMrQoFxdYB+Gdta6h85HsrAo5uyN1JlhqQVycyToXlG2OETFZjfJhoAmX7M6/GGwuY9+zOxKIlBgdIA==
+"@ignisign/public@1.0.68":
+  version "1.0.68"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.68.tgz#27d9da1a1860dffbb0230e377695767fafc295db"
+  integrity sha512-EdJMt2tEfiLI19b0hV5VIiu9o7Wc0LRlamin8/FdV8vPrK536NuHwV3gvoYN+5a4pb3zsYdpPDJzi3sdkSmrFA==
   dependencies:
-    class-transformer "^0.3.1"
-    class-validator "^0.13.1"
+    class-transformer "^0.5.1"
+    class-validator "^0.14.0"
     reflect-metadata "^0.1.13"
 
 "@types/node@^13.13.4":
   version "13.13.52"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.52.tgz#03c13be70b9031baaed79481c0c0cfb0045e53f7"
   integrity sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==
+
+"@types/validator@^13.7.10":
+  version "13.11.2"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.11.2.tgz#a2502325a3c0bd29f36dbac3b763223edd801e17"
+  integrity sha512-nIKVVQKT6kGKysnNt+xLobr+pFJNssJRi2s034wgWeFBUx01fI8BeHTW2TcRp7VcFu9QCYG8IlChTuovcm0oKQ==
 
 ansi-styles@^3.2.1:
   version "3.2.1"
@@ -101,17 +106,18 @@ chalk@^2.4.1:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-class-transformer@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.3.2.tgz#779ef5f124784324b40f8e927c774bd96cdecd4b"
-  integrity sha512-9QY6QXBH/+Gt1C3HBmJCrgY6+EFpIa6aLjfDnlXFx0zQl/HjrCE7qoaI0srNrxpMIfsobCpgUdDG5JYtJOpVsw==
+class-transformer@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.5.1.tgz#24147d5dffd2a6cea930a3250a677addf96ab336"
+  integrity sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==
 
-class-validator@^0.13.1:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.13.2.tgz#64b031e9f3f81a1e1dcd04a5d604734608b24143"
-  integrity sha512-yBUcQy07FPlGzUjoLuUfIOXzgynnQPPruyK1Ge2B74k9ROwnle1E+NxLWnUv5OLU8hA/qL5leAE9XnXq3byaBw==
+class-validator@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.14.0.tgz#40ed0ecf3c83b2a8a6a320f4edb607be0f0df159"
+  integrity sha512-ct3ltplN8I9fOwUd8GrP8UQixwff129BkEtuWDKL5W45cQuLd19xqmTLu5ge78YDm/fdje6FMt0hGOhl0lii3A==
   dependencies:
-    libphonenumber-js "^1.9.43"
+    "@types/validator" "^13.7.10"
+    libphonenumber-js "^1.10.14"
     validator "^13.7.0"
 
 color-convert@^1.9.0:
@@ -382,11 +388,9 @@ has-tostringtag@^1.0.0:
     has-symbols "^1.0.2"
 
 has@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/has/-/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"
-  integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
-  dependencies:
-    function-bind "^1.1.1"
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/has/-/has-1.0.4.tgz#2eb2860e000011dae4f1406a86fe80e530fb2ec6"
+  integrity sha512-qdSAmqLF6209RFj4VVItywPMbm3vWylknmB3nvNiUIs72xAimcM8nVYxYr7ncvZq5qzk9MKIZR8ijqD/1QuYjQ==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
@@ -533,10 +537,10 @@ json-parse-better-errors@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
   integrity sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
 
-libphonenumber-js@^1.9.43:
-  version "1.10.44"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.44.tgz#6709722461173e744190494aaaec9c1c690d8ca8"
-  integrity sha512-svlRdNBI5WgBjRC20GrCfbFiclbF0Cx+sCcQob/C1r57nsoq0xg8r65QbTyVyweQIlB33P+Uahyho6EMYgcOyQ==
+libphonenumber-js@^1.10.14:
+  version "1.10.47"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.47.tgz#1efdf08306960a222703e575e78eb76458944012"
+  integrity sha512-b4t7VQDV29xx/ni+58yl9KWPGjnDLDXCeCTLrD4V8vDpObXZRZBrg7uX/HWZ7YXiJKqdBDGgc+barUUTNB6Slw==
 
 load-json-file@^4.0.0:
   version "4.0.0"
@@ -807,9 +811,9 @@ spdx-expression-parse@^3.0.0:
     spdx-license-ids "^3.0.0"
 
 spdx-license-ids@^3.0.0:
-  version "3.0.15"
-  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.15.tgz#142460aabaca062bc7cd4cc87b7d50725ed6a4ba"
-  integrity sha512-lpT8hSQp9jAKp9mhtBU4Xjon8LPGBvLIuBiSVhMEtmLecTh2mO0tlqrAMp47tBXzMr13NJMQ2lf7RpQGLJ3HsQ==
+  version "3.0.16"
+  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.16.tgz#a14f64e0954f6e25cc6587bd4f392522db0d998f"
+  integrity sha512-eWN+LnM3GR6gPu35WxNgbGl8rmY1AEmoMDvL/QD6zYmPWgywxWqJWNdLGT+ke8dKNWrcYgYjPpG5gbTfghP8rw==
 
 string.prototype.padend@^3.0.0:
   version "3.1.5"

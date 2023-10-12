@@ -265,9 +265,9 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return null
   }
 
-  public async getSignatureImg(documentId : string, signerId: string): Promise<IgnisignSignatureImages_Dto> {
+  public async getSignaturesImages(documentId : string): Promise<IgnisignSignatureImages_Dto> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId,  signerId } });
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId } });
   }
 
 
@@ -446,7 +446,13 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return callbacksToApply.reduce( async (accPr, c) => {
       try {
         await accPr;
-        return c.callback(actionDto.content, actionDto?.error || undefined, actionDto.msgNature, actionDto.action, actionDto.topic)
+        return c.callback({
+          content: actionDto.content, 
+          error: actionDto?.error || undefined, 
+          msgNature: actionDto.msgNature, 
+          action: actionDto.action, 
+          topic: actionDto.topic
+        })
           .catch(e => {
             console.error("[IGNISIGN SDK] Webhook: error when executing your webhook application callback", e)
             return Promise.resolve()

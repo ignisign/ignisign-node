@@ -55,7 +55,8 @@ import {
   IgnisignWebhookDto_Signature,
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
   IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
-  IGNISIGN_SIGNER_CREATION_INPUT_REF
+  IGNISIGN_SIGNER_CREATION_INPUT_REF,
+  IGNISIGN_WEBHOOK_MESSAGE_NATURE
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -437,10 +438,11 @@ export class IgnisignSdk extends IgnisignHttpApi {
     }
 
     const callbacksToApply = this.callbacks.filter( c => {
-      const topicIsMatching   = [ actionDto.topic, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.topic);
-      const actionIsMatching  = [ actionDto.action, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.action);
+      const topicIsMatching     = [actionDto.topic, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.topic);
+      const actionIsMatching    = [actionDto.action, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.action);
+      const msgNatureIsMatching = [actionDto.msgNature, IGNISIGN_WEBHOOK_ACTION_ALL].includes(c.msgNature);
 
-      return (topicIsMatching && actionIsMatching)
+      return (topicIsMatching && actionIsMatching && msgNatureIsMatching);
     });
 
     return callbacksToApply.reduce( async (accPr, c) => {
@@ -469,13 +471,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_Signature(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_Signature>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signature> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE,
       action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -487,13 +491,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_SignatureSession(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureSession>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE_SESSION,
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_SESSION,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureSession> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SESSION,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -504,13 +510,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_DocumentRequest(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_DocumentRequest>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
+    action    ?: IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_DocumentRequest> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.DOCUMENT_REQUEST,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -521,13 +529,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_SignatureRequest(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureRequest>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureRequest> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_REQUEST,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -538,13 +548,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_SignatureProfile(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureProfile>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE_PROFILE
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_PROFILE,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProfile> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_PROFILE,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -555,13 +567,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_Signer(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_Signer>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNER
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNER,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signer> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNER,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -572,13 +586,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_SignatureProof(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureProof>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE_PROOF
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_PROOF,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProof> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_PROOF,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -589,13 +605,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_SignatureImageGenerated(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureImage>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_SIGNATURE_IMAGE
+    action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_IMAGE,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureImage> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SIGNER_IMAGE,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -606,13 +624,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback_Application(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_Application>,
-    action?    : IGNISIGN_WEBHOOK_ACTION_APPLICATION
+    action    ?: IGNISIGN_WEBHOOK_ACTION_APPLICATION,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Application> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.APP,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 
@@ -623,14 +643,16 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async registerWebhookCallback<T = any>(
     callback   : IgnisignWebhook_Callback<T>,
-    topic?     : IGNISIGN_WEBHOOK_TOPICS,
-    action?    : IgnisignWebhook_Action
+    topic     ?: IGNISIGN_WEBHOOK_TOPICS,
+    action    ?: IgnisignWebhook_Action,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
     const mapper : IgnisignWebhook_CallbackMapper<T>  = {
       uuid      : uuid.v4(),
       topic     : topic     ? topic     : IGNISIGN_WEBHOOK_ACTION_ALL,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
     }
 

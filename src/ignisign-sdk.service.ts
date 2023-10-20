@@ -277,7 +277,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
-  public async generateAdvancedSignatureProof(documentId: string): Promise<NodeJS.ReadableStream> {
+  public async generateAdvancedSignatureProof(documentId: string): Promise<{ documentId : string }> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }

@@ -262,8 +262,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async downloadAsicFile(documentId : string): Promise<NodeJS.ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
-    return null
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
   }
 
   public async getSignaturesImages(documentId : string): Promise<IgnisignSignatureImages_Dto> {

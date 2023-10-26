@@ -33,7 +33,7 @@ export class IgnisignWebhook_CallbackMapper<T> {
 
 export class IgnisignSdkFileContentUploadDto {
   fileStream  : NodeJS.ReadableStream;
-  filename    : string;
+  fileName    : string;
   contentType : string;
 }
 

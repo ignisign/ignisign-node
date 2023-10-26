@@ -236,7 +236,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const formData = new FormData();
 
     formData.append('file', uploadDto.fileStream, {
-      filename    : uploadDto.filename,
+      filename    : uploadDto.fileName,
       contentType : uploadDto.contentType
     });
 

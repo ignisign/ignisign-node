@@ -262,8 +262,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async downloadAsicFile(documentId : string): Promise<NodeJS.ReadableStream> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
-    return null
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
   }
 
   public async getSignaturesImages(documentId : string): Promise<IgnisignSignatureImages_Dto> {
@@ -276,6 +275,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
+
+  public async generateAdvancedSignatureProof(documentId: string): Promise<{ documentId : string }> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
+  }
+
 
   /************** DOCUMENTS *************/
 
@@ -342,6 +347,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureRequestContext, { urlParams: {  signatureRequestId } });
   }
+
+  /*************** SIGNATURE PROOF **************/
 
 
   /************** WEBHOOK MANAGEMENT *************/

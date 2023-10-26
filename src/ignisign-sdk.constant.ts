@@ -47,6 +47,7 @@ export const ignisignRemoteServiceUrls = {
   downloadSignatureProofDocument          : "/v3/documents/:documentId/signature-proof", //  
   downloadDocumentSignatureXades          : "/v3/documents/:documentId/signatures/:signatureId/xades", //
   downloadAsicFile                        : "/v3/documents/:documentId/asics", // 
+  generateAdvancedSignatureProof          : "/v3/documents/:documentId/generate-advanced-signature-proof", // post
 
   getSignatureImg                         : "/v3/documents/:documentId/img-signatures", // get
   getDocumentSignatures                   : "/v3/documents/:documentId/signatures", // get

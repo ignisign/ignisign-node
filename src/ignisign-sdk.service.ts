@@ -243,7 +243,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post<IgnisignDocument>(ignisignRemoteServiceUrls.provideDocumentContent_File, formData, { urlParams: { documentId } , headers: {...formData.getHeaders()} });
   }
 
-  public async downloadOriginalDoc(documentId : string): Promise<NodeJS.ReadableStream> {
+  public async downloadOriginalDoc(documentId : string): Promise<Readable> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
@@ -254,12 +254,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<NodeJS.ReadableStream> {
+  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<Readable> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadDocumentSignatureXades,  { urlParams: { documentId, signatureId }, responseType:<ResponseType>('stream') });
   }
 
-  public async downloadAsicFile(documentId : string): Promise<NodeJS.ReadableStream> {
+  public async downloadAsicFile(documentId : string): Promise<Readable> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
     return null
@@ -271,7 +271,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  public async downloadSignatureProofDocument(documentId: string): Promise<NodeJS.ReadableStream> {
+  public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }

@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@1.0.68":
-  version "1.0.68"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.68.tgz#27d9da1a1860dffbb0230e377695767fafc295db"
-  integrity sha512-EdJMt2tEfiLI19b0hV5VIiu9o7Wc0LRlamin8/FdV8vPrK536NuHwV3gvoYN+5a4pb3zsYdpPDJzi3sdkSmrFA==
+"@ignisign/public@1.0.71":
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.71.tgz#5b7f064418f3389f7703866776399d8ea9fa5101"
+  integrity sha512-kPVfcXJZIYG5dREgvQw8LFFeTtPye4PYjfGbeQm/JaBuHGkDlrvKKTw9yhlslA7kQroWOiQc+GuBNlVuEQosbA==
   dependencies:
     class-transformer "^0.5.1"
     class-validator "^0.14.0"
@@ -17,9 +17,9 @@
   integrity sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==
 
 "@types/validator@^13.7.10":
-  version "13.11.2"
-  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.11.2.tgz#a2502325a3c0bd29f36dbac3b763223edd801e17"
-  integrity sha512-nIKVVQKT6kGKysnNt+xLobr+pFJNssJRi2s034wgWeFBUx01fI8BeHTW2TcRp7VcFu9QCYG8IlChTuovcm0oKQ==
+  version "13.11.3"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.11.3.tgz#6afba392782b44dd6cfeb390cc06c45833066ad9"
+  integrity sha512-jxjhh33aTYDHnrV1vZ3AvWQHfrGx2f5UxKjaP13l5q04fG+/hCKKm0MfodIoCqxevhbcfBb6ZjynyHuQ/jueGQ==
 
 ansi-styles@^3.2.1:
   version "3.2.1"
@@ -538,9 +538,9 @@ json-parse-better-errors@^1.0.1:
   integrity sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
 
 libphonenumber-js@^1.10.14:
-  version "1.10.47"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.47.tgz#1efdf08306960a222703e575e78eb76458944012"
-  integrity sha512-b4t7VQDV29xx/ni+58yl9KWPGjnDLDXCeCTLrD4V8vDpObXZRZBrg7uX/HWZ7YXiJKqdBDGgc+barUUTNB6Slw==
+  version "1.10.48"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.48.tgz#3c426b4aa21dfe3210bfbda47d208acffa3631bf"
+  integrity sha512-Vvcgt4+o8+puIBJZLdMshPYx9nRN3/kTT7HPtOyfYrSQuN9PGBF1KUv0g07fjNzt4E4GuA7FnsLb+WeAMzyRQg==
 
 load-json-file@^4.0.0:
   version "4.0.0"

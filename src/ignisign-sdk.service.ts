@@ -56,7 +56,8 @@ import {
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
   IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
   IGNISIGN_SIGNER_CREATION_INPUT_REF,
-  IGNISIGN_WEBHOOK_MESSAGE_NATURE
+  IGNISIGN_WEBHOOK_MESSAGE_NATURE,
+  IgnisignSignatureRequests_StatusContainer
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -346,6 +347,11 @@ export class IgnisignSdk extends IgnisignHttpApi {
   public async getSignatureRequestContext(signatureRequestId : string): Promise<IgnisignSignatureRequest_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureRequestContext, { urlParams: {  signatureRequestId } });
+  }
+
+  public async getSignatureRequestsStatus(signatureRequestIds : string[]): Promise<IgnisignSignatureRequests_StatusContainer> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.getSignatureRequestsStatus, { signatureRequestIds });
   }
 
   /*************** SIGNATURE PROOF **************/

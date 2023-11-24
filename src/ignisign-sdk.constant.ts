@@ -68,6 +68,7 @@ export const ignisignRemoteServiceUrls = {
   publishSignatureRequest                 : "/v3/signature-requests/:signatureRequestId/publish", //  
   closeSignatureRequest                   : "/v3/signature-requests/:signatureRequestId/close", //    
   getSignatureRequestContext              : "/v3/signature-requests/:signatureRequestId/context", //  
+  getSignatureRequestsStatus              : "/v3/applications/:appId/envs/:appEnv/signature-requests/status", //
 
   
   // Webhooks

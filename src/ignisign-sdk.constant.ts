@@ -81,4 +81,5 @@ export const ignisignRemoteServiceUrls = {
   getWebhookEvent                         : "/v3/webhooks/:webhookId/events/:eventId",
   resendWebhookEvent                      : "/v3/webhooks/:webhookId/events/:eventId/resend",
   checkWebhookToken                       : '/v3/tokens/webhook-verification/checking-consumption',
+  initIdProofingOnlySession               : "/v3/applications/:appId/envs/:appEnv/signers/:signerId/id-proofing",
 }

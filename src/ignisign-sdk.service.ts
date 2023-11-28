@@ -57,6 +57,8 @@ import {
   IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
   IGNISIGN_SIGNER_CREATION_INPUT_REF,
   IGNISIGN_WEBHOOK_MESSAGE_NATURE,
+  IgnisignWebhookDto_IdProofing,
+  IGNISIGN_WEBHOOK_ACTION_ID_PROOFING,
   IgnisignSignatureRequests_StatusContainer
 } from "@ignisign/public";
 
@@ -410,10 +412,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     }
   }
 
-  
-
-
-
   public async consumeWebhook(actionDto: IgnisignWebhook_ActionDto){
 
     _logIfActivated("consumeWebhook", actionDto)
@@ -493,6 +491,25 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signature> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE,
+      action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
+      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
+      callback
+    }
+
+    this.callbacks.push(mapper)
+
+    return mapper.uuid;
+  }
+
+  public async registerWebhookCallback_IdProofing(
+    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_IdProofing>,
+    action    ?: IGNISIGN_WEBHOOK_ACTION_ID_PROOFING,
+    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
+  ): Promise<string>{
+
+    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_IdProofing> = {
+      uuid      : uuid.v4(),
+      topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNER_ID_PROOFING,
       action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback
@@ -679,4 +696,13 @@ export class IgnisignSdk extends IgnisignHttpApi {
   public async revokeCallback(callbackId : string){
     this.callbacks = this.callbacks.filter( c => c.uuid !== callbackId);
   }
+
+  public async initIdProofingOnlySession(signatureProfileId: string, signerId: string): Promise<IgnisignSignatureRequest_IdContainer> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    return await ignisignConnectedApi.post<IgnisignSignatureRequest_IdContainer>(ignisignRemoteServiceUrls.initIdProofingOnlySession, {
+      signatureProfileId
+    }, { urlParams: { appId, appEnv, signerId } });
+  }
+
 }

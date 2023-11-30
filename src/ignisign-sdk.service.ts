@@ -355,7 +355,9 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async getSignatureRequestsStatus(signatureRequestIds : string[]): Promise<IgnisignSignatureRequests_StatusContainer> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.getSignatureRequestsStatus, { signatureRequestIds });
+    const { appId, appEnv }     = this.execContext;
+
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.getSignatureRequestsStatus, { signatureRequestIds }, { urlParams: { appId, appEnv } });
   }
 
   /*************** SIGNATURE PROOF **************/

@@ -59,7 +59,9 @@ import {
   IGNISIGN_WEBHOOK_MESSAGE_NATURE,
   IgnisignWebhookDto_IdProofing,
   IGNISIGN_WEBHOOK_ACTION_ID_PROOFING,
-  IgnisignSignatureRequests_StatusContainer
+  IgnisignSignatureRequests_StatusContainer,
+  IgnisignSignatureRequest_PublishBySide,
+  IgnisignSignatureRequest_PublishEmbedded
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -330,7 +332,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.put<IgnisignSignatureRequest_Context>(ignisignRemoteServiceUrls.updateSignatureRequest, dto, { urlParams: { signatureRequestId } });
   }
 
-  public async publishSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_IdContainer> {
+  public async publishSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_PublishBySide | IgnisignSignatureRequest_PublishEmbedded> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.publishSignatureRequest, {}, { urlParams: { signatureRequestId } });
   }

@@ -1,135 +1,131 @@
-This is the implemetation of the Ignisign API SDK in Node JS. <br/>
-It ease the integration of the Ignisign API with your backend.
+# Node.js Implementation of Ignisign API SDK
+
+This documentation guides you through the Node.js implementation of the Ignisign API SDK, simplifying the integration of Ignisign API with your backend.
 
 ## Pre-requisites
 
-First at all you need an API key, and defined Webhook endpoints. <br/>
-Follow the information in the **[Integrate Ignisign with your Backend](https://doc.ignisign.io/#tag/Integrate-Ignisign-with-your-Backend)** to do it.
+Before you begin, ensure you have an API key and defined webhook endpoints. 
+Detailed instructions for setting these up can be found in the [Integrate Ignisign with your Backend](https://doc.ignisign.io/#tag/Integrate-Ignisign-with-your-Backend) section.
 
 ## Installation
 
-You can install the library using npm.
+Install the library via npm:
 
 ```bash
 npm install @ignisign/sdk
 ```
 
-We suggest your to also install `@ignisign/public` package into your application. <br/>
-This package contains all types that are used by the library.<br/><br/>
-
-Although it is a transitive dependancy from `@ignisign/ignisign-node`, and consequently it's not mandatory to install it, it will help you to have a **better experience** with the library, expecially regarding **import mecanism of your IDE** (Indeed, IDE do not resolve automatically dependancies import from  transitives dependancies)
+Additionally, consider installing the `@ignisign/public` package, which includes all types utilized by the library. While it's a transitive dependency of `@ignisign/sdk` and not mandatory, installing it directly can enhance your development experience, especially for IDE import mechanisms.
 
 ```bash
 npm install @ignisign/public
 ```
 
-an example of integration is available **[here](https://github.com/ignisign/ignisign-examples/tree/main/ignisign-node-example)**
+## Integration Example
 
-## Usage
-<br/>
+Find an example of integration in this [GitHub repository](https://github.com/ignisign/ignisign-examples/tree/main/ignisign-node).
 
-### Initiate the IgnisignSdk class.
-<br/>
-First at all you need to initiate the IgnisignSdk class
+## Initiate the IgnisignSdk Class
+
+Begin by initiating the `IgnisignSdk` class:
 
 ```typescript
 import { IgnisignSdk } from "@ignisign/sdk"
 
-    ignisignSdkInstance = new IgnisignSdk({
-      appId           : IGNISIGN_APP_ID,
-      appEnv          : (<IGNISIGN_APPLICATION_ENV>IGNISIGN_APP_ENV),
-      appSecret       : IGNISIGN_APP_SECRET,
-      displayWarning  : true,
-    })
+const ignisignSdkInstance = new IgnisignSdk({
+  appId: IGNISIGN_APP_ID,
+  appEnv: (<IGNISIGN_APPLICATION_ENV>IGNISIGN_APP_ENV),
+  appSecret: IGNISIGN_APP_SECRET,
+  displayWarning: true,
+});
 ```
 
-You can found your appId in the API Keys section of your application into the [Ignisign Console](https://console.ignisign.io/).
-
-The `application environment` is a value of the following enum:
+Find your `appId`, `appEnv`, and `appSecret` in the "API Keys" section of the [Ignisign Console](https://console.ignisign.io/). 
+The `application environment` should be one of the following:
 
 ```typescript
 enum IGNISIGN_APPLICATION_ENV {
-  DEVELOPMENT   = "DEVELOPMENT",
-  STAGING       = "STAGING",
-  PRODUCTION    = "PRODUCTION",
+  DEVELOPMENT = "DEVELOPMENT",
+  STAGING = "STAGING",
+  PRODUCTION = "PRODUCTION",
 }
 ```
 
-### Call the API easyly
-<br/>
+## Easy API Calls
 
-The **IgnisignSdk** class expose all the API endpoints as methods.<br/>
-So, you can call them easily.<br/><br/>
+The `IgnisignSdk` class exposes all API endpoints as methods for easy access. 
+
+- An implementation example is available [here](https://github.com/ignisign/ignisign-examples/blob/main/ignisign-node/src/services/ignisign-sdk-manager.service.ts), 
+- And a full description of the API endpoints is in the [Ignisign API Documentation](https://doc.ignisign.io/#tag/Api-Auth).
+
+### Example Implementation
 
 ```typescript
-
 async function createNewSigner(
   signatureProfileId, 
   inputs: { [key in IGNISIGN_SIGNER_CREATION_INPUT_REF] ?: string } = {}, 
   externalId: string = null): Promise<IgnisignSigner_CreationResponseDto> {  
 
-  const dto : IgnisignSigner_CreationRequestDto = {
+  const dto: IgnisignSigner_CreationRequestDto = {
     signatureProfileId,
     ...inputs,
     ...(externalId && {externalId})
-  }
+  };
 
   try {
     return await ignisignSdkInstance.createSigner(dto);
   } catch (error) {
     console.error(error.toString());
-    throw error
+    throw error;
   }
 }
 ```
 
-You can found a full description of the API endpoints in the **[Ignisign API Documentation](https://doc.ignisign.io/#tag/Api-Auth)**
+### Linking Your Webhook Endpoint to Ignisign SDK
 
-
-### Link your webhook endpoint to Ignisign SDK
-<br/>
-you can link your webhook endpoint to Ignisign SDK very easily.
-<br/><br/>
+Easily connect your webhook endpoint to the Ignisign SDK:
 
 ```typescript
-router.post('/v1/ignisign-webhook', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const result = await IgnisignSdkManagerService.consumeWebhook(req.body);
-        jsonSuccess(res, result);
-      } catch(e) { next(e) }
-    })
+router.post('/v1/ignisign-webhook', async (req, res, next) => {
+  try {
+    const result = await IgnisignSdkManagerService.consumeWebhook(req.body);
+    jsonSuccess(res, result);
+  } catch (e) {
+    next(e);
+  }
+});
 ```
 
-The Ignisign SDK will manage the webhook signature verification, and will call the right callback method according to the webhook type.
+The SDK manages webhook signature verification and calls the appropriate callback method based on the webhook type.
 
-### Register webhooks callbacks
-<br/>
-You can now register your webhooks callbacks to the Ignisign SDK.
-<br/><br/>
+### Registering Webhook Callbacks
+
+You can register callbacks for various webhook events, as described in the [Webhook Events Documentation](https://doc.ignisign.io/#tag/Webhook-Events).
+
+#### Example Webhook Callback Registration:
 
 ```typescript
-const exampleWebhookCallback = async ( 
-  webhookContext  : IgnisignWebhookDto, 
-  error           : IgnisignError = null,
-  msgNature      ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE,
-  action         ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST,
-  topic          ?: IGNISIGN_WEBHOOK_TOPICS  
+const exampleWebhookCallback = async (
+  webhookContext: IgnisignWebhookDto,
+  error: IgnisignError = null,
+  msgNature?: IGNISIGN_WEBHOOK_MESSAGE_NATURE,
+  action?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST,
+  topic?: IGNISIGN_WEBHOOK_TOPICS  
 ): Promise<boolean> => {
 
-  console.log("Received webhook", webhookContext, topic, action, msgNature)
+  console.log("Received webhook", webhookContext, topic, action, msgNature);
   return true;
-}
+};
 
 await ignisignSdkInstance.registerWebhookCallback(
-  exampleWebhookCallback, 
+  exampleWebhookCallback,
   IGNISIGN_WEBHOOK_TOPICS.SIGNATURE,
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE.FINALIZED
 );
-
 ```
-<br/>
-There are also register functions for **each webhook type**.
-<br/><br/>
+#### Simplified Registration of Common Webhook Callbacks
+
+To streamline the implementation of frequently used webhook callbacks, we've introduced a series of "shortcut" functions. These functions provide an more efficient way to handle common webhook scenarios. Below is a list of these functions:
 
 ```typescript
   registerWebhookCallback_Signature(
@@ -176,39 +172,31 @@ There are also register functions for **each webhook type**.
     callback: IgnisignWebhook_Callback<IgnisignWebhookDto_Application>, 
     action?: IGNISIGN_WEBHOOK_ACTION_APPLICATION
   ): Promise<string>;
-    
 ```
-<br/><br/>
-All webhooks events are described in the **[Webhook Events Documentation](https://doc.ignisign.io/#tag/Webhook-Events)**<br/>
 
-You can register them easily using the same principle.
-<br/><br/>
+### Example of Implementation
+
+Here is an example to illustrate how these shortcut functions can be implemented:
 
 ```typescript
-
-const handleSignatureRequestWebhookSigners = async (
-    content     : IgnisignWebhookDto_SignatureRequest,
-    error       : IgnisignError = null,
-    msgNature  ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE,
-    action     ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST,
-    topic      ?: IGNISIGN_WEBHOOK_TOPICS
+const webhookHandler_SignatureRequest = async (
+    content: IgnisignWebhookDto_SignatureRequest,
+    error: IgnisignError = null,
+    msgNature?: IGNISIGN_WEBHOOK_MESSAGE_NATURE,
+    action?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST,
+    topic?: IGNISIGN_WEBHOOK_TOPICS
   ): Promise<any> => {
 
-  if(msgNature === IGNISIGN_WEBHOOK_MESSAGE_NATURE.ERROR) {
-    console.error("handleSignatureRequestWebhookSigners ERROR : ", error);
-    return;
-  }
+    if (msgNature === IGNISIGN_WEBHOOK_MESSAGE_NATURE.ERROR) {
+      console.error("handleSignatureRequestWebhookSigners ERROR : ", error);
+      return;
+    }
 
-  console.log("handleSignatureRequestWebhookSigners : ", content);
-  
-}
+    console.log("handleSignatureRequestWebhookSigners : ", content);
+};
 
 await ignisignSdkInstance.registerWebhookCallback_SignatureRequest(
-  SignatureRequestService.handleSignatureRequestWebhookSigners,  
-  IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST.LAUNCHED
+    webhookHandler_SignatureRequest,  
+    IGNISIGN_WEBHOOK_ACTION_SIGNATURE_REQUEST.LAUNCHED
 );
-
 ```
-
-
-

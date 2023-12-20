@@ -276,16 +276,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
 
-  public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
-  }
-
-  public async generateAdvancedSignatureProof(documentId: string): Promise<{ documentId : string }> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
-  }
-
 
   /************** DOCUMENTS *************/
 
@@ -360,7 +350,25 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.getSignatureRequestsStatus, { signatureRequestIds }, { urlParams: { appId, appEnv } });
   }
 
+  public async initIdProofingOnlySession(signatureProfileId: string, signerId: string): Promise<IgnisignSignatureRequest_IdContainer> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    return await ignisignConnectedApi.post<IgnisignSignatureRequest_IdContainer>(ignisignRemoteServiceUrls.initIdProofingOnlySession, {
+      signatureProfileId
+    }, { urlParams: { appId, appEnv, signerId } });
+  }
+
   /*************** SIGNATURE PROOF **************/
+
+  public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
+  }
+
+  public async generateAdvancedSignatureProof(documentId: string): Promise<{ documentId : string }> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
+  }
 
 
   /************** WEBHOOK MANAGEMENT *************/
@@ -413,6 +421,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
       console.error("check webhook token", e)
     }
   }
+
+    /************** WEBHOOK CONSUMMATION MANAGEMENT *************/
 
   public async consumeWebhook(actionDto: IgnisignWebhook_ActionDto){
 
@@ -697,14 +707,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async revokeCallback(callbackId : string){
     this.callbacks = this.callbacks.filter( c => c.uuid !== callbackId);
-  }
-
-  public async initIdProofingOnlySession(signatureProfileId: string, signerId: string): Promise<IgnisignSignatureRequest_IdContainer> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.post<IgnisignSignatureRequest_IdContainer>(ignisignRemoteServiceUrls.initIdProofingOnlySession, {
-      signatureProfileId
-    }, { urlParams: { appId, appEnv, signerId } });
   }
 
 }

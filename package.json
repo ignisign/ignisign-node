@@ -23,6 +23,7 @@
     "watch": "tsc -b -w --preserveWatchOutput"
   },
   "dependencies": {
+
     "@ignisign/public": "1.0.85",
     "axios": "^0.21.1",
     "form-data": "^4.0.0",

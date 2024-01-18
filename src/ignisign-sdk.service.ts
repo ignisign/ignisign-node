@@ -61,7 +61,8 @@ import {
   IGNISIGN_WEBHOOK_ACTION_ID_PROOFING,
   IgnisignSignatureRequests_StatusContainer,
   IgnisignSignatureRequest_PublishBySide,
-  IgnisignSignatureRequest_PublishEmbedded
+  IgnisignSignatureRequest_PublishEmbedded,
+  IgnisignDocument_AuthenticityValidationContainer
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -275,6 +276,13 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId } });
   }
 
+  public async checkDocumentAuthenticity(documentId : string, file: File): Promise<IgnisignDocument_AuthenticityValidationContainer> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.checkDocumentAuthenticity, formData, { urlParams: { documentId } });
+  }
 
 
   /************** DOCUMENTS *************/

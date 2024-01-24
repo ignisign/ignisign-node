@@ -41,6 +41,7 @@ export const ignisignRemoteServiceUrls = {
 
   provideDocumentContent_File             : "/v3/documents/:documentId/file", //
   downloadOriginalDoc                     : "/v3/documents/:documentId/file", // 
+  checkDocumentAuthenticity               : "/v3/documents/:documentId/check-authenticity", // post
   
   // Signature Proof
 

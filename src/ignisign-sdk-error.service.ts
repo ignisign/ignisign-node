@@ -86,7 +86,7 @@ export const createIgnisignSdkErrorFromHttp = async (error: any, execContext: Ig
   const isObject = (val) => val instanceof Object;
 
   if( error.response ){
-    console.error("!! error.response")
+    // console.error("!! error.response")
     const errorData = error.response.data;
 
     let code;
@@ -108,7 +108,7 @@ export const createIgnisignSdkErrorFromHttp = async (error: any, execContext: Ig
 
     return createIgnisignSdkError(code as IGNISIGN_ERROR_CODES, context, stack, execContext);
   }
-  console.error("!! not error.response")
+  // console.error("!! not error.response")
   return error;
 }
 

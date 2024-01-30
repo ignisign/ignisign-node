@@ -133,6 +133,11 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** SIGNERS *************/
 
+  public async regenerateSignerAuthSecret(signerId: string): Promise<{authSecret: string}> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }          = this.execContext;
+    return await ignisignConnectedApi.put<{authSecret: string}>(ignisignRemoteServiceUrls.regenerateSignerAuthSecret, {}, { urlParams: { appId, appEnv, signerId } });
+  }
 
   public async getMissingSignerInputs_FromSignatureProfile(signatureProfileId : string, signerId: string) : Promise<IGNISIGN_SIGNER_CREATION_INPUT_REF[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();

@@ -9,10 +9,11 @@ import {
 
 
 export class IgnisignSdkInitializer {
-  appId           : string;
-  appEnv          : IGNISIGN_APPLICATION_ENV;
-  appSecret       : string;
-  displayWarning  : boolean = true;
+  appId                   : string;
+  appEnv                  : IGNISIGN_APPLICATION_ENV;
+  appSecret               : string;
+  displayWarning          : boolean = true;
+  disableWebhookWarning  ?: boolean = false;
 }
 
 

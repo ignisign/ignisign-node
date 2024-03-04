@@ -41,7 +41,7 @@ export class IgnisignHttpApi {
 
   protected isInitialized         : boolean         = false;
   protected initAlreadyStarted    : boolean         = false;
-  private _init: IgnisignSdkInitializer = null;
+  protected _init: IgnisignSdkInitializer = null;
 
   protected execContext           : IgnisignSdkExecutionContext;
 

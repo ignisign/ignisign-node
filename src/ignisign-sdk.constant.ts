@@ -14,6 +14,7 @@ export const ignisignRemoteServiceUrls = {
   editAppInvitedUser                      : "/v3/applications/:appId/users-invitations/:userInvitationId", // put
 
   // Signers
+  regenerateSignerAuthSecret              : "/v3/applications/:appId/envs/:appEnv/signers/:signerId/regenerate-auth-secret", // put
   getSignerWithDetails                    : "/v3/applications/:appId/envs/:appEnv/signers/:signerId/details", // get
   getSignerSummary                        : "/v3/applications/:appId/envs/:appEnv/signers/:signerId", // get
   searchApplicationSigners                : "/v3/applications/:appId/envs/:appEnv/signers-search", // post

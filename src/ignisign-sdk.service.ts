@@ -86,6 +86,24 @@ export class IgnisignSdk extends IgnisignHttpApi {
     super(init);
   }
 
+  public async init(){
+    await super.init();
+    await this.checkWebhookPresence();
+  }
+
+  private async checkWebhookPresence () {
+    const webhooks = await this.getWebhookEndpoints()
+
+    if (!this._init?.disableWebhookWarning && webhooks?.length === 0) {
+      // yellow
+      const color = '\x1b[33m%s\x1b[0m';
+      console.info(color, "[IGNISIGN SDK] You are receiving this warning as you have not set any webhook endpoint.");
+      console.info(color, "[IGNISIGN SDK] You will not be able to receive any webhook from Ignisign.");
+      console.info(color, "[IGNISIGN SDK] Please set at least one webhook endpoint in your Ignisign application settings.");
+      console.info(color, "[IGNISIGN SDK] If you want to disable this warning, please set the disableWebhookWarning property to true in the IgnisignSdkInitializer object.");
+    }
+  } 
+
    /************** APPLICATION *************/
 
    public async getApplicationContext(): Promise<IgnisignApplication_Context> {
@@ -132,6 +150,11 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** SIGNERS *************/
 
+  public async regenerateSignerAuthSecret(signerId: string): Promise<{authSecret: string}> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }          = this.execContext;
+    return await ignisignConnectedApi.put<{authSecret: string}>(ignisignRemoteServiceUrls.regenerateSignerAuthSecret, {}, { urlParams: { appId, appEnv, signerId } });
+  }
 
   public async getMissingSignerInputs_FromSignatureProfile(signatureProfileId : string, signerId: string, forRecurrent: boolean) : Promise<IGNISIGN_SIGNER_CREATION_INPUT_REF[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();

@@ -62,6 +62,7 @@ import {
   IgnisignSignatureRequests_StatusContainer,
   IgnisignSignatureRequest_PublishBySide,
   IgnisignSignatureRequest_PublishEmbedded,
+  IgnisignDocument_AuthenticityValidationContainer
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -383,14 +384,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const { appId, appEnv }     = this.execContext;
 
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.getSignatureRequestsStatus, { signatureRequestIds }, { urlParams: { appId, appEnv } });
-  }
-
-  public async initIdProofingOnlySession(signatureProfileId: string, signerId: string): Promise<IgnisignSignatureRequest_IdContainer> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.post<IgnisignSignatureRequest_IdContainer>(ignisignRemoteServiceUrls.initIdProofingOnlySession, {
-      signatureProfileId
-    }, { urlParams: { appId, appEnv, signerId } });
   }
 
   /*************** SIGNATURE PROOF **************/

@@ -62,7 +62,6 @@ import {
   IgnisignSignatureRequests_StatusContainer,
   IgnisignSignatureRequest_PublishBySide,
   IgnisignSignatureRequest_PublishEmbedded,
-  IgnisignDocument_AuthenticityValidationContainer
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -134,10 +133,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
   /************** SIGNERS *************/
 
 
-  public async getMissingSignerInputs_FromSignatureProfile(signatureProfileId : string, signerId: string) : Promise<IGNISIGN_SIGNER_CREATION_INPUT_REF[]> {
+  public async getMissingSignerInputs_FromSignatureProfile(signatureProfileId : string, signerId: string, forRecurrent: boolean) : Promise<IGNISIGN_SIGNER_CREATION_INPUT_REF[]> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.get<IGNISIGN_SIGNER_CREATION_INPUT_REF[]>(ignisignRemoteServiceUrls.getMissingSignerInputs_FromSignatureProfile, { urlParams: { appId, appEnv, signatureProfileId, signerId } });
+    
+    return await ignisignConnectedApi.get<IGNISIGN_SIGNER_CREATION_INPUT_REF[]>(ignisignRemoteServiceUrls.getMissingSignerInputs_FromSignatureProfile, 
+      { 
+        urlParams: { appId, appEnv, signatureProfileId, signerId },
+        params: { forRecurrent: forRecurrent.toString() }
+    });
   }
 
   public async getSignatureProfileSignerInputsConstraints(signatureProfileId : string) : Promise<IgnisignSignatureProfile_SignerInputsConstraints> {

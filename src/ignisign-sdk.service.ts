@@ -56,10 +56,7 @@ import {
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
   IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
   IGNISIGN_SIGNER_CREATION_INPUT_REF,
-  IGNISIGN_WEBHOOK_MESSAGE_NATURE,
-  IgnisignWebhookDto_IdProofing,
-  IGNISIGN_WEBHOOK_ACTION_ID_PROOFING,
-  IgnisignSignatureRequests_StatusContainer,
+  IGNISIGN_WEBHOOK_MESSAGE_NATURE, IgnisignSignatureRequests_StatusContainer,
   IgnisignSignatureRequest_PublishBySide,
   IgnisignSignatureRequest_PublishEmbedded,
   IgnisignDocument_AuthenticityValidationContainer
@@ -531,25 +528,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signature> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE,
-      action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
-      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
-      callback
-    }
-
-    this.callbacks.push(mapper)
-
-    return mapper.uuid;
-  }
-
-  public async registerWebhookCallback_IdProofing(
-    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_IdProofing>,
-    action    ?: IGNISIGN_WEBHOOK_ACTION_ID_PROOFING,
-    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
-  ): Promise<string>{
-
-    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_IdProofing> = {
-      uuid      : uuid.v4(),
-      topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNER_ID_PROOFING,
       action    : action? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
       msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
       callback

@@ -59,7 +59,8 @@ import {
   IGNISIGN_WEBHOOK_MESSAGE_NATURE, IgnisignSignatureRequests_StatusContainer,
   IgnisignSignatureRequest_PublishBySide,
   IgnisignSignatureRequest_PublishEmbedded,
-  IgnisignDocument_AuthenticityValidationContainer
+  IgnisignDocument_AuthenticityValidationContainer,
+  IgnisignSignerStatus_FromSignatureProfile
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -211,6 +212,18 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.delete<{signerId : string}>(ignisignRemoteServiceUrls.revokeSigner, { urlParams: { appId, appEnv, signerId } });
+  }
+
+  public async getSignerStatus_FromSignatureProfile(signerId: string, signatureProfileId: string, forceRecurrent: boolean = false) : Promise<IgnisignSignerStatus_FromSignatureProfile> {
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+
+    return await ignisignConnectedApi.get<IgnisignSignerStatus_FromSignatureProfile>(ignisignRemoteServiceUrls.getSignerStatus_FromSignatureProfile,
+    { 
+        urlParams : { appId, appEnv, signerId, signatureProfileId },
+        params    : { forceRecurrent: forceRecurrent.toString() }
+      });
+
   }
   
 

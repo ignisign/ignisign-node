@@ -40,7 +40,6 @@ import {
   IgnisignWebhookDto_DocumentRequest,
   IgnisignWebhookDto_SignatureRequest,
   IgnisignWebhookDto_Signer,
-  IgnisignWebhookDto_SignatureProof,
   IgnisignWebhookDto_SignatureImage,
   IgnisignWebhookDto_Application,
   IgnisignWebhookDto_SignatureProfile,
@@ -60,7 +59,10 @@ import {
   IgnisignSignatureRequest_PublishBySide,
   IgnisignSignatureRequest_PublishEmbedded,
   IgnisignDocument_AuthenticityValidationContainer,
-  IgnisignSignerStatus_FromSignatureProfile
+  IgnisignSignerStatus_FromSignatureProfile,
+  IgnisignWebhookDto_SignatureProof_Error,
+  IgnisignWebhookDto_SignatureProof_Success,
+  IgnisignWebhookDto_SignatureAdvancedProof
 } from "@ignisign/public";
 
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
@@ -648,12 +650,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async registerWebhookCallback_SignatureProof(
-    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureProof>,
+    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureProof_Error | IgnisignWebhookDto_SignatureProof_Success | IgnisignWebhookDto_SignatureAdvancedProof>,
     action    ?: IGNISIGN_WEBHOOK_ACTION_SIGNATURE_PROOF,
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProof> = {
+    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProof_Error | IgnisignWebhookDto_SignatureProof_Success | IgnisignWebhookDto_SignatureAdvancedProof> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_PROOF,
       action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,

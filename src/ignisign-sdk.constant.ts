@@ -39,8 +39,6 @@ export const ignisignRemoteServiceUrls = {
   
   removeDocumentContent                   : "/v3/documents/:documentId/content", //
 
-  createDocumentRequest                   : "/v3/documents/:documentId/requests", //
-
   provideDocumentContent_File             : "/v3/documents/:documentId/file", //
   downloadOriginalDoc                     : "/v3/documents/:documentId/file", // 
   checkDocumentAuthenticity               : "/v3/documents/:documentId/check-authenticity", // post

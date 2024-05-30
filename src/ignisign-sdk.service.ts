@@ -21,8 +21,7 @@ import {
   IgnisignSigner_Context,
   IgnisignSigners_SearchResultDto,
   IgnisignDocument_InitializationDto,
-  IgnisignDocument_ContentCreation_PrivateContentDto,
-  IgnisignDocumentRequest_RequestDto, IgnisignDocument_Context,
+  IgnisignDocument_ContentCreation_PrivateContentDto, IgnisignDocument_Context,
   IgnisignSignatureProfile,
   IgnisignSignatureProfile_StatusWrapper,
   IGNISIGN_SIGNATURE_PROFILE_STATUS,
@@ -36,9 +35,7 @@ import {
   IgnisignSigner_Summary,
   IgnisignSignatureProfile_SignerInputsConstraints,
   IgnisignSignature,
-  IgnisignWebhookDto_SignatureSession,
-  IgnisignWebhookDto_DocumentRequest,
-  IgnisignWebhookDto_SignatureRequest,
+  IgnisignWebhookDto_SignatureSession, IgnisignWebhookDto_SignatureRequest,
   IgnisignWebhookDto_Signer,
   IgnisignWebhookDto_SignatureImage,
   IgnisignWebhookDto_Application,
@@ -52,9 +49,7 @@ import {
   IgnisignWebhook_Action,
   IGNISIGN_WEBHOOK_ACTION_SIGNATURE_SESSION,
   IgnisignWebhookDto_Signature,
-  IGNISIGN_WEBHOOK_ACTION_SIGNATURE,
-  IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
-  IGNISIGN_SIGNER_CREATION_INPUT_REF,
+  IGNISIGN_WEBHOOK_ACTION_SIGNATURE, IGNISIGN_SIGNER_CREATION_INPUT_REF,
   IGNISIGN_WEBHOOK_MESSAGE_NATURE, IgnisignSignatureRequests_StatusContainer,
   IgnisignSignatureRequest_PublishBySide,
   IgnisignSignatureRequest_PublishEmbedded,
@@ -293,11 +288,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
   public async downloadOriginalDoc(documentId : string): Promise<Readable> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
-  }
-
-  public async createDocumentRequest(documentId: string, dto: IgnisignDocumentRequest_RequestDto): Promise<IgnisignDocument> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createDocumentRequest, dto, { urlParams: {documentId} });
   }
 
 
@@ -573,24 +563,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return mapper.uuid;
   }
 
-  public async registerWebhookCallback_DocumentRequest(
-    callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_DocumentRequest>,
-    action    ?: IGNISIGN_WEBHOOK_ACTION_DOCUMENT_REQUEST,
-    msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
-  ): Promise<string>{
-
-    const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_DocumentRequest> = {
-      uuid      : uuid.v4(),
-      topic     : IGNISIGN_WEBHOOK_TOPICS.DOCUMENT_REQUEST,
-      action    : action    ? action    : IGNISIGN_WEBHOOK_ACTION_ALL,
-      msgNature : msgNature ? msgNature : IGNISIGN_WEBHOOK_ACTION_ALL,
-      callback
-    }
-
-    this.callbacks.push(mapper)
-
-    return mapper.uuid;
-  }
 
   public async registerWebhookCallback_SignatureRequest(
     callback   : IgnisignWebhook_Callback<IgnisignWebhookDto_SignatureRequest>,

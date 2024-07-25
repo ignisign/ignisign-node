@@ -7,7 +7,7 @@ import {IgnisignApiAuth_RequestDto, IGNISIGN_ERROR_CODES, IgnisignJwtContainer} 
 
 const IGNISIGN_SERVER_URL = process.env.IGNISIGN_SERVER_URL || DEFAULT_IGNISIGN_API_URL;
 const MAX_BODY_LENGTH     = 50000000;
-const URL_API_AUTH        = "/v3/auth/app-api";
+const URL_API_AUTH        = "/v4/auth/app-api";
 
 // /!\ https://github.com/axios/axios/issues/1510#issuecomment-525382535
 interface IgnisignSdkAxiosRequest extends AxiosRequestConfig {

@@ -11,7 +11,7 @@
     "allowJs": false,
     "module": "commonjs",
     "target": "ES2019",
-    "lib": [ "ES2019", "dom" ],
+    "lib": ["ES2019", "dom"],
     "outDir": "dist",
     "rootDir": "src"
   },
@@ -19,7 +19,6 @@
   "exclude": [
     "node_modules",
     "src/**/*.spec.ts",
-    "**/*.d.ts",
     "dist/**/*"
   ]
 }

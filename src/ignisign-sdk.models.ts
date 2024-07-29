@@ -38,4 +38,7 @@ export class IgnisignSdkFileContentUploadDto {
   contentType : string;
 }
 
-
+export class IgnisignSignM2mSignatureRequestPayload {
+  signatureRequestId : string;
+  documentHash       : string;
+}

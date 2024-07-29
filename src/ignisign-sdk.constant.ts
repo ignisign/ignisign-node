@@ -1,3 +1,5 @@
+import { sign } from "crypto";
+
 export const DEFAULT_IGNISIGN_API_URL = "https://api.ignisign.io";
 
 export const ignisignRemoteServiceUrls = {
@@ -89,4 +91,8 @@ export const ignisignRemoteServiceUrls = {
   resendWebhookEvent                      : "/v4/webhooks/:webhookId/events/:eventId/resend",
   checkWebhookToken                       : '/v4/tokens/webhook-verification/checking-consumption',
   initIdProofingOnlySession               : "/v4/applications/:appId/envs/:appEnv/signers/:signerId/id-proofing",
+
+  //seal
+  createM2MSealSignatureRequest:          "/v4/applications/:appId/envs/:appEnv/m2m/init", // post
+  signM2mSealSignatureRequest:           "/v4/applications/:appId/envs/:appEnv/m2m/sign", // post
 }

@@ -360,6 +360,29 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
+    /************** SEAL *************/
+
+    public async createM2mSignatureRequest(body: IgniSign_CreateM2MSealRequestDto): Promise<IgniSign_CreateM2MSealResponsetDto> {
+      const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+      const { appId, appEnv }     = this.execContext;
+      return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createM2MSealSignatureRequest, body, { urlParams: { appId, appEnv } });
+    }
+  
+    public async signM2mSignatureRequest(body: IgniSign_SignM2MSealRequestDto): Promise<void> {
+     
+      const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+      const { appId, appEnv }     = this.execContext;
+      return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.signM2mSealSignatureRequest, body, { urlParams: { appId, appEnv } });
+    }
+  
+    public doSignM2MPayload(privateKeyPem: string, documentHash: string): {signature: string} {
+      
+      const hashBuffer  = Buffer.from(documentHash, 'hex');
+      const privateKey  = crypto.createPrivateKey(privateKeyPem);
+      const signature   = crypto.sign(null, hashBuffer, privateKey);
+      return { signature : signature.toString('hex') };
+    }
+
 
   /************** WEBHOOK MANAGEMENT *************/
 
@@ -660,51 +683,5 @@ export class IgnisignSdk extends IgnisignHttpApi {
   public async revokeCallback(callbackId : string){
     this.callbacks = this.callbacks.filter( c => c.uuid !== callbackId);
   }
-
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-  /************** SEAL *************/
-
-  public async createM2mSignatureRequest(body: IgniSign_CreateM2MSealRequestDto): Promise<IgniSign_CreateM2MSealResponsetDto> {
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createM2MSealSignatureRequest, body, { urlParams: { appId, appEnv } });
-
-  }
-
-
-
-  public async signM2mSignatureRequest(body: IgniSign_SignM2MSealRequestDto): Promise<void> {
-    // const { signatureRequestId, documentHash } = payload ?? {}
-    // const { signature } = this.doSignM2MPayload(privateKey, payload);
-    // const body: IgniSign_SignM2MSealRequestDto = {
-    //   signatureRequestId, 
-    //   documentHash,
-    //   signature
-    // }
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.signM2mSealSignatureRequest, body, { urlParams: { appId, appEnv } });
-  }
-
-  public doSignM2MPayload(privateKey: string, payload: any): {signature: string} {
-    //check if payload is a string
-    if (typeof payload !== 'string') {
-      payload = JSON.stringify(payload);
-    }
-
-    const sign = crypto.createSign('SHA256');
-    sign.update(payload);
-    sign.end();
-  
-    const signature = sign.sign(privateKey, 'hex');
-    return {signature};
-  }
 }
+

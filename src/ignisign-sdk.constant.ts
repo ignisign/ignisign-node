@@ -93,6 +93,7 @@ export const ignisignRemoteServiceUrls = {
   initIdProofingOnlySession               : "/v4/applications/:appId/envs/:appEnv/signers/:signerId/id-proofing",
 
   //seal
-  createM2MSealSignatureRequest:          "/v4/applications/:appId/envs/:appEnv/m2m/init", // post
+  createM2MSealSignatureRequest:          "/v4/applications/:appId/envs/:appEnv/sign-m2m", // post
+
   signM2mSealSignatureRequest:           "/v4/applications/:appId/envs/:appEnv/m2m/sign", // post
 }

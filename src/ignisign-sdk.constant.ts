@@ -29,9 +29,6 @@ export const ignisignRemoteServiceUrls = {
   revokeSigner                            : "/v4/applications/:appId/envs/:appEnv/signers/:signerId/revoke", //delete
   getSignerInputsConstraintsFromSignerProfileId  : "/v4/applications/:appId/envs/:appEnv/signer-profiles/:signerProfileId/inputs-needed", // get
 
-  // getMissingSignerInputs_FromSignatureProfile: "/v4/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signers/:signerId/missing-inputs", // get
-  // getSignerStatus_FromSignatureProfile      : "/v4/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/signers/:signerId/status", // get
-
   // Documents
   initializeDocument                      : "/v4/applications/:appId/envs/:appEnv/init-documents", // post
   updateDocument                          : "/v4/documents/:documentId", // put
@@ -61,12 +58,6 @@ export const ignisignRemoteServiceUrls = {
   getSignatureImg                         : "/v4/documents/:documentId/img-signatures", // get
   getDocumentSignatures                   : "/v4/documents/:documentId/signatures", // get
   getDocumentSignature                    : "/v4/documents/:documentId/signatures/:signatureId", // get
-  
-
-  // // Signature profile   
-  // getSignatureProfiles                    : "/v4/applications/:appId/envs/:appEnv/signature-profiles", //  get
-  // updateSignatureProfileStatus            : "/v4/applications/:appId/envs/:appEnv/signature-profiles/:signatureProfileId/status", // put
-  
 
   // Signature requests
 
@@ -92,8 +83,7 @@ export const ignisignRemoteServiceUrls = {
   checkWebhookToken                       : '/v4/tokens/webhook-verification/checking-consumption',
   initIdProofingOnlySession               : "/v4/applications/:appId/envs/:appEnv/signers/:signerId/id-proofing",
 
-  //seal
-  createM2MSealSignatureRequest:          "/v4/applications/:appId/envs/:appEnv/sign-m2m", // post
-
-  signM2mSealSignatureRequest:           "/v4/applications/:appId/envs/:appEnv/m2m/sign", // post
+  // Seal
+  
+  signM2M                                 : "/v4/applications/:appId/envs/:appEnv/m2m/:m2mId/sign", 
 }

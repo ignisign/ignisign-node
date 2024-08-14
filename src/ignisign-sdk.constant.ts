@@ -86,4 +86,9 @@ export const ignisignRemoteServiceUrls = {
   // Seal
   
   signM2M                                 : "/v4/applications/:appId/envs/:appEnv/m2m/:m2mId/sign", 
+
+  // Bare Signature
+
+  bareSignatureGetProofToken              : "/v4/envs/:appEnv/oauth2/sign-oauth2-proof-token", // proof-token
+  bareSignatureGetProofs                  : "/v4/envs/:appEnv/oauth2/sign-oauth2-proof", // proofs
 }

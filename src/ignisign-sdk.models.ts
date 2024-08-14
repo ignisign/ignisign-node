@@ -42,3 +42,9 @@ export class IgnisignSignM2mSignatureRequestPayload {
   signatureRequestId : string;
   documentHash       : string;
 }
+
+export class Ignisign_BareSignature_SdkProofAccessTokenRequest {
+  code_verifier  : string;
+  redirect_uri   : string;
+  code           : string;
+}

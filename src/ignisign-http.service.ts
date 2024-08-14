@@ -34,6 +34,8 @@ declare module 'axios' {
 
 export class IgnisignHttpApi {
 
+  protected ignisignServerUrl   : string          = IGNISIGN_SERVER_URL;
+
   private ignisignConnectedApi  : AxiosInstance   = axios.create({ baseURL : IGNISIGN_SERVER_URL, headers: { Accept: 'application/json' }, maxBodyLength: MAX_BODY_LENGTH });
   private ignisignPublicApi     : AxiosInstance   = axios.create({ baseURL : IGNISIGN_SERVER_URL, headers: { Accept: 'application/json' }, maxBodyLength: MAX_BODY_LENGTH });
 

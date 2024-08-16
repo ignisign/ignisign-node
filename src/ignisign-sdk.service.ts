@@ -65,6 +65,8 @@ import {
   Ignisign_BareSignature_GetAuthrozationUrlRequest,
   Ignisign_BareSignature_ProofAccessTokenRequest,
   Ignisign_BareSignature_ProofAccessToken,
+  IgnisignLogCapsule_ResponseDto,
+  IgnisignLogCapsule_RequestDto,
 } from "@ignisign/public";
 
 import { Readable } from "stream";
@@ -423,6 +425,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
+  
   /************** SEAL *************/
 
   public async signM2M(dto: IgniSign_SignM2MRequestDto): Promise<IgniSign_SignM2MResponseDto> {
@@ -434,6 +437,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
 
   /************** LOG_CAPSULE *************/
+
+  public async logCapsuleCreate(hashSha256_b64 : string) : Promise<IgnisignLogCapsule_ResponseDto> {
+    await this._assertIsAppTypeLogCapsule()
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    const dto : IgnisignLogCapsule_RequestDto = { hashSha256_b64 };
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.logCapsuleCreate, dto, { urlParams: { appId, appEnv } });
+
+  }
 
 
   
@@ -530,11 +542,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
       });
 
   }
-
-
-
-
-
 
 
   /************** WEBHOOK MANAGEMENT *************/

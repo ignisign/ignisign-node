@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ignisign/public@4.0.0-beta.2":
-  version "4.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-4.0.0-beta.2.tgz#3d0e60203615f6508733c0da31c4e561a6975593"
-  integrity sha512-7n/Dnwg4S4kM3y9Xqwini/u2A2gaifK7nuuwm6O6ctSOuVLpbdWZSxz033w6Cy+bsqrDyVfwyKB5TKqp1dgTKw==
+"@ignisign/public@4.0.0-beta.10":
+  version "4.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-4.0.0-beta.10.tgz#e7f3a0678dda63447d17ae1d4a06827c44d46cb4"
+  integrity sha512-GRaXB0QhsA/kdnLP5460ws27YveE4i/9pndpNcLlEtbpGktZc5GIYxzp5fZHdL5feFGadZy50DK9oYliSNpppA==
   dependencies:
     class-transformer "^0.5.1"
     class-validator "^0.14.0"
@@ -608,9 +608,9 @@ json-parse-better-errors@^1.0.1:
   integrity sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
 
 libphonenumber-js@^1.10.53:
-  version "1.11.5"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.5.tgz#50a441da5ff9ed9a322d796a14f1e9cbc0fdabdf"
-  integrity sha512-TwHR5BZxGRODtAfz03szucAkjT5OArXr+94SMtAM2pYXIlQNVMrxvb6uSCbnaJJV6QXEyICk7+l6QPgn72WHhg==
+  version "1.11.7"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.7.tgz#efe4fcf816e1982925e9c800d0013b0ee99b8283"
+  integrity sha512-x2xON4/Qg2bRIS11KIN9yCNYUjhtiEjNyptjX0mX+pyKHecxuJVLIpfX1lq9ZD6CrC/rB+y4GBi18c6CEcUR+A==
 
 load-json-file@^4.0.0:
   version "4.0.0"

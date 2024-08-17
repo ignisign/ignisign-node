@@ -67,6 +67,7 @@ import {
   Ignisign_BareSignature_ProofAccessToken,
   IgnisignLogCapsule_ResponseDto,
   IgnisignLogCapsule_RequestDto,
+  IgnisignApplication_BareSignatureEnvSettings,
 } from "@ignisign/public";
 
 import { Readable } from "stream";
@@ -84,42 +85,100 @@ const _logIfActivated = (...args) => {
   }
 }
 
+const CONSOLE_YELLOW_COLOR = '\x1b[33m%s\x1b[0m';
+
+
 export class IgnisignSdk extends IgnisignHttpApi {
 
   private callbacks: IgnisignWebhook_CallbackMapper<any>[] = [];
   private appType : IGNISIGN_APPLICATION_TYPE;
+  private appContext : IgnisignApplication_Context;
 
   constructor(init: IgnisignSdkInitializer){
     super(init);
   }
-
+  
   public async init(){
     await super.init();
-    await this.checkWebhookPresence();
+    
+    await this._checkConfiguration();
   }
 
-  private async checkWebhookPresence () {
+  private _consoleYellow (message : string, isFirstLine = false){
+    if(this._init?.displayWarning){
+      if(isFirstLine)
+        console.log("\n")
+      
+      console.log(CONSOLE_YELLOW_COLOR, `[IGNISIGN SDK] ${message}`)
+    }
+      
+  };
+
+  private async _checkConfiguration(){
+
+    await this.getApplicationContext();
+
+    this.appType = this.appContext.appType;
+
+    this._assertIsAppType([...Object.values(IGNISIGN_APPLICATION_TYPE)]); // check if the app type is valid (not IGNISIGN_RIGHT_DELEGATION or WEB3_PROOF)
+    
+    if(this.appType === IGNISIGN_APPLICATION_TYPE.SIGNATURE){
+      // TODO check signer profiles to see if they need warnings
+      await this._checkWebhookPresence();
+
+    }
+
+    if(this.appType === IGNISIGN_APPLICATION_TYPE.SEAL){
+      await this._checkWebhookPresence();
+
+    }
+
+    if(this.appType === IGNISIGN_APPLICATION_TYPE.BARE_SIGNATURE){
+      const bareSignAppEnvSettings : IgnisignApplication_BareSignatureEnvSettings = await this.getBareSignatureConfiguration();
+
+      if(bareSignAppEnvSettings.authorizedOrigins.length === 0){
+        
+        this._consoleYellow("You are receiving this warning as you have not set any authorized origins for your Bare Signature application.", true);
+        this._consoleYellow("Please set at least one authorized origin in your Ignisign application settings.");
+      }
+
+      if(bareSignAppEnvSettings.redirectUris.length === 0){
+        this._consoleYellow("You are receiving this warning as you have not set any redirect uri for your Bare Signature application.", true);
+        this._consoleYellow("Please set at least one redirect uri in your Ignisign application settings.");
+      }
+
+    }
+
+    if(this.appType === IGNISIGN_APPLICATION_TYPE.LOG_CAPSULE){
+    
+    }
+
+  }
+
+  private async _checkWebhookPresence () {
     const webhooks = await this.getWebhookEndpoints()
 
     if (!this._init?.disableWebhookWarning && webhooks?.length === 0) {
-      // yellow
-      const color = '\x1b[33m%s\x1b[0m';
-      console.info(color, "[IGNISIGN SDK] You are receiving this warning as you have not set any webhook endpoint.");
-      console.info(color, "[IGNISIGN SDK] You will not be able to receive any webhook from Ignisign.");
-      console.info(color, "[IGNISIGN SDK] Please set at least one webhook endpoint in your Ignisign application settings.");
-      console.info(color, "[IGNISIGN SDK] If you want to disable this warning, please set the disableWebhookWarning property to true in the IgnisignSdkInitializer object.");
+
+      this._consoleYellow("You are receiving this warning as you have not set any webhook endpoint.");
+      this._consoleYellow("You will not be able to receive any webhook from Ignisign.");
+      this._consoleYellow("Please set at least one webhook endpoint in your Ignisign application settings.");
+      this._consoleYellow("If you want to disable this warning, please set the disableWebhookWarning property to true in the IgnisignSdkInitializer object.");
     }
   } 
 
-  private async _assertIsAppType(types : IGNISIGN_APPLICATION_TYPE[]){
+  private async _assertIsAppType(types : IGNISIGN_APPLICATION_TYPE[], functionName? : string){
+    if(!this.appContext)
+      await this.getApplicationContext();
+    
+
     if (!this.appType){
-      const appContext = await this.getApplicationContext();
-      this.appType = appContext.appType;
+      this.appType = this.appContext.appType;
     }
 
     if(this.appType === IGNISIGN_APPLICATION_TYPE.IGNISIGN_RIGHT_DELEGATION)
       throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.BAD_REQUEST, 
-          { customMessage : "[IGNISIGN SDK] Access to a right delegation application is forbidden by SDK"}, 
+          { customMessage : "[IGNISIGN SDK] Access to a right delegation application is forbidden by SDK",}, 
           null, this.execContext)
 
     if(this.appType === IGNISIGN_APPLICATION_TYPE.WEB3_PROOF)
@@ -134,112 +193,128 @@ export class IgnisignSdk extends IgnisignHttpApi {
       throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.BAD_REQUEST, {
         customMessage : "[IGNISIGN SDK] You are trying to use a feature that is not available for your application type",
         appType : this.appType,
-        expectedTypes : types
+        expectedTypes : types,
+        functionName : functionName,
       }, null, this.execContext)
     }
   }
 
-  private async _assertIsAppTypeSignature(){
-    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SIGNATURE]);
+  private async _assertIsAppTypeSignature(functionName? : string){
+    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SIGNATURE], functionName);
   }
 
-  private async _assertIsAppTypeSeal(){
-    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SEAL]);
+  private async _assertIsAppTypeSeal(functionName? : string){
+    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SEAL], functionName);
   }
 
-  private async _assertIsAppTypeBareSignature(){
-    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.BARE_SIGNATURE]);
+  private async _assertIsAppTypeBareSignature(functionName? : string){
+    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.BARE_SIGNATURE], functionName);
   }
 
-  private async _assertIsAppTypeLogCapsule(){
-    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.LOG_CAPSULE]);
+  private async _assertIsAppTypeLogCapsule(functionName? : string){
+    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.LOG_CAPSULE], functionName);
   }
 
-  private async _assertIsAppTypeSignatureOrSeal(){
-    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SIGNATURE, IGNISIGN_APPLICATION_TYPE.SEAL]);
+  private async _assertIsAppTypeSignatureOrSeal(functionName? : string){
+    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SIGNATURE, IGNISIGN_APPLICATION_TYPE.SEAL], functionName);
   }
 
-  private async _assertIsAppTypeSignatureOrSealOrBareSignature(){
-    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SIGNATURE, IGNISIGN_APPLICATION_TYPE.BARE_SIGNATURE]);
+  private async _assertIsAppTypeSignatureOrSealOrBareSignature(functionName? : string){
+    await this._assertIsAppType([IGNISIGN_APPLICATION_TYPE.SIGNATURE, IGNISIGN_APPLICATION_TYPE.SEAL, IGNISIGN_APPLICATION_TYPE.BARE_SIGNATURE], functionName);
   }
 
   
 
    /************** APPLICATION *************/
 
-   public async getApplicationContext(): Promise<IgnisignApplication_Context> {
+   public async getApplicationContext(refresh = false): Promise<IgnisignApplication_Context> {
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    const { appId }          = this.execContext;
-    return await ignisignConnectedApi.get<IgnisignApplication_Context>(ignisignRemoteServiceUrls.getApplicationContext, {urlParams: { appId }});
+    
+    if(this.appContext && !refresh)
+      return this.appContext;
+
+    const { appId }  = this.execContext;
+    const appContext = await ignisignConnectedApi.get<IgnisignApplication_Context>(ignisignRemoteServiceUrls.getApplicationContext, {urlParams: { appId }});
+    this.appContext  = appContext;
+
+    return appContext;
    }
 
   /************** SIGNER PROFILE *************/
 
   public async getSignerProfile(signerProfileId): Promise<IgnisignSignerProfile> {
+    await this._assertIsAppTypeSignatureOrSeal("getSignerProfile")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }          = this.execContext;
     return await ignisignConnectedApi.get<IgnisignSignerProfile>(ignisignRemoteServiceUrls.getSignerProfile, {urlParams: { appId, appEnv, signerProfileId}});
    }
 
+   public async getSignerProfiles(): Promise<IgnisignSignerProfile[]> {
+    await this._assertIsAppTypeSignatureOrSeal("getSignerProfiles")
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }          = this.execContext;
+    return await ignisignConnectedApi.get<IgnisignSignerProfile[]>(ignisignRemoteServiceUrls.getSignerProfiles, {urlParams: { appId, appEnv}});
+   }
+
   /************** SIGNERS *************/
 
   public async regenerateSignerAuthSecret(signerId: string): Promise<{authSecret: string}> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("regenerateSignerAuthSecret")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }          = this.execContext;
     return await ignisignConnectedApi.put<{authSecret: string}>(ignisignRemoteServiceUrls.regenerateSignerAuthSecret, {}, { urlParams: { appId, appEnv, signerId } });
   }
 
   public async getSignerInputsConstraintsFromSignerProfileId(signerProfileId : string) : Promise<IgnisignInputNeedsDto> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("getSignerInputsConstraintsFromSignerProfileId")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignInputNeedsDto>(ignisignRemoteServiceUrls.getSignerInputsConstraintsFromSignerProfileId, { urlParams: { appId, appEnv, signerProfileId } });
   }
 
   public async getSignerWithDetails(signerId : string): Promise<IgnisignSigner_Context> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getSignerWithDetails")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignSigner_Context>(ignisignRemoteServiceUrls.getSignerWithDetails,  { urlParams: { appId, appEnv, signerId } });
   }
   public async getSignerSummary(signerId : string): Promise<IgnisignSigner_Summary> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getSignerSummary")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignSigner_Summary>(ignisignRemoteServiceUrls.getSignerSummary,  { urlParams: { appId, appEnv, signerId } });
   }
 
   public async searchApplicationSigners(filter: string): Promise<IgnisignSigners_SearchResultDto> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("searchApplicationSigners")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignSigners_SearchResultDto>(ignisignRemoteServiceUrls.searchApplicationSigners, { urlParams: { appId, appEnv }, params: { filter } });
   }
 
   public async getPaginateApplicationSigners(page: number): Promise<IgnisignSigners_SearchResultDto> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getPaginateApplicationSigners")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignSigners_SearchResultDto>(ignisignRemoteServiceUrls.getPaginateApplicationSigners, { urlParams: {  appId, appEnv}, params: { page : page.toString() } });
   }
 
   public async createSigner(dto: IgnisignSigner_CreationRequestDto) {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("createSigner")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.post<IgnisignSigner_CreationResponseDto>(ignisignRemoteServiceUrls.createSigner, dto, { urlParams: { appId, appEnv } });
   }
   
   public async updateSigner(signerId: string, dto: IgnisignSigner_UpdateRequestDto) {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("updateSigner")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.put<IgnisignSigner_CreationResponseDto>(ignisignRemoteServiceUrls.updateSigner, dto, { urlParams: { appId, appEnv, signerId } });
   }
   
   public async revokeSigner(signerId: string): Promise<{signerId : string}> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("revokeSigner")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.delete<{signerId : string}>(ignisignRemoteServiceUrls.revokeSigner, { urlParams: { appId, appEnv, signerId } });
@@ -248,45 +323,45 @@ export class IgnisignSdk extends IgnisignHttpApi {
   /************** DOCUMENT FILES *************/
 
   public async initializeDocument(dto: IgnisignDocument_InitializationDto): Promise<{documentId : string}> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("initializeDocument")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.post<{documentId : string}>(ignisignRemoteServiceUrls.initializeDocument, dto, { urlParams: { appId, appEnv } });
   }
 
   public async getDocumentById(documentId: string): Promise<IgnisignDocument> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getDocumentById")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignDocument>(ignisignRemoteServiceUrls.getDocumentById, { urlParams: { documentId } });
   }
 
   public async getDocumentContext(documentId: string): Promise<IgnisignDocument_Context> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getDocumentContext")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get<IgnisignDocument_Context>(ignisignRemoteServiceUrls.getDocumentContext, { urlParams: { documentId } });
   }
 
   public async updateDocument(documentId: string, dto: IgnisignDocument_InitializationDto): Promise<IgnisignDocument> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("updateDocument")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.put<IgnisignDocument>(ignisignRemoteServiceUrls.updateDocument, ignisignConnectedApi, { urlParams: { documentId } });
+    return await ignisignConnectedApi.put<IgnisignDocument>(ignisignRemoteServiceUrls.updateDocument, dto, { urlParams: { documentId } });
   }
 
   public async removeDocument(documentId: string): Promise<{documentId : string}> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("removeDocument")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.delete<{documentId : string}>(ignisignRemoteServiceUrls.removeDocument, { urlParams: { documentId } });
   }
 
   public async removeDocumentContent(documentId: string): Promise<IgnisignDocument> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("removeDocumentContent")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.delete<IgnisignDocument>(ignisignRemoteServiceUrls.removeDocumentContent, { urlParams: { documentId } });
   }
 
   public async provideDocumentContent_DataJson(documentId: string, content : any): Promise<IgnisignDocument> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("provideDocumentContent_DataJson")
     const dto: IgnisignDocument_ContentCreation_DataJsonDto = { jsonContent : content};
 
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
@@ -295,14 +370,14 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async provideDocumentContent_PrivateContent(documentId: string, documentHash: string): Promise<IgnisignDocument> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("provideDocumentContent_PrivateContent")
     const dto: IgnisignDocument_ContentCreation_PrivateContentDto = { documentHash };
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post<IgnisignDocument>(ignisignRemoteServiceUrls.provideDocumentContent_PrivateContent, dto, { urlParams: { documentId } });
   }
 
   public async provideDocumentContent_File(documentId: string, uploadDto : IgnisignSdkFileContentUploadDto): Promise<IgnisignDocument> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("provideDocumentContent_File")
     const formData = new FormData();
 
     formData.append('file', uploadDto.fileStream, {
@@ -315,31 +390,31 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async downloadOriginalDoc(documentId : string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadOriginalDoc")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
   public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadDocumentSignatureXades")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadDocumentSignatureXades,  { urlParams: { documentId, signatureId }, responseType:<ResponseType>('stream') });
   }
 
   public async downloadAsicFile(documentId : string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("downloadAsicFile")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
   }
 
   public async getSignaturesImages(documentId : string): Promise<IgnisignSignatureImages_Dto> {
-    await this._assertIsAppTypeSignature()
+    await this._assertIsAppTypeSignature("getSignaturesImages")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureImg, { urlParams: {documentId } });
   }
 
   public async checkDocumentAuthenticity(documentId : string, file: File): Promise<IgnisignDocument_AuthenticityValidationContainer> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("checkDocumentAuthenticity")
     const formData = new FormData();
     formData.append('file', file);
 
@@ -350,14 +425,14 @@ export class IgnisignSdk extends IgnisignHttpApi {
   /************** DOCUMENTS *************/
 
   public async getDocumentSignatures(documentId): Promise<IgnisignSignature[]> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getDocumentSignatures")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get<IgnisignSignature[]>(ignisignRemoteServiceUrls.getDocumentSignatures,  { urlParams: {documentId  } });
   }
 
 
   public async getDocumentSignature(documentId, signatureId): Promise<IgnisignSignature> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getDocumentSignature")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get<IgnisignSignature>(ignisignRemoteServiceUrls.getDocumentSignature, { urlParams: { documentId, signatureId } });
   }
@@ -365,45 +440,45 @@ export class IgnisignSdk extends IgnisignHttpApi {
   /**************  SIGNATURE REQUESTS *************/
 
   public async initSignatureRequest(): Promise<IgnisignSignatureRequest_IdContainer> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("initSignatureRequest")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.initSignatureRequest, null, { urlParams: { appId, appEnv } });
   }
 
   public async updateSignatureRequest(signatureRequestId : string, dto: IgnisignSignatureRequest_UpdateDto): Promise<IgnisignSignatureRequest_Context> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("updateSignatureRequest")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.put<IgnisignSignatureRequest_Context>(ignisignRemoteServiceUrls.updateSignatureRequest, dto, { urlParams: { signatureRequestId } });
   }
 
   public async publishSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_Publish_ResponseDTO> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("publishSignatureRequest")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.publishSignatureRequest, {}, { urlParams: { signatureRequestId } });
   }
 
   public async closeSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_IdContainer> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("closeSignatureRequest")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.closeSignatureRequest, {}, { urlParams: {  signatureRequestId} });
   }
 
   public async getSignatureRequestsByAppIdAndAppEnv(page: Number = 1): Promise<IgnisignSignatureRequests_Paginate> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getSignatureRequestsByAppIdAndAppEnv")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.get<IgnisignSignatureRequests_Paginate>(ignisignRemoteServiceUrls.getSignatureRequestsByAppIdAndAppEnv, { urlParams: { appId, appEnv }, params: { page : page.toString() } });
   }
 
   public async getSignatureRequestContext(signatureRequestId : string): Promise<IgnisignSignatureRequest_Context> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getSignatureRequestContext")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.getSignatureRequestContext, { urlParams: {  signatureRequestId } });
   }
 
   public async getSignatureRequestsStatus(signatureRequestIds : string[]): Promise<IgnisignSignatureRequests_StatusContainer> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("getSignatureRequestsStatus")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
 
@@ -413,23 +488,23 @@ export class IgnisignSdk extends IgnisignHttpApi {
   /*************** SIGNATURE PROOF **************/
 
   public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadSignatureProofDocument")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
   /** @deprecated */
   public async generateAdvancedSignatureProof(documentId: string): Promise<{ documentId : string }> {
-    await this._assertIsAppTypeSignatureOrSeal()
+    await this._assertIsAppTypeSignatureOrSeal("generateAdvancedSignatureProof")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
-  
+
   /************** SEAL *************/
 
   public async signM2M(dto: IgniSign_SignM2MRequestDto): Promise<IgniSign_SignM2MResponseDto> {
-    await this._assertIsAppTypeSeal()
+    await this._assertIsAppTypeSeal("signM2M")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.signM2M, dto, { urlParams: { appId, appEnv, m2mId : dto.m2mId} });
@@ -439,12 +514,11 @@ export class IgnisignSdk extends IgnisignHttpApi {
   /************** LOG_CAPSULE *************/
 
   public async logCapsuleCreate(hashSha256_b64 : string) : Promise<IgnisignLogCapsule_ResponseDto> {
-    await this._assertIsAppTypeLogCapsule()
+    await this._assertIsAppTypeLogCapsule("logCapsuleCreate")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
     const dto : IgnisignLogCapsule_RequestDto = { hashSha256_b64 };
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.logCapsuleCreate, dto, { urlParams: { appId, appEnv } });
-
   }
 
 
@@ -460,10 +534,11 @@ export class IgnisignSdk extends IgnisignHttpApi {
     { redirectUri, hashes, externalId, nonce, codeChallenge} : Ignisign_BareSignature_GetAuthrozationUrlRequest
   ) : Promise<Ignisign_BareSignature_GetAuthrozationUrlResponse> {
 
-    await this._assertIsAppTypeBareSignature()
+    await this._assertIsAppTypeBareSignature("getBareSignatureAuthorizationUrl")
 
     const nonceValue = nonce || uuid.v4();
     let codeVerfier = null;
+
     if(!codeChallenge){
       codeVerfier   = IgnisignSdkUtilsService.bareSignature_GenerateCodeVerifier();
       codeChallenge = IgnisignSdkUtilsService.bareSiganture_GenerateCodeChallenge(codeVerfier);
@@ -510,7 +585,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   ): Promise<Ignisign_BareSignature_ProofAccessToken> {
 
-    await this._assertIsAppTypeBareSignature()
+    await this._assertIsAppTypeBareSignature("getBareSignatureProofToken")
 
     const dto : Ignisign_BareSignature_ProofAccessTokenRequest = {
       client_id      : this.execContext.appId,
@@ -530,7 +605,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   public async getBareSignatureProofs(headerToken : string) : Promise<Ignisign_BareSignature_ProofAccessToken> {
 
-    await this._assertIsAppTypeBareSignature()
+    await this._assertIsAppTypeBareSignature("getBareSignatureProofs")
 
     const ignisignPublicApi  = await this.getIgnisignPublicApi();
 
@@ -542,6 +617,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
       });
 
   }
+
+  public async getBareSignatureConfiguration() : Promise<IgnisignApplication_BareSignatureEnvSettings>{
+    await this._assertIsAppTypeBareSignature("getBareSignatureConfiguration")
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    const { appId, appEnv }     = this.execContext;
+    return await ignisignConnectedApi.get<IgnisignApplication_BareSignatureEnvSettings>(ignisignRemoteServiceUrls.getBareSignatureConfiguration, { urlParams: { appId, appEnv } });
+
+  }
+
 
 
   /************** WEBHOOK MANAGEMENT *************/
@@ -673,7 +757,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("registerWebhookCallback_Signature")
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signature> = {
       uuid      : uuid.v4(),
@@ -695,7 +779,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("registerWebhookCallback_SignatureSession")
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureSession> = {
       uuid      : uuid.v4(),
       topic     : IGNISIGN_WEBHOOK_TOPICS.SIGNATURE_SESSION,
@@ -716,7 +800,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("registerWebhookCallback_SignatureRequest")
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureRequest> = {
       uuid      : uuid.v4(),
@@ -737,7 +821,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("registerWebhookCallback_Signer")
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_Signer> = {
       uuid      : uuid.v4(),
@@ -758,7 +842,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("registerWebhookCallback_SignatureProof")
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureProof_Error | IgnisignWebhookDto_SignatureProof_Success | IgnisignWebhookDto_SignatureAdvancedProof> = {
       uuid      : uuid.v4(),
@@ -779,7 +863,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     msgNature ?: IGNISIGN_WEBHOOK_MESSAGE_NATURE
   ): Promise<string>{
 
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature()
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("registerWebhookCallback_SignatureImageGenerated")
 
     const mapper : IgnisignWebhook_CallbackMapper<IgnisignWebhookDto_SignatureImage> = {
       uuid      : uuid.v4(),

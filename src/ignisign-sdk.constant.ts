@@ -10,6 +10,7 @@ export const ignisignRemoteServiceUrls = {
 
   // Signer profile
   getSignerProfile                        : "/v4/applications/:appId/envs/:appEnv/signer-profiles/:signerProfileId", // get
+  getSignerProfiles                       : "/v4/applications/:appId/envs/:appEnv/signer-profiles", // get
 
   // User invitations
   getAppInvitedUsers                      : "/v4/applications/:appId/users-invitations", // get
@@ -89,10 +90,11 @@ export const ignisignRemoteServiceUrls = {
 
   // Bare Signature
 
-  bareSignatureGetProofToken              : "/v4/envs/:appEnv/oauth2/sign-oauth2-proof-token", // proof-token
-  bareSignatureGetProofs                  : "/v4/envs/:appEnv/oauth2/sign-oauth2-proof", // proofs
+  bareSignatureGetProofToken              : "/v4/envs/:appEnv/oauth2/proofs-token", // proof-token
+  bareSignatureGetProofs                  : "/v4/envs/:appEnv/oauth2/proofs", // proofs
+  getBareSignatureConfiguration           : "/v4/applications/:appId/envs/:appEnv/bare-signatures-configuration", // config
 
   // Log Capsule
 
-  logCapsuleCreate                        : "/v4/applications/:appId/envs/:appEnv/log-capsules", // post
+  logCapsuleCreate                        : "/v4/applications/:appId/envs/:appEnv/log-capsules", 
 }

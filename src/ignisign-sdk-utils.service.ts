@@ -2,7 +2,7 @@
 import * as crypto from "crypto";
 
 export const IgnisignSdkUtilsService = {
-  
+
   parsePrivateKeyFromEnv,
 
   sealM2M_doSignPayload,
@@ -13,7 +13,7 @@ export const IgnisignSdkUtilsService = {
 
 function parsePrivateKeyFromEnv(envKey: string) : string{
   if(!envKey)
-    throw new Error('key not set: mandatory to init IgnisignSdkManagerSigantureService');
+    throw new Error('key not set: mandatory to init IgnisignSdkManagerSignatureService');
 
   return envKey
     .replace(/\|/g    ,'\n')
@@ -47,4 +47,6 @@ function bareSiganture_GenerateCodeChallenge(codeVerifier: string) : string{
     .replace(/\//g, '_')
     .replace(/=/g, '');
 }
+
+
 

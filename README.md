@@ -88,7 +88,7 @@ Easily connect your webhook endpoint to the Ignisign SDK:
 ```typescript
 router.post('/v1/ignisign-webhook', async (req, res, next) => {
   try {
-    const result = await IgnisignSdkManagerSigantureService.consumeWebhook(req.body);
+    const result = await IgnisignSdkManagerSignatureService.consumeWebhook(req.body);
     jsonSuccess(res, result);
   } catch (e) {
     next(e);

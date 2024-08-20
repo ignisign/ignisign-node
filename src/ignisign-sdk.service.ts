@@ -493,13 +493,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
-  /** @deprecated */
-  public async generateAdvancedSignatureProof(documentId: string): Promise<{ documentId : string }> {
-    await this._assertIsAppTypeSignatureOrSeal("generateAdvancedSignatureProof")
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.generateAdvancedSignatureProof, {}, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
-  }
-
 
   /************** SEAL *************/
 

@@ -9,6 +9,8 @@ export const IgnisignSdkUtilsService = {
   bareSignature_GenerateCodeVerifier,
   bareSiganture_GenerateCodeChallenge,
 
+  generateECDSAKey,
+
 }
 
 function parsePrivateKeyFromEnv(envKey: string) : string{
@@ -26,7 +28,7 @@ function sealM2M_doSignPayload(privateKeyPem: string, documentHash: string): { s
   const hashBuffer  = Buffer.from(documentHash, 'hex');
   const privateKey  = crypto.createPrivateKey(privateKeyPem);
   const signature   = crypto.sign(null, hashBuffer, privateKey);
-  return { signature : signature.toString('hex') };
+  return { signature : signature.toString('hex') }; //.toString('base64');
 }
 
 
@@ -46,6 +48,22 @@ function bareSiganture_GenerateCodeChallenge(codeVerifier: string) : string{
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=/g, '');
+}
+
+function generateECDSAKey() {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync('ec', 
+  {
+    namedCurve: 'P-256',
+    publicKeyEncoding: {
+      type: 'spki',      // Public key standard
+      format: 'pem'       // Encoding format
+    },
+    privateKeyEncoding: {
+      type: 'pkcs8',  // Use 'pkcs8' for private key encoding
+      format: 'pem'
+    }
+  });
+  return { publicKey, privateKey }
 }
 
 

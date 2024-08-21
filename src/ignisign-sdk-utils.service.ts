@@ -25,7 +25,7 @@ function parsePrivateKeyFromEnv(envKey: string) : string{
 
 function sealM2M_doSignPayload(privateKeyPem: string, documentHash: string): { signature: string } {
     
-  const hashBuffer  = Buffer.from(documentHash, 'hex');
+  const hashBuffer  = Buffer.from(documentHash, 'hex');//base64 ?
   const privateKey  = crypto.createPrivateKey(privateKeyPem);
   const signature   = crypto.sign(null, hashBuffer, privateKey);
   return { signature : signature.toString('hex') }; //.toString('base64');

@@ -1,6 +1,7 @@
 import { sign } from "crypto";
 
 export const DEFAULT_IGNISIGN_API_URL = "https://api.ignisign.io";
+export const DEFAULT_IGNISIGN_SIGN_URL = "https://sign.v4.ignisign.io";
 
 export const ignisignRemoteServiceUrls = {
 

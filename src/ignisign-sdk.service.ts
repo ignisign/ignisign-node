@@ -73,7 +73,7 @@ import {
 import { Readable } from "stream";
 import { IgnisignHttpApi } from "./ignisign-http.service";
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
-import { ignisignRemoteServiceUrls } from "./ignisign-sdk.constant";
+import { DEFAULT_IGNISIGN_SIGN_URL, ignisignRemoteServiceUrls } from "./ignisign-sdk.constant";
 import { Ignisign_BareSignature_SdkProofAccessTokenRequest, IgnisignSdkFileContentUploadDto, IgnisignSdkInitializer, IgnisignSignM2mSignatureRequestPayload, IgnisignWebhook_CallbackMapper } from "./ignisign-sdk.models";
 import { IgnisignSdkUtilsService } from "./ignisign-sdk-utils.service";
 
@@ -86,6 +86,7 @@ const _logIfActivated = (...args) => {
 }
 
 const CONSOLE_YELLOW_COLOR = '\x1b[33m%s\x1b[0m';
+const IGNISIGN_SIGN_URL = process.env.IGNISIGN_SIGN_URL || DEFAULT_IGNISIGN_SIGN_URL;
 
 
 export class IgnisignSdk extends IgnisignHttpApi {
@@ -519,8 +520,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** BARE-SIGNATURE *************/
 
-  private _getBareSignatureBaseUrl() : string {
-    return `${this.ignisignServerUrl}/v4/envs/${this.execContext.appEnv}/oauth2`
+  private _getBareSignatureClientBaseUrl() : string {
+    return `${IGNISIGN_SIGN_URL}/envs/${this.execContext.appEnv}/oauth2`
   }
 
   public async getBareSignatureAuthorizationUrl(
@@ -555,7 +556,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     };
 
     const paramString  = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&')
-    const authorizationUrl = `${this._getBareSignatureBaseUrl()}/authorize?${paramString}`;
+    const authorizationUrl = `${this._getBareSignatureClientBaseUrl()}/authorize?${paramString}`;
 
     const result : Ignisign_BareSignature_GetAuthrozationUrlResponse =  {
       authorizationUrl,

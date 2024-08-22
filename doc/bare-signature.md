@@ -1,10 +1,37 @@
 
-
-
 # Bare Signature
+
+The Ignisign Bare Signature is a 
+
 
 ## Flow Summary
 
+```mermaid
+
+
+  Ignisign_SignatureInterface ->>+ Signer : Request Identification
+  Signer ->>- Ignisign_SignatureInterface : Provide identity
+  Ignisign_SignatureInterface ->>+ IgniSign_API : Transmit identity
+  IgniSign_API ->> IgniSign_API : Register Identity
+  IgniSign_API ->> IgniSign_API : Generate Certificates
+  IgniSign_API ->> IgniSign_API : Sign Hashes
+  IgniSign_API ->> IgniSign_API : Generate oAuth2 token
+  IgniSign_API ->>- Ignisign_SignatureInterface : Transmit oAuth2 token <br/>https://sign.example.com/callback?code=XXXXXX
+  
+  Ignisign_SignatureInterface ->>- ClientAppFrontend : Redirect with oAuth2 token
+  ClientAppFrontend ->>+ ClientAppBackend : Transmit oAuth2 token 
+  
+  ClientAppBackend ->>+ IgniSign_API : Get Proof access token  <br/> POST https://api.ignisign.io/env/{appEnv}/sign-oauth2-proof-token<br/> Content-Type: application/json <br/>{ <br/> grant_type="authorization_code", <br/> client_id : "{appId}", <br/>  client_secret : "{appSecret}", <br/> code_verifier :"code_verifier" <br/> redirect_uri="https://sign.example.com/callback" <br/> }
+
+  IgniSign_API ->>- ClientAppBackend : Provide Proof access token <br/> { <br/>access_token : "xxxxxxx"  <br/>  token_type : "Bearer", <br/>  expires_in : 3600, <br/>  scope : "proof_retrieval"  <br/> }
+  ClientAppBackend ->> ClientAppFrontend : notify end of sign
+  ClientAppFrontend ->>- ClientAppFrontend : end of sign
+  ClientAppBackend ->>+ IgniSign_API : Request PKCS 7 <br/> GET https://api.ignisign.io/env/{appEnv}/sign-oauth2-proof <br/> Autorization:  Bearer xxxxxxxx
+  IgniSign_API ->>- ClientAppBackend : Provide PKCS 7 <br/> { proofs : <br/> [ <br/> { hash : "{fileHash1}", pkcs7_b64 : base64(pkcs7) } <br/> { hash : "{fileHash2}", pkcs7_b64 : base64(pkcs7) } <br/> ... <br/> ] }
+  ClientAppBackend ->> ClientAppBackend: Add PKCS 7 to PDF
+  ClientAppBackend ->>- Signer : Provide PDF Signed
+
+```
 
 ## Ignisign version and account creation.
 
@@ -12,8 +39,11 @@ As a first step, you need to create an account on the Ignisign platform that is 
 
 The Bare Signature feature is available from the `version 4` of the Ignisign platform.
 
-to create an account that with this version, you need to create it on the console v4 of the Ignisign platform.
+To create an account that with this version, you need to create it on the console v4 of the Ignisign platform.
 The URL of the console v4 is : https://console.v4.ignisign.io
+
+If you have an existing account, you can migrate any organization to the IgniSign V4 inside the console.
+
 
 ## SDK and Example
 

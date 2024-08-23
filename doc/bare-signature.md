@@ -381,7 +381,7 @@ class Ignisign_BareSignature_Proof {
     fullName         : string;
     lastName        ?: string;
     firstName       ?: string;
-  }[];
+  };
 
 }
 

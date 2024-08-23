@@ -68,6 +68,7 @@ import {
   IgnisignLogCapsule_ResponseDto,
   IgnisignLogCapsule_RequestDto,
   IgnisignApplication_BareSignatureEnvSettings,
+  Ignisign_BareSignature_Proof,
 } from "@ignisign/public";
 
 import { Readable } from "stream";
@@ -597,7 +598,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
       { urlParams: { appEnv: this.execContext.appEnv } });
   }
 
-  public async getBareSignatureProofs(headerToken : string) : Promise<Ignisign_BareSignature_ProofAccessToken> {
+  public async getBareSignatureProofs(headerToken : string) : Promise<Ignisign_BareSignature_Proof> {
 
     await this._assertIsAppTypeBareSignature("getBareSignatureProofs")
 

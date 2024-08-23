@@ -91,7 +91,7 @@ export const ignisignRemoteServiceUrls = {
   // Bare Signature
 
   bareSignatureGetProofToken              : "/v4/envs/:appEnv/oauth2/proofs-token", // proof-token
-  bareSignatureGetProofs                  : "/v4/envs/:appEnv/oauth2/proofs", // proofs
+  bareSignatureGetProofs                  : "/v4/envs/:appEnv/bare-signatures/proofs", // proofs
   getBareSignatureConfiguration           : "/v4/applications/:appId/envs/:appEnv/bare-signatures-configuration", // config
 
   // Log Capsule

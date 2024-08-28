@@ -150,7 +150,7 @@ To initiate the signature session, you need to create an authorization URL that 
 
 ### Create the Authorization URL Manually
 
-- **Base URL**: [https://sign.v4.ignisign.io/v4/envs/:appEnv/oauth2/authorize](https://sign.v4.ignisign.io/v4/envs/:appEnv/oauth2/authorize)
+- **Base URL**: [https://sign.v4.ignisign.io/envs/:appEnv/oauth2/authorize](https://sign.v4.ignisign.io/envs/:appEnv/oauth2/authorize)
 
 **URL Parameters:**
 

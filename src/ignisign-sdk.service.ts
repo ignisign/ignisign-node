@@ -69,6 +69,7 @@ import {
   IgnisignLogCapsule_RequestDto,
   IgnisignApplication_BareSignatureEnvSettings,
   Ignisign_BareSignature_Proof,
+  IGNISIGN_SIGNATURE_PROOF_TYPE,
 } from "@ignisign/public";
 
 import { Readable } from "stream";
@@ -397,18 +398,6 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadOriginalDoc, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
   }
 
-  public async downloadDocumentSignatureXades(documentId : string, signatureId : string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadDocumentSignatureXades")
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadDocumentSignatureXades,  { urlParams: { documentId, signatureId }, responseType:<ResponseType>('stream') });
-  }
-
-  public async downloadAsicFile(documentId : string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSeal("downloadAsicFile")
-    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadAsicFile, { urlParams: { documentId }, responseType:<ResponseType>('stream')});
-  }
-
   public async getSignaturesImages(documentId : string): Promise<IgnisignSignatureImages_Dto> {
     await this._assertIsAppTypeSignature("getSignaturesImages")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
@@ -489,10 +478,16 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /*************** SIGNATURE PROOF **************/
 
-  public async downloadSignatureProofDocument(documentId: string): Promise<Readable> {
-    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadSignatureProofDocument")
+  public async downloadSignatureByType(documentId: string, signatureType: IGNISIGN_SIGNATURE_PROOF_TYPE): Promise<Readable> {
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadSignatureByType")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureProofDocument, { urlParams: { documentId }, responseType:<ResponseType>('stream') });
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadSignatureByType, { urlParams: { documentId, signatureType }, responseType:<ResponseType>('stream') });
+  }
+
+  public async downloadLowLevelSignatureProof(documentId: string, signatureType: IGNISIGN_SIGNATURE_PROOF_TYPE, signerId: string): Promise<Readable> {
+    await this._assertIsAppTypeSignatureOrSealOrBareSignature("downloadLowLevelSignatureProof")
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.get(ignisignRemoteServiceUrls.downloadLowLevelSignatureProof, { urlParams: { documentId, signatureType, signerId }, responseType:<ResponseType>('stream') });
   }
 
 

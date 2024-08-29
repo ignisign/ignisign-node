@@ -51,10 +51,8 @@ export const ignisignRemoteServiceUrls = {
   checkDocumentAuthenticity               : "/v4/documents/:documentId/check-authenticity", // post
   
   // Signature Proof
-
-  downloadSignatureProofDocument          : "/v4/documents/:documentId/signature-proof", //  
-  downloadDocumentSignatureXades          : "/v4/documents/:documentId/signatures/:signatureId/xades", //
-  downloadAsicFile                        : "/v4/documents/:documentId/asics", // 
+  downloadSignatureByType                 : "/v4/documents/:documentId/signatures/:signatureType", // get
+  downloadLowLevelSignatureProof          : "/v4/documents/:documentId/signatures/:signatureType/signers/:signerId", // get
 
   getSignatureImg                         : "/v4/documents/:documentId/img-signatures", // get
   getDocumentSignatures                   : "/v4/documents/:documentId/signatures", // get

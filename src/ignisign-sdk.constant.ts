@@ -51,8 +51,8 @@ export const ignisignRemoteServiceUrls = {
   checkDocumentAuthenticity               : "/v4/documents/:documentId/check-authenticity", // post
   
   // Signature Proof
-  downloadSignatureByType                 : "/v4/documents/:documentId/signatures/:signatureType", // get
-  downloadLowLevelSignatureProof          : "/v4/documents/:documentId/signatures/:signatureType/signers/:signerId", // get
+  downloadSignatureByType                 : "/v4/documents/:documentId/signature-type/:signatureType", // get
+  downloadLowLevelSignatureProof          : "/v4/documents/:documentId/signature-type/:signatureType/signers/:signerId", // get
 
   getSignatureImg                         : "/v4/documents/:documentId/img-signatures", // get
   getDocumentSignatures                   : "/v4/documents/:documentId/signatures", // get

@@ -434,7 +434,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     await this._assertIsAppTypeSignatureOrSeal("initSignatureRequest")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.initSignatureRequest, null, { urlParams: { appId, appEnv } });
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.initSignatureRequest, {}, { urlParams: { appId, appEnv } });
   }
 
   public async updateSignatureRequest(signatureRequestId : string, dto: IgnisignSignatureRequest_UpdateDto): Promise<IgnisignSignatureRequest_Context> {

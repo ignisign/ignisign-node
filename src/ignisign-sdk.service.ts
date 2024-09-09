@@ -18,8 +18,8 @@ import {
   IGNISIGN_WEBHOOK_EVENT_FILTER,
   IGNISIGN_WEBHOOK_MESSAGE_NATURE,
   IGNISIGN_WEBHOOK_TOPICS,
-  IgniSign_SignM2MRequestDto,
-  IgniSign_SignM2MResponseDto,
+  IgnisignSealM2M_RequestDto,
+  IgnisignSealM2M_ResponseDto,
   IgnisignApplication_Context,
   IgnisignDocument,
   IgnisignDocument_AuthenticityValidationContainer,
@@ -61,14 +61,14 @@ import {
   IgnisignWebhook_Callback,
   IgnisignWebhook_EndpointDto,
   IgnisignWebhook_SettingsDescription,
-  Ignisign_BareSignature_GetAuthrozationUrlResponse,
-  Ignisign_BareSignature_GetAuthrozationUrlRequest,
-  Ignisign_BareSignature_ProofAccessTokenRequest,
-  Ignisign_BareSignature_ProofAccessToken,
+  IgnisignBareSignature_GetAuthrozationUrlResponse,
+  IgnisignBareSignature_GetAuthrozationUrlRequest,
+  IgnisignBareSignature_ProofAccessTokenRequest,
+  IgnisignBareSignature_ProofAccessToken,
   IgnisignLogCapsule_ResponseDto,
   IgnisignLogCapsule_RequestDto,
   IgnisignApplication_BareSignatureEnvSettings,
-  Ignisign_BareSignature_Proof,
+  IgnisignBareSignature_Proof,
   IGNISIGN_SIGNATURE_PROOF_TYPE,
 } from "@ignisign/public";
 
@@ -76,7 +76,7 @@ import { Readable } from "stream";
 import { IgnisignHttpApi } from "./ignisign-http.service";
 import { createIgnisignSdkError } from "./ignisign-sdk-error.service";
 import { DEFAULT_IGNISIGN_SIGN_URL, ignisignRemoteServiceUrls } from "./ignisign-sdk.constant";
-import { Ignisign_BareSignature_SdkProofAccessTokenRequest, IgnisignSdkFileContentUploadDto, IgnisignSdkInitializer, IgnisignSignM2mSignatureRequestPayload, IgnisignWebhook_CallbackMapper } from "./ignisign-sdk.models";
+import { IgnisignBareSignature_SdkProofAccessTokenRequest, IgnisignSdkFileContentUploadDto, IgnisignSdkInitializer, IgnisignSignM2mSignatureRequestPayload, IgnisignWebhook_CallbackMapper } from "./ignisign-sdk.models";
 import { IgnisignSdkUtilsService } from "./ignisign-sdk-utils.service";
 
 
@@ -493,7 +493,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
   /************** SEAL *************/
 
-  public async signM2M(dto: IgniSign_SignM2MRequestDto): Promise<IgniSign_SignM2MResponseDto> {
+  public async signM2M(dto: IgnisignSealM2M_RequestDto): Promise<IgnisignSealM2M_ResponseDto> {
     await this._assertIsAppTypeSeal("signM2M")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     const { appId, appEnv }     = this.execContext;
@@ -521,8 +521,8 @@ export class IgnisignSdk extends IgnisignHttpApi {
   }
 
   public async getBareSignatureAuthorizationUrl(
-    { redirectUri, hashes, externalId, nonce, codeChallenge} : Ignisign_BareSignature_GetAuthrozationUrlRequest
-  ) : Promise<Ignisign_BareSignature_GetAuthrozationUrlResponse> {
+    { redirectUri, hashes, externalId, nonce, codeChallenge} : IgnisignBareSignature_GetAuthrozationUrlRequest
+  ) : Promise<IgnisignBareSignature_GetAuthrozationUrlResponse> {
 
     await this._assertIsAppTypeBareSignature("getBareSignatureAuthorizationUrl")
 
@@ -554,7 +554,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
     const paramString  = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&')
     const authorizationUrl = `${this._getBareSignatureClientBaseUrl()}/authorize?${paramString}`;
 
-    const result : Ignisign_BareSignature_GetAuthrozationUrlResponse =  {
+    const result : IgnisignBareSignature_GetAuthrozationUrlResponse =  {
       authorizationUrl,
       nonce: nonceValue,
       codeChallenge
@@ -571,13 +571,13 @@ export class IgnisignSdk extends IgnisignHttpApi {
       code,
       code_verifier, 
       redirect_uri
-    } : Ignisign_BareSignature_SdkProofAccessTokenRequest
+    } : IgnisignBareSignature_SdkProofAccessTokenRequest
 
-  ): Promise<Ignisign_BareSignature_ProofAccessToken> {
+  ): Promise<IgnisignBareSignature_ProofAccessToken> {
 
     await this._assertIsAppTypeBareSignature("getBareSignatureProofToken")
 
-    const dto : Ignisign_BareSignature_ProofAccessTokenRequest = {
+    const dto : IgnisignBareSignature_ProofAccessTokenRequest = {
       client_id      : this.execContext.appId,
       client_secret  : this.execContext.appSecret,
       code_verifier,
@@ -587,13 +587,13 @@ export class IgnisignSdk extends IgnisignHttpApi {
     };
 
     const ignisignPublicApi  = await this.getIgnisignPublicApi();
-    return await ignisignPublicApi.post<Ignisign_BareSignature_ProofAccessToken>(
+    return await ignisignPublicApi.post<IgnisignBareSignature_ProofAccessToken>(
       ignisignRemoteServiceUrls.bareSignatureGetProofToken, 
       dto, 
       { urlParams: { appEnv: this.execContext.appEnv } });
   }
 
-  public async getBareSignatureProofs(headerToken : string) : Promise<Ignisign_BareSignature_Proof> {
+  public async getBareSignatureProofs(headerToken : string) : Promise<IgnisignBareSignature_Proof> {
 
     await this._assertIsAppTypeBareSignature("getBareSignatureProofs")
 

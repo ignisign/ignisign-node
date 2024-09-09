@@ -213,7 +213,7 @@ const exampleBareSignature: Example_BareSignature = {
 
 const codeChallenge = IgniSignSdkUtilsService.bareSignature_GenerateCodeChallenge(exampleBareSignature.codeVerifier);
 
-const urlAuthRequestDto: IgniSign_BareSignature_GetAuthorizationUrlRequest = {
+const urlAuthRequestDto: IgnisignBareSignature_GetAuthorizationUrlRequest = {
   externalId: exampleBareSignature._id,
   hashes: [exampleBareSignature.document.documentHash],
   redirectUri: "https://example.com/redirect",
@@ -282,7 +282,7 @@ import { IgniSignSdk } from '@ignisign/ignisign-sdk';
 
 const myExampleBareSignatureObject = _getMyExampleBareSignatureObject();
 
-const dto: IgniSign_BareSignature_SdkProofAccessTokenRequest = {
+const dto: IgnisignBareSignature_SdkProofAccessTokenRequest = {
   code: myExampleBareSignatureObject.code, // The code that was provided by IgniSign via callback
   codeVerifier: myExampleBareSignatureObject.codeVerifier,
   redirectUri: "https://example.com/redirect",
@@ -330,7 +330,7 @@ import { IgnisignSdk } from '@ignisign/ignisign-sdk';
 const myExampleBareSignatureObject = _getMyExampleBareSignatureObject();
 const proofAccessToken             = myExampleBareSignatureObject.accessToken;
 
-const proof : Ignisign_BareSignature_Proof = await ignisignSdkInstance.getBareSignatureProof(proofAccessToken);
+const proof : IgnisignBareSignature_Proof = await ignisignSdkInstance.getBareSignatureProof(proofAccessToken);
 
 // process the proof of the signature.
 
@@ -342,7 +342,7 @@ Below is a description of the data structure of the Bare Signature Proof:
 
 ```javascript
 
-class Ignisign_BareSignature_Proof {
+class IgnisignBareSignature_Proof {
   // The related appId of the request
   appId              : string;
   

@@ -15,4 +15,4 @@ echo "tsconfig.tsbuildinfo => Removed";
 
 yarn install 
 yarn build 
-npm publish --tag beta;
+npm publish;

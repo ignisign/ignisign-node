@@ -4,8 +4,8 @@
 
 "@ignisign/public@4.0.0":
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-4.0.0.tgz#451ebf90ab65c84ef1dfa1aa236b84513ab8f3a4"
-  integrity sha512-4XRCXNShpMnnghzrqf0Or3t7rZGJ9DU2pSeP587XCGVsNgjA4+XmHt+9J80BhgFpEZYIsW5dow5h4BexAUDofA==
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-4.0.0.tgz#26d3f76901267a7448ee3df8b6926a0b50b519a2"
+  integrity sha512-SRZSIgjO+BZX0OkWJqyMG+Efh2ddce+KT3BD+neN2XXq/eSUZyAVc/GjbcVzi0XmUV+KF6ocN+4KP5R88RvvvQ==
   dependencies:
     class-transformer "^0.5.1"
     class-validator "^0.14.0"
@@ -318,9 +318,9 @@ escape-string-regexp@^1.0.5:
   integrity sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==
 
 follow-redirects@^1.14.0:
-  version "1.15.6"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
-  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
+  version "1.15.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
+  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
 
 for-each@^0.3.3:
   version "0.3.3"

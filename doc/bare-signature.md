@@ -66,7 +66,7 @@ As a first step, you need to create an account on the IgniSign platform that is 
 
 The Bare Signature feature is available starting from `version 4` of the IgniSign platform.
 
-To create an account with this version, you need to create it on the console v4 of the IgniSign platform. The URL of the console v4 is: [https://console.v4.ignisign.io](https://console.v4.ignisign.io).
+To create an account with this version, you need to create it on the console v4 of the IgniSign platform. The URL of the console v4 is: [https://console.ignisign.io](https://console.ignisign.io).
 
 If you have an existing account, you can migrate any organization to IgniSign V4 inside the console.
 
@@ -150,7 +150,7 @@ To initiate the signature session, you need to create an authorization URL that 
 
 ### Create the Authorization URL Manually
 
-- **Base URL**: [https://sign.v4.ignisign.io/envs/:appEnv/oauth2/authorize](https://sign.v4.ignisign.io/envs/:appEnv/oauth2/authorize)
+- **Base URL**: [https://sign.ignisign.io/envs/:appEnv/oauth2/authorize](https://sign.ignisign.io/envs/:appEnv/oauth2/authorize)
 
 **URL Parameters:**
 

@@ -45,9 +45,6 @@ function bareSiganture_GenerateCodeChallenge(codeVerifier: string) : string{
   return crypto.createHash('sha256')
     .update(codeVerifier)
     .digest('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
 }
 
 function generateECDSAKey() {

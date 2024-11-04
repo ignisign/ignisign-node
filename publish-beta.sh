@@ -16,6 +16,9 @@ echo "dist => Removed";
 rm -f "tsconfig.tsbuildinfo";
 echo "tsconfig.tsbuildinfo => Removed";
 
-yarn install 
-yarn build 
-npm publish;
+yarn install;
+
+rm -f "tsconfig.tsbuildinfo";
+yarn build;
+
+npm publish --tag beta;

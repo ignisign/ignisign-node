@@ -184,7 +184,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
           { customMessage : "[IGNISIGN SDK] Access to a right delegation application is forbidden by SDK",}, 
           null, this.execContext)
 
-    if(this.appType === IGNISIGN_APPLICATION_TYPE.WEB3_PROOF)
+    if(this.appType === IGNISIGN_APPLICATION_TYPE.WEB3)
       throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.NOT_YET_IMPLEMENTED, 
         { customMessage : "[IGNISIGN SDK] Web3 Proof application type is not yet implemented"},
         null, this.execContext)

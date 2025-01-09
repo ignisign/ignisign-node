@@ -120,7 +120,6 @@ export class IgnisignHttpApi {
   /************** PRIVATE METHODS **************/
 
   private async _requestAdminAuthJWT(): Promise<string> {
-
       if(!this.execContext)
         throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext)
 
@@ -132,7 +131,6 @@ export class IgnisignHttpApi {
 
       const jwtContainer : IgnisignJwtContainer  = await this.ignisignPublicApi.post(URL_API_AUTH, apiAuthDto);
       this.jwtToken       = jwtContainer.jwtToken;
-
       return this.jwtToken;
   }
 

@@ -59,6 +59,8 @@ export const ignisignRemoteServiceUrls = {
   getDocumentSignature                    : "/v4/documents/:documentId/signatures/:signatureId", // get
 
   // Signature requests
+                         
+  initSignerSetup                         : "/v4/applications/:appId/envs/:appEnv/signer-setup", // post
 
   initSignatureRequest                    : "/v4/applications/:appId/envs/:appEnv/signature-requests", //  
   getSignatureRequestsByAppIdAndAppEnv    : "/v4/applications/:appId/envs/:appEnv/signature-requests", //

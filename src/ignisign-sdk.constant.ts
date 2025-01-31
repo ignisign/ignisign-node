@@ -67,6 +67,7 @@ export const ignisignRemoteServiceUrls = {
 
   updateSignatureRequest                  : "/v4/signature-requests/:signatureRequestId", //  
   publishSignatureRequest                 : "/v4/signature-requests/:signatureRequestId/publish", //  
+  createSignatureRequestInOneCall         : "/v4/signature-requests/one-call-sign", //
   closeSignatureRequest                   : "/v4/signature-requests/:signatureRequestId/close", //    
   getSignatureRequestContext              : "/v4/signature-requests/:signatureRequestId/context", //  
   getSignatureRequestsStatus              : "/v4/applications/:appId/envs/:appEnv/signature-requests/status", //

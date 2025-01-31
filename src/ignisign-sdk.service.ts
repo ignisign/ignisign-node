@@ -33,6 +33,7 @@ import {
   IgnisignSignatureRequest_Context,
   IgnisignSignatureRequest_IdContainer,
   IgnisignSignatureRequest_Publish_ResponseDTO,
+  IgnisignSignatureRequest_OneCallCreationDto,
   IgnisignSignatureRequest_UpdateDto,
   IgnisignSignatureRequests_Paginate,
   IgnisignSignatureRequests_StatusContainer,
@@ -454,6 +455,12 @@ export class IgnisignSdk extends IgnisignHttpApi {
     await this._assertIsAppTypeSignatureOrSeal("publishSignatureRequest")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.publishSignatureRequest, {}, { urlParams: { signatureRequestId } });
+  }
+
+  public async createSignatureRequestInOneCall(signatureRequestId : string, dto: IgnisignSignatureRequest_OneCallCreationDto): Promise<IgnisignSignatureRequest_Publish_ResponseDTO> {
+    await this._assertIsAppTypeSignatureOrSeal("createSignatureRequestInOneCall")
+    const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
+    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createSignatureRequestInOneCall, {}, { urlParams: { signatureRequestId } });
   }
 
   public async closeSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_IdContainer> {

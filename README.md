@@ -5,7 +5,7 @@ This documentation guides you through the Node.js implementation of the Ignisign
 ## Pre-requisites
 
 Before you begin, ensure you have an API key and defined webhook endpoints. 
-Detailed instructions for setting these up can be found in the [Integrate Ignisign with your Backend](https://ignisign.io/docs/quick-start/Integrate_Ignisign_With_Your_Backend section).
+
 
 ## Installation
 
@@ -55,8 +55,8 @@ enum IGNISIGN_APPLICATION_ENV {
 
 The `IgnisignSdk` class exposes all API endpoints as methods for easy access. 
 
-- An implementation example is available [here](https://github.com/ignisign/ignisign-examples/blob/main/ignisign-node/src/services/ignisign-sdk-manager.service.ts), 
-- And a full description of the API endpoints is in the [Ignisign API Documentation](https://ignisign.io/docs/ignisign-api/api-auth).
+- An implementation example is available [here](https://github.com/ignisign/ignisign-examples/blob/main/ignisign-node/src/services/ignisign/ignisign-sdk-manager-signature.service.ts), 
+
 
 ### Example Implementation
 

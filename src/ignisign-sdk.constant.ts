@@ -59,12 +59,15 @@ export const ignisignRemoteServiceUrls = {
   getDocumentSignature                    : "/v4/documents/:documentId/signatures/:signatureId", // get
 
   // Signature requests
+                         
+  initSignerSetup                         : "/v4/applications/:appId/envs/:appEnv/signer-setup", // post
 
   initSignatureRequest                    : "/v4/applications/:appId/envs/:appEnv/signature-requests", //  
   getSignatureRequestsByAppIdAndAppEnv    : "/v4/applications/:appId/envs/:appEnv/signature-requests", //
 
   updateSignatureRequest                  : "/v4/signature-requests/:signatureRequestId", //  
   publishSignatureRequest                 : "/v4/signature-requests/:signatureRequestId/publish", //  
+  createSignatureRequestInOneCall         : "/v4/signature-requests/one-call-sign", //
   closeSignatureRequest                   : "/v4/signature-requests/:signatureRequestId/close", //    
   getSignatureRequestContext              : "/v4/signature-requests/:signatureRequestId/context", //  
   getSignatureRequestsStatus              : "/v4/applications/:appId/envs/:appEnv/signature-requests/status", //

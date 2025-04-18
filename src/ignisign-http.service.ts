@@ -1,10 +1,10 @@
 import axios, {AxiosInstance, AxiosRequestConfig} from "axios";
 
 import { DEFAULT_IGNISIGN_API_URL } from "./ignisign-sdk.constant";
-import { IgnisignSdkInitializer, IgnisignSdkExecutionContext} from "./ignisign-sdk.models";
+import { IgnisignSdkInitializer, IgnisignSdkExecutionContext, IgnisignOldSdkInitializer} from "./ignisign-sdk.models";
 import {createIgnisignSdkError, createIgnisignSdkErrorFromHttp} from "./ignisign-sdk-error.service";
 import {IgnisignApiAuth_RequestDto, IGNISIGN_ERROR_CODES, IgnisignJwtContainer} from "@ignisign/public";
-
+import { IgnisignSdkUtilsService } from "./ignisign-sdk-utils.service";
 const IGNISIGN_SERVER_URL = process.env.IGNISIGN_SERVER_URL || DEFAULT_IGNISIGN_API_URL;
 const MAX_BODY_LENGTH     = 50000000;
 const URL_API_AUTH        = "/v4/auth/app-api";
@@ -56,7 +56,7 @@ export class IgnisignHttpApi {
     await this._executeInit(this._init);
   }
 
-  private async _executeInit(init: IgnisignSdkInitializer){
+  private async _executeInit(init: IgnisignSdkInitializer | IgnisignOldSdkInitializer){
     try {
 
       const responseStdInterceptor = (resp) => resp.data;
@@ -79,18 +79,31 @@ export class IgnisignHttpApi {
       
 
       this.initAlreadyStarted = true;
-      this.execContext = {
-        appId           : init.appId,
-        appEnv          : init.appEnv,
-        appSecret       : init.appSecret,
-        displayWarning  : init.displayWarning
-      }
 
+      if(init instanceof IgnisignOldSdkInitializer && init.appId && init.appEnv && init.appSecret) {
+        this.execContext = {
+          appId           : init.appId,
+          appEnv          : init.appEnv,
+          apiKey          : init.appSecret,
+          displayWarning  : init.displayWarning,
+          isOldKey        : true
+        }
+      } else if(init instanceof IgnisignSdkInitializer) {
+        const { appId, appEnv } = IgnisignSdkUtilsService.exportAppIdAndEnv(init.apiKey);
+        this.execContext = {
+          appId           : appId,
+          appEnv          : appEnv,
+          apiKey          : init.apiKey,
+          displayWarning  : init.displayWarning,
+          isOldKey        : false
+        }
+      }
       if (!this.isInitialized){
         this.ignisignPublicApi.interceptors.request.use(formatUrlRequestInterceptor)
         this.ignisignPublicApi.interceptors.response.use(responseStdInterceptor, this._errorHandlerStrInterceptor.bind(this));
 
-        await this._requestAdminAuthJWT();
+        if(this.execContext.isOldKey)
+          await this._requestAdminAuthJWT();
 
         this.ignisignConnectedApi.interceptors.request.use(formatUrlRequestInterceptor)
         this.ignisignConnectedApi.interceptors.request.use(this._authRequestInterceptor.bind(this));
@@ -123,10 +136,13 @@ export class IgnisignHttpApi {
       if(!this.execContext)
         throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext)
 
+      if(!this.execContext.isOldKey)
+        throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_BAD_CREDENTIALS, { customMessage : "New API key used. JWT mechanism is not available for new API keys."}, null, this.execContext)
+      
       const apiAuthDto : IgnisignApiAuth_RequestDto = {
         appId   : this.execContext.appId,
         appEnv  : this.execContext.appEnv,
-        secret  : this.execContext.appSecret,
+        secret  : this.execContext.apiKey,
       }
 
       const jwtContainer : IgnisignJwtContainer  = await this.ignisignPublicApi.post(URL_API_AUTH, apiAuthDto);
@@ -138,11 +154,16 @@ export class IgnisignHttpApi {
   private async _authRequestInterceptor(config) {
     try {
 
-      if(!this.jwtToken)
-        throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext);
-
-      await this._renewJwtIfNeeded();
-      config.headers.authorization = `Bearer ${this.jwtToken}`;
+      if(this.execContext.isOldKey){
+        if(!this.jwtToken)
+          throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext);
+  
+        await this._renewJwtIfNeeded();
+        config.headers.authorization = `Bearer ${this.jwtToken}`;
+      } else {
+        config.headers.authorization = `Bearer ${this.execContext.apiKey}`;
+      }
+     
       return config;
     } catch (e) {
       return config

@@ -593,7 +593,7 @@ export class IgnisignSdk extends IgnisignHttpApi {
 
     const dto : IgnisignBareSignature_ProofAccessTokenRequest = {
       client_id      : this.execContext.appId,
-      client_secret  : this.execContext.appSecret,
+      client_secret  : this.execContext.apiKey,
       code_verifier,
       redirect_uri,
       grant_type      : 'authorization_code',

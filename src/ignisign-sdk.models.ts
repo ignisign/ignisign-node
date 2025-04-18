@@ -9,19 +9,25 @@ import {
 
 
 export class IgnisignSdkInitializer {
-  appId                   : string;
-  appEnv                  : IGNISIGN_APPLICATION_ENV;
-  appSecret               : string;
+  apiKey                  : string;
   displayWarning          : boolean = true;
   disableWebhookWarning  ?: boolean = false;
 }
 
-
-export class IgnisignSdkExecutionContext {
-  displayWarning  : boolean = true;
+export class IgnisignOldSdkInitializer {
   appId           : string;
   appEnv          : IGNISIGN_APPLICATION_ENV;
   appSecret       : string;
+  displayWarning          : boolean;
+  disableWebhookWarning  ?: boolean;
+}
+
+export class IgnisignSdkExecutionContext {
+  displayWarning  : boolean = true;
+  apiKey          : string;
+  appId           : string;
+  appEnv          : IGNISIGN_APPLICATION_ENV;
+  isOldKey        : boolean = false;
 }
 
 export class IgnisignWebhook_CallbackMapper<T> {

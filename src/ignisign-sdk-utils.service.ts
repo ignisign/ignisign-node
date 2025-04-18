@@ -1,5 +1,6 @@
 
 import * as crypto from "crypto";
+import { IGNISIGN_APPLICATION_ENV } from "@ignisign/public";
 
 export const IgnisignSdkUtilsService = {
 
@@ -11,11 +12,24 @@ export const IgnisignSdkUtilsService = {
 
   generateECDSAKey,
 
+  exportAppIdAndEnv,
+
+}
+
+
+function exportAppIdAndEnv(apiKey: string) : { appId: string, appEnv: IGNISIGN_APPLICATION_ENV }{
+  const [sk, appEnvLowerCase, appIdWithoutPrefix, secretEnd] = apiKey.split('_');
+
+  const appEnv = appEnvLowerCase.toUpperCase() as IGNISIGN_APPLICATION_ENV;
+
+  const appId = `appId_${appIdWithoutPrefix}`;
+
+  return { appId, appEnv }
 }
 
 function parsePrivateKeyFromEnv(envKey: string) : string{
   if(!envKey)
-    throw new Error('key not set: mandatory to init IgnisignSdkManagerSignatureService');
+    throw new Error('key not set: mandatory to init IgnisignSdk');
 
   return envKey
     .replace(/\|/g    ,'\n')

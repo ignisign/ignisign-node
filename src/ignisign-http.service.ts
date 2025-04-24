@@ -102,7 +102,7 @@ export class IgnisignHttpApi {
         this.ignisignPublicApi.interceptors.request.use(formatUrlRequestInterceptor)
         this.ignisignPublicApi.interceptors.response.use(responseStdInterceptor, this._errorHandlerStrInterceptor.bind(this));
 
-        if(this.execContext.isOldKey)
+        if(this.execContext?.isOldKey)
           await this._requestAdminAuthJWT();
 
         this.ignisignConnectedApi.interceptors.request.use(formatUrlRequestInterceptor)
@@ -136,7 +136,7 @@ export class IgnisignHttpApi {
       if(!this.execContext)
         throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext)
 
-      if(!this.execContext.isOldKey)
+      if(!this.execContext?.isOldKey)
         throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_BAD_CREDENTIALS, { customMessage : "New API key used. JWT mechanism is not available for new API keys."}, null, this.execContext)
       
       const apiAuthDto : IgnisignApiAuth_RequestDto = {
@@ -154,7 +154,7 @@ export class IgnisignHttpApi {
   private async _authRequestInterceptor(config) {
     try {
 
-      if(this.execContext.isOldKey){
+      if(this.execContext?.isOldKey){
         if(!this.jwtToken)
           throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_NOT_INITIALIZED, {}, null, this.execContext);
   
@@ -192,6 +192,7 @@ export class IgnisignHttpApi {
         await this._requestAdminAuthJWT();
     }
 
+    
     return this.jwtToken;
   }
 

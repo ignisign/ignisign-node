@@ -56,7 +56,7 @@ export class IgnisignHttpApi {
     await this._executeInit(this._init);
   }
 
-  private async _executeInit(init: IgnisignSdkInitializer | IgnisignOldSdkInitializer){
+  private async _executeInit(init: IgnisignSdkInitializer | IgnisignOldSdkInitializer ){
     try {
 
       const responseStdInterceptor = (resp) => resp.data;
@@ -80,7 +80,9 @@ export class IgnisignHttpApi {
 
       this.initAlreadyStarted = true;
 
-      if(init instanceof IgnisignOldSdkInitializer && init.appId && init.appEnv && init.appSecret) {
+      // Check fields directly instead of using instanceof to support both object formats and compatibility
+      if ('appId' in init && 'appEnv' in init && 'appSecret' in init) {
+        // Old format with appId, appEnv, appSecret
         this.execContext = {
           appId           : init.appId,
           appEnv          : init.appEnv,
@@ -88,15 +90,22 @@ export class IgnisignHttpApi {
           displayWarning  : init.displayWarning,
           isOldKey        : true
         }
-      } else if(init instanceof IgnisignSdkInitializer) {
-        const { appId, appEnv } = IgnisignSdkUtilsService.exportAppIdAndEnv(init.apiKey);
-        this.execContext = {
-          appId           : appId,
-          appEnv          : appEnv,
-          apiKey          : init.apiKey,
-          displayWarning  : init.displayWarning,
-          isOldKey        : false
+      } else if ('apiKey' in init) {
+        // New format with apiKey
+        try {
+          const { appId, appEnv } = IgnisignSdkUtilsService.exportAppIdAndEnv(init.apiKey);
+          this.execContext = {
+            appId           : appId,
+            appEnv          : appEnv,
+            apiKey          : init.apiKey,
+            displayWarning  : init.displayWarning,
+            isOldKey        : false
+          }
+        } catch (e) {
+          throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_BAD_CREDENTIALS, { customMessage : "Could not extract app info from API key. Please use a valid Ignisign API key.", init}, null, this.execContext)
         }
+      } else {
+        throw createIgnisignSdkError(IGNISIGN_ERROR_CODES.SDK_BAD_CREDENTIALS, { customMessage : "Invalid API key format. Please use a valid Ignisign API key.", init}, null, this.execContext)
       }
       if (!this.isInitialized){
         this.ignisignPublicApi.interceptors.request.use(formatUrlRequestInterceptor)

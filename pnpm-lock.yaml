@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@ignisign/public':
-        specifier: 4.1.14
-        version: 4.1.14
+        specifier: 4.2.1
+        version: 4.2.1
       axios:
         specifier: ^0.21.1
         version: 0.21.4
@@ -42,8 +42,8 @@ importers:
 
 packages:
 
-  '@ignisign/public@4.1.14':
-    resolution: {integrity: sha512-6LdqeuVavqh7cxjAJ3qRhAzfA2lZai4eTw68u3Ig0MiK9O0x9IF5Azz4fF7uyeYBbTL5BCeATZ5wn4v3zSoOjQ==}
+  '@ignisign/public@4.2.1':
+    resolution: {integrity: sha512-kItOHPn/gqdlAsISlc6siuXgoZROyX0qUqzS81KA9DbhMw7FQ6Pl1fJlMDnBdHB38VYw9gHi2CyYF+Xrb/utMw==}
 
   '@types/node@13.13.52':
     resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
@@ -679,7 +679,7 @@ packages:
 
 snapshots:
 
-  '@ignisign/public@4.1.14':
+  '@ignisign/public@4.2.1':
     dependencies:
       class-transformer: 0.5.1
       class-validator: 0.14.1

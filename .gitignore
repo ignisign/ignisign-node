@@ -4,3 +4,21 @@ dist
 tsconfig.tsbuildinfo
 .npmrc
 .DS_Store
+
+# Security: prevent accidental commits of sensitive files
+*.env
+*.env.*
+!*.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.csr
+*.der
+secrets/
+.secrets
+credentials.json
+config/secrets.json
+.aws/
+.gcloud/

@@ -457,10 +457,15 @@ export class IgnisignSdk extends IgnisignHttpApi {
     return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.publishSignatureRequest, {}, { urlParams: { signatureRequestId } });
   }
 
-  public async createSignatureRequestInOneCall(signatureRequestId : string, dto: IgnisignSignatureRequest_OneCallCreationDto): Promise<IgnisignSignatureRequest_Publish_ResponseDTO> {
+  /**
+   * Creates, fills and publishes a signature request in one call.
+   * POST /v4/signature-requests/one-call-sign — the body is the DTO (title, signatureMethod, signers, documents);
+   * the route takes no path parameter. Returns the created signature request context (HTTP 201).
+   */
+  public async createSignatureRequestInOneCall(dto: IgnisignSignatureRequest_OneCallCreationDto): Promise<IgnisignSignatureRequest_Context> {
     await this._assertIsAppTypeSignatureOrSeal("createSignatureRequestInOneCall")
     const ignisignConnectedApi  = await this.getIgnisignConnectedApi();
-    return await ignisignConnectedApi.post(ignisignRemoteServiceUrls.createSignatureRequestInOneCall, {}, { urlParams: { signatureRequestId } });
+    return await ignisignConnectedApi.post<IgnisignSignatureRequest_Context>(ignisignRemoteServiceUrls.createSignatureRequestInOneCall, dto, {});
   }
 
   public async closeSignatureRequest(signatureRequestId : string): Promise<IgnisignSignatureRequest_IdContainer> {
@@ -925,4 +930,3 @@ export class IgnisignSdk extends IgnisignHttpApi {
     this.callbacks = this.callbacks.filter( c => c.uuid !== callbackId);
   }
 }
-

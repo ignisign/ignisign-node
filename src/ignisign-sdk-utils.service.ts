@@ -47,18 +47,36 @@ function sealM2M_doSignPayload(privateKeyPem: string, documentHash: string): { s
 
 
 function bareSignature_GenerateCodeVerifier(length = 128) : string{
-  const codeVerifier = crypto.randomBytes(length)
+  if (length < 43 || length > 128) {
+    throw new Error('Code verifier length must be between 43 and 128 characters per RFC 7636');
+  }
+  
+  const randomBytes = crypto.randomBytes(length);
+  const codeVerifier = randomBytes
     .toString('base64')
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
-    .replace(/=/g, '');
+    .replace(/=/g, '')
+    .substring(0, length);
+  
+  if (codeVerifier.length < 43) {
+    throw new Error('Generated code verifier is too short');
+  }
+  
   return codeVerifier;
 }
 
 function bareSiganture_GenerateCodeChallenge(codeVerifier: string) : string{
+  if (!codeVerifier || codeVerifier.length < 43) {
+    throw new Error('Code verifier must be at least 43 characters');
+  }
+  
   return crypto.createHash('sha256')
     .update(codeVerifier)
     .digest('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
 }
 
 function generateECDSAKey() {

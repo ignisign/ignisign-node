@@ -27,29 +27,20 @@ Find an example of integration in this [GitHub repository](https://github.com/ig
 
 ## Initiate the IgnisignSdk Class
 
-Begin by initiating the `IgnisignSdk` class:
-
 ```typescript
 import { IgnisignSdk } from "@ignisign/sdk"
 
 const ignisignSdkInstance = new IgnisignSdk({
-  appId: IGNISIGN_APP_ID,
-  appEnv: (<IGNISIGN_APPLICATION_ENV>IGNISIGN_APP_ENV),
-  appSecret: IGNISIGN_APP_SECRET,
+  apiKey: "skv2_your_api_key_here",
   displayWarning: true,
 });
+
+await ignisignSdkInstance.init();
 ```
 
-Find your `appId`, `appEnv`, and `appSecret` in the "API Keys" section of the [Ignisign Console](https://console.ignisign.io/). 
-The `application environment` should be one of the following:
+Create the key in the [IgniSign console](https://console.ignisign.io/), under API Keys. It starts with `skv2_`. Call `init()` before any other method.
 
-```typescript
-enum IGNISIGN_APPLICATION_ENV {
-  DEVELOPMENT = "DEVELOPMENT",
-  STAGING = "STAGING",
-  PRODUCTION = "PRODUCTION",
-}
-```
+An object with `appId`, `appEnv` and `appSecret` is still accepted. New keys use `apiKey`.
 
 ## Easy API Calls
 

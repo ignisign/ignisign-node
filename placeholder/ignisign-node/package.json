@@ -1,0 +1,17 @@
+{
+  "name": "ignisign-node",
+  "version": "0.0.1",
+  "description": "Not the IgniSign SDK. Install @ignisign/sdk.",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "deprecated": "This name is not the IgniSign SDK. Install @ignisign/sdk.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ignisign/ignisign-node.git",
+    "directory": "placeholder/ignisign-node"
+  }
+}

@@ -1,0 +1,28 @@
+name: Claim ignisign-node name
+on:
+  push:
+    branches: [claim/ignisign-node-name]
+    paths:
+      - "placeholder/ignisign-node/**"
+      - ".github/workflows/claim-ignisign-node.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: placeholder/ignisign-node
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Refuse to publish anything except the placeholder
+        run: node -e "const n=require('./package.json').name; if(n!=='ignisign-node') { console.error(n); process.exit(1) }"
+      - run: npm publish --access public

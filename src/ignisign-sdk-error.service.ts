@@ -5,6 +5,30 @@ import {IgnisignSdkExecutionContext} from "./ignisign-sdk.models";
 const ERRORS_WARN : IGNISIGN_ERROR_CODES[] = [];
 const IGNISIGN_ERROR_TEXT = "IGNISIGN SDK EXCEPTION"
 
+const SENSITIVE_KEYS = ['apiKey', 'appSecret', 'secret', 'token', 'jwtToken', 'authorization', 'password', 'privateKey', 'client_secret', 'verificationToken'];
+
+const sanitizeContext = (context: any): any => {
+  if (!context || typeof context !== 'object') {
+    return context;
+  }
+
+  const sanitized = Array.isArray(context) ? [...context] : { ...context };
+
+  for (const key in sanitized) {
+    if (sanitized.hasOwnProperty(key)) {
+      const lowerKey = key.toLowerCase();
+      
+      if (SENSITIVE_KEYS.some(sensitiveKey => lowerKey.includes(sensitiveKey.toLowerCase()))) {
+        sanitized[key] = '[REDACTED]';
+      } else if (typeof sanitized[key] === 'object' && sanitized[key] !== null) {
+        sanitized[key] = sanitizeContext(sanitized[key]);
+      }
+    }
+  }
+
+  return sanitized;
+};
+
 const getTimestampString = () => {
   const pad     = (num) => num < 10 ? '0' + num : num;
 
@@ -42,18 +66,20 @@ const logError = ( code : IGNISIGN_ERROR_CODES, context : object = {}, stack: st
 
   console.error(errorHeaderMessage)
 
-  if(execContext){
-    if(!context)
-      context = {};
+  let sanitizedContext = sanitizeContext(context);
 
-    context['execContext'] = {
+  if(execContext){
+    if(!sanitizedContext)
+      sanitizedContext = {};
+
+    sanitizedContext['execContext'] = {
       appId: execContext.appId,
       appEnv: execContext.appEnv,
     };
   }
 
-  if(context && Object.keys(context).length !== 0)
-    console.error("* Context: ", context);
+  if(sanitizedContext && Object.keys(sanitizedContext).length !== 0)
+    console.error("* Context: ", sanitizedContext);
   
   if(stack && stack.length !== 0)
     console.error("* Stack: ", stack);
@@ -74,7 +100,7 @@ export const createIgnisignSdkError = (code : IGNISIGN_ERROR_CODES, context : ob
   if(stack && stack.length)
     e.stack = stack;
 
-  e.context = context
+  e.context = sanitizeContext(context);
   e.code = code
   return e;
 }
@@ -86,7 +112,6 @@ export const createIgnisignSdkErrorFromHttp = async (error: any, execContext: Ig
   const isObject = (val) => val instanceof Object;
 
   if( error.response ){
-    // console.error("!! error.response")
     const errorData = error.response.data;
 
     let code;
@@ -108,7 +133,6 @@ export const createIgnisignSdkErrorFromHttp = async (error: any, execContext: Ig
 
     return createIgnisignSdkError(code as IGNISIGN_ERROR_CODES, context, stack, execContext);
   }
-  // console.error("!! not error.response")
   return error;
 }
 

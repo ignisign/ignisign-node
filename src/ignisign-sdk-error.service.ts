@@ -7,23 +7,36 @@ const IGNISIGN_ERROR_TEXT = "IGNISIGN SDK EXCEPTION"
 
 const SENSITIVE_KEYS = ['apiKey', 'appSecret', 'secret', 'token', 'jwtToken', 'authorization', 'password', 'privateKey', 'client_secret', 'verificationToken'];
 
-const sanitizeContext = (context: any): any => {
-  if (!context || typeof context !== 'object') {
+const isSensitiveKey = (key: string): boolean => {
+  const lowerKey = key.toLowerCase();
+  return SENSITIVE_KEYS.some(sensitiveKey => lowerKey.includes(sensitiveKey.toLowerCase()));
+};
+
+const isPlainObject = (value: any): boolean => {
+  if (value === null || typeof value !== 'object')
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+};
+
+// Returns a redacted copy; never mutates the input. Only plain objects and arrays are
+// traversed (Dates, Buffers, Errors, class instances are kept as-is) and cycles are cut.
+const sanitizeContext = (context: any, seen: WeakSet<object> = new WeakSet()): any => {
+  if (!Array.isArray(context) && !isPlainObject(context))
     return context;
-  }
 
-  const sanitized = Array.isArray(context) ? [...context] : { ...context };
+  if (seen.has(context))
+    return '[Circular]';
+  seen.add(context);
 
-  for (const key in sanitized) {
-    if (sanitized.hasOwnProperty(key)) {
-      const lowerKey = key.toLowerCase();
-      
-      if (SENSITIVE_KEYS.some(sensitiveKey => lowerKey.includes(sensitiveKey.toLowerCase()))) {
-        sanitized[key] = '[REDACTED]';
-      } else if (typeof sanitized[key] === 'object' && sanitized[key] !== null) {
-        sanitized[key] = sanitizeContext(sanitized[key]);
-      }
-    }
+  const sanitized: any = Array.isArray(context) ? [] : {};
+
+  for (const key of Object.keys(context)) {
+    const value = context[key];
+    if (!Array.isArray(context) && isSensitiveKey(key))
+      sanitized[key] = '[REDACTED]';
+    else
+      sanitized[key] = sanitizeContext(value, seen);
   }
 
   return sanitized;

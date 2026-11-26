@@ -47,10 +47,10 @@ function sealM2M_doSignPayload(privateKeyPem: string, documentHash: string): { s
 
 
 function bareSignature_GenerateCodeVerifier(length = 128) : string{
-  if (length < 43 || length > 128) {
-    throw new Error('Code verifier length must be between 43 and 128 characters per RFC 7636');
-  }
-  
+  // RFC 7636 §4.1: 43..128 chars from the unreserved set. Clamp instead of throwing so
+  // existing callers passing other values keep working (non-breaking for SDK users).
+  length = Math.min(128, Math.max(43, Math.floor(Number(length) || 128)));
+
   const randomBytes = crypto.randomBytes(length);
   const codeVerifier = randomBytes
     .toString('base64')

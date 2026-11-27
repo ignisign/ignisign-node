@@ -190,11 +190,29 @@ export class IgnisignHttpApi {
     const  isTokenExpired = (token) => {
       if(!token)
         return true;
-      const payloadBase64 = token.split('.')[1];
-      const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
-      const decoded = JSON.parse(decodedJson)
-      const exp = decoded.exp;
-      return (Date.now() >= exp * 1000)
+      
+      try {
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+          return true;
+        }
+        
+        const payloadBase64 = parts[1];
+        const decodedJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
+        const decoded = JSON.parse(decodedJson);
+        
+        if (!decoded.exp || typeof decoded.exp !== 'number') {
+          return true;
+        }
+        
+        const exp = decoded.exp;
+        const now = Math.floor(Date.now() / 1000);
+        const bufferSeconds = 60;
+        
+        return (now >= (exp - bufferSeconds));
+      } catch (e) {
+        return true;
+      }
     }
 
     if (!this.jwtToken || isTokenExpired(this.jwtToken)){
